@@ -12,7 +12,8 @@ $(document).ready(function(){
 				$(".menuWrap").fadeOut(180);
 				$(".menu").animate({opacity: '0', left: '-320px'}, 180);
     });
-	
+
+
 		// Show/Hide the other notification options
 		$(".deskNotif").click(function(){
         $(".showSName, .showPreview, .playSounds").toggle();
