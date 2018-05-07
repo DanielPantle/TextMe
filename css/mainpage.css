@@ -6,7 +6,7 @@
 body {
 	overflow: hidden;
 	background: #419fd9;
-	background-image: url(https://s-media-cache-ak0.pinimg.com/originals/51/ed/c0/51edc046eb80046ee4755ee71d0f19ca.jpg);
+	background-image: url("../images/background_body.jpg");
 	font-family: 'Open Sans', 'Roboto', 'Ubuntu', sans-serif;
 	font-size: 16px;
 }
@@ -150,7 +150,7 @@ input[type="checkbox"] {
 .me .image {
 	width: 70px;
 	height: 70px;
-	background: #FFF url(http://4.bp.blogspot.com/-BHhUazKytmw/VbCfWPqrOJI/AAAAAAAAB7c/qj6WVX3du-s/s1600/51b91bba5a3fd9b6c8b9c53bc0ab6c65.jpg) no-repeat center;
+    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
 	background-size: cover;
 	border-radius: 100%;
 	cursor: pointer;
@@ -159,7 +159,8 @@ input[type="checkbox"] {
 .me .settings {
 	position: absolute;
 	right: 20px;
-	bottom: 65px;
+	/*bottom: 65px;*/
+    bottom: 15px;
 	width: 40px;
 	height: 40px;
 	padding-top: 2px;
@@ -175,7 +176,8 @@ input[type="checkbox"] {
 .me .cloud {
 	position: absolute;
 	right: 20px;
-	bottom: 15px;
+	/*bottom: 15px;*/
+    bottom: 65px;
 	width: 40px;
 	height: 40px;
 	color: #FFF;
@@ -281,7 +283,7 @@ nav button > span {
 .profile .image {
 	width: 140px;
 	height: 140px;
-	background: #FFF url(http://4.bp.blogspot.com/-BHhUazKytmw/VbCfWPqrOJI/AAAAAAAAB7c/qj6WVX3du-s/s1600/51b91bba5a3fd9b6c8b9c53bc0ab6c65.jpg) no-repeat center;
+    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
 	background-size: cover;
 	border-radius: 100%;
 	cursor: pointer;
@@ -447,7 +449,6 @@ header {
 	float: left;
 	padding: 8px;
 	margin-top: 14px;
-	margin-left: 10px;
 	border: none;
 	border-radius: 4px;
 	font-size: 14px;
@@ -484,12 +485,12 @@ header {
 
 .active {
 	color: #FFF;
-	background: #419fd9; 
+	background: #419fd9;
 }
 
 .active:hover {
 	color: #FFF;
-	background: #419fd9; 
+	background: #419fd9;
 }
 
 .chatInfo {
@@ -504,8 +505,8 @@ header {
 	position: absolute;
 	width: 55px;
 	height: 55px;
-	background: #FFF url(https://pbs.twimg.com/profile_images/378800000822867536/3f5a00acf72df93528b6bb7cd0a4fd0c.jpeg) no-repeat center;
-	background-size: cover;
+    background: #FFF url(../images/Profilbild_defualt_2.jpg) no-repeat center;
+    background-size: cover;
 	border-radius: 100%;
 	margin: 13px 13px;
 }
@@ -657,7 +658,7 @@ div[class~="onTop"] > .count {
 }
 
 .userBg {
-	background: url("https://images.unsplash.com/photo-1463058837219-41e13a132b7d?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=&bg=") 100% center;
+    background: url("../images/chat_hintergrund.jpg") 100% center;
 }
 
 .msg {
@@ -724,13 +725,13 @@ div[class~="onTop"] > .count {
 .replyBar .attach {
 	width: 70px;
 	height: 70px;
-  color: #777;
+	color: #777;
 	background: #FFF;
 	float: left;
 }
 
 .replyBar .attach:hover {
-  color: #555;
+	color: #555;
 	background: #DDD;
 }
 
@@ -857,17 +858,18 @@ div[class~="onTop"] > .count {
 	background-image: url(https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/96/smiling-face-with-open-mouth-and-smiling-eyes_1f604.png);
 }
 
+
 /* SOLVING RESPONSIVE DESIGN ISSUES */
 
 @media screen and (max-width: 1090px) {
 	.leftPanel {
 		width: 40%;
 	}
-	
+
 	.rightPanel {
 		width: calc(60% - 1px);
 	}
-	
+
 	.config {
 		width: 70%;
 	}
@@ -877,11 +879,11 @@ div[class~="onTop"] > .count {
 	.leftPanel {
 		width: 40%;
 	}
-	
+
 	.rightPanel {
 		width: calc(60% - 1px);
 	}
-	
+
 	.config {
 		width: 90%;
 	}
@@ -891,15 +893,15 @@ div[class~="onTop"] > .count {
 	body {
 		font-size: 14px;
 	}
-	
+
 	.leftPanel {
 		width: 45%;
 	}
-	
+
 	.rightPanel {
 		width: calc(55% - 1px);
 	}
-	
+
 	.msg {
 		width: 90%;
 	}
@@ -909,21 +911,21 @@ div[class~="onTop"] > .count {
 	.leftPanel {
 		width: 45%;
 	}
-	
+
 	.rightPanel {
 		width: calc(55% - 1px);
 	}
-	
+
 	.msg {
 		width: auto;
 		max-width: 60%;
 	}
-	
+
 	.profile .changePic, .profile .edit {
 		font-size: 14px;
 		font-weight: 500;
 	}
-	
+
 	.profile .edit {
 		margin-left: 5px;
 	}
@@ -933,7 +935,7 @@ div[class~="onTop"] > .count {
 	.switchMobile {
 		display: block;
 	}
-	
+
 	.leftPanel, .rightPanel, .menuWrap, .config, .overlay {
 		display: none;
 	}
