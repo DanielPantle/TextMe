@@ -62,13 +62,13 @@ class Database {
 		}
 	}
 	
-	public function userExists($name) {
+	public function userExists($email) {
 		try {
 			$stmt = $this->db->prepare("SELECT {$this->U_ID}
 					FROM {$this->TABLE_USER}
-					WHERE {$this->U_NAME} LIKE :name");
+					WHERE {$this->U_MAIL} = :email");
 			
-			if($stmt->execute(array(':name' => $name))) {
+			if($stmt->execute(array(':email' => $email))) {
 				return $stmt->rowCount() > 0;
 			}
 			else {
@@ -124,15 +124,15 @@ class Database {
 		return true;
 	}
 	
-	public function register($name, $mail, $password) {
+	public function register($name, $email, $password) {
 		try {
 			$pw = password_hash($password, PASSWORD_DEFAULT);
 			
 			$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER}
 					({$this->U_NAME}, {$this->U_MAIL}, {$this->U_PASSWORD})
-					VALUES (:name, :mail, :password)");
+					VALUES (:name, :email, :password)");
 			
-			if($stmt->execute(array(':name' => $name, 'email' => $mail, ':password' => $pw))) {
+			if($stmt->execute(array(':name' => $name, ':email' => $email, ':password' => $pw))) {
 				return $this->db->lastInsertId();
 			}
 			else {

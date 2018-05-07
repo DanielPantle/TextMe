@@ -1,3 +1,68 @@
+
+<?php
+
+include("php/db.php");
+$Database = new Database();
+
+
+// Login überprüfen
+if(isset($_POST['login-submit'])) {
+	// Login-Form wurde abgesendet
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	
+	// Einloggen
+	if($Database->login($username, $password)) {
+		echo "<h3>Login erfolgreich!</h3>";
+	}
+	else {
+		echo "<h3>Login fehlgeschlagen!</h3>";
+	}
+}
+
+
+// Registrierung überprüfen
+if(isset($_POST['register-submit'])) {
+	// Registrierungs-Form wurde abgesendet
+	$username = $_POST['username'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+	$confirm_password = $_POST['confirm-password'];
+	
+	
+	// Passwörter überprüfen
+	if($password != $confirm_password) {
+		echo "<h3>Registrierung fehlgeschlagen! Passwörter stimmen nicht überein!</h3>";
+	}
+	else {
+		// Benutzer-Name überprüfen (ob vorhanden)
+		if($Database->userExists($email)) {
+			echo "<h3>Registrierung fehlgeschlagen! E-Mail ist schon vergeben!</h3>";
+		}
+		else {
+			// Registrieren
+			if($Database->register($username, $email, $password)) {
+				echo "<h3>Registrierung erfolgreich!</h3>";
+			}
+			else {
+				echo "<h3>Registrierung fehlgeschlagen!</h3>";
+			}
+		}
+	}
+}
+
+
+// prüfen, ob User eingeloggt ist
+if($Database->isLoggedIn()) {
+    // zur Chat-Seite weiterleiten
+    header('Location: /chat');
+}
+
+// Login fehlgeschlagen - Login-Seite anzeigen
+
+
+?>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/login-signup.css">
@@ -26,7 +91,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <form id="login-form" action="submit" method="post" role="form" style="display: block;">
+                            <form id="login-form" action="" method="post" role="form" style="display: block;">
                                 <div class="form-group">
                                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
@@ -56,7 +121,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <form id="register-form" action="submit" method="post" role="form" style="display: none;">
+                            <form id="register-form" action="" method="post" role="form" style="display: none;">
                                 <div class="form-group">
                                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
