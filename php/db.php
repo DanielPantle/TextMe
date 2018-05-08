@@ -29,7 +29,8 @@ class Database {
 	
 	private $TABLE_MESSAGE = "message";
 	private $M_ID = "message.mid";
-	private $M_UIICID = "message.uiicid";
+	private $M_CID = "message.cid";
+	private $M_UID = "message.uid";
 	private $M_MESSAGE = "message.message";
 	private $M_TIMEADDED = "message.timeadded";
 	private $M_TIMEMODIFIED = "message.timemodified";
@@ -181,7 +182,34 @@ class Database {
 	public function getAllChatsFromCurrentUser() {
 		try {
 			$currentUser = $this->getCurrentUser();
-			
+
+			$stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
+					FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
+					WHERE {$this->UIIC_CID} = {$this->C_ID}
+					AND {$this->UIIC_UID} = {$this->U_ID}
+					GROUP BY {$this->C_ID}
+					HAVING members LIKE '%$currentUser%'");
+
+			if($stmt->execute()) {
+				return $stmt->fetchAll(PDO::FETCH_ASSOC);
+			}
+			else {
+				return false;
+			}
+		}
+		catch(PDOException $e) {
+			return "Error: " . $e->getMessage();
+		}
+	}
+
+	public function getCurrentUser() {
+		return $_SESSION['name'];
+	}
+
+	public function getAllChatsFromCurrentUser() {
+		try {
+			$currentUser = $this->getCurrentUser();
+
 			$stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
 					FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
 					WHERE {$this->UIIC_CID} = {$this->C_ID}
