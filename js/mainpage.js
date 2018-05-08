@@ -63,5 +63,24 @@ function runScript(e) {
 }
 
 function sendChatMsg() {
+    var chatText = $("#inputChatMessage").val();
+    if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
+        console.log("Nachrichten Text leer oder enthält nur Blanks");
+        $("#inputChatMessage").val("");
+        $("#inputChatMessage").focus();
+    } else {
+        chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
+        chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
+        window.alert("Die Nachricht  \""+chatText+"\" wurde gesendet");
+        $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
+        $("#inputChatMessage").focus();
+    }
 
+    //sendReadUntil(sessionStorage.aktuelleChatId);
 }
+
+function logout(){
+    window.location.href='/../logout.php';
+}
+
+

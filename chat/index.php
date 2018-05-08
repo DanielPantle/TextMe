@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
 <?php
 
 include("../php/db.php");
 $Database = new Database();
+
+$username;
+// Login überprüfen
+if(isset($_POST['login-submit'])) {
+    // Login-Form wurde abgesendet
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Einloggen
+    if($Database->login($username, $password)) {
+        ?>
+        <script>console.log("Login hat geklappt")
+        </script>
+        <?php
+    }
+
+
+}
 
 // prüfen, ob User eingeloggt ist
 if(!$Database->isLoggedIn()) {
@@ -14,14 +32,14 @@ if(!$Database->isLoggedIn()) {
 
 ?>
 
-<head>
+
     <meta charset="UTF-8">
     <title>TextMe - Pineapple</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../CSS/Icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/mainpage.css">
+    <link href="../css/Icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/mainpage.css">
 </head>
 <body>
 <!-- -------- -->
@@ -200,8 +218,8 @@ if(!$Database->isLoggedIn()) {
             <div class="image"></div>
 
             <div class="myinfo">
-                <p class="name">Random Name</p>
-                <p> eMail Adresse?</p>
+                <p class="name" id="nutzernamen">Random Name</p>
+                <p id="email"> eMail Adresse?</p>
                 <!--<p class="phone">+1 12 1234 5678</p>-->
             </div>
 
@@ -248,7 +266,7 @@ if(!$Database->isLoggedIn()) {
                 </button>
             </a>-->
 
-            <button class="lo">
+            <button class="lo" onclick="logout()">
                 <i class="material-icons">&#xE879;</i>
                 <span>Logout</span>
             </button>
@@ -281,8 +299,9 @@ if(!$Database->isLoggedIn()) {
             <div class="image"></div>
 
             <div class="side">
-                <p class="name">Random Name</p>
-                <p class="pStatus">Online</p>
+                <p class="name" id="nutzernamen2">Random Name</p>
+                <p id="email2">email Adresse?</p>
+                <!--<p class="pStatus">Online</p>-->
             </div>
 
             <button class="changePic">Change Profile Picture</button>
@@ -293,15 +312,15 @@ if(!$Database->isLoggedIn()) {
     <section class="configSect second">
 
         <!-- PROFILE INFO SECTION -->
-        <p class="confTitle">Your Info</p>
+        <!--<p class="confTitle">Your Info</p>
 
         <div class="information">
             <ul>
-                <li>Phone Number: <span class="blue phone">+1 12 1234 5678</span></li>
-                <li>Username: <span class="blue username">@USERNAME</span></li>
+                <li>eMail-Adresse: <span class="blue phone">+1 12 1234 5678</span></li>
+                <li>Username: <span class="blue username">USERNAME</span></li>
                 <li>Profile: <span class="blue">https://t.me/USERNAME</span></li>
             </ul>
-        </div>
+        </div>-->
 
         <!-- NOTIFICATIONS SECTION -->
         <p class="confTitle">Notifications</p>
@@ -375,6 +394,23 @@ if(!$Database->isLoggedIn()) {
     <button class="option notify">Disable Notifications</button>
     <button class="option block">Block User</button>-->
 </div>
+
+<?php
+//echo $username;
+$userid = $Database->getUserID($username);
+$userid = $userid[0][0];
+//echo $userid;
+$email = $Database->getEmail($userid);
+$email = $email[0][0];
+//echo $email;
+
+echo "<script>
+    document.getElementById('nutzernamen').innerHTML = '$username';
+    document.getElementById('nutzernamen2').innerHTML = '$username';
+    document.getElementById('email').innerHTML='$email';
+    document.getElementById('email2').innerHTML='$email';
+</script>";
+?>
 
 <!-- JS einbinden -->
 <script src='../js/vendor/jquery.min.js'></script>

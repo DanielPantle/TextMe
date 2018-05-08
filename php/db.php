@@ -21,16 +21,15 @@ class Database {
 	private $C_TIMEMODIFIED = "chat.timemodified";
 	
 	private $TABLE_USER_IS_IN_CHAT = "user_is_in_chat";
-	private $UINC_ID = "user_is_in_chat.uiicid";
-	private $UINC_CID = "user_is_in_chat.uid";
-	private $UINC_UID = "user_is_in_chat.cid";
-	private $UINC_TIMEADDED = "user_is_in_chat.timeadded";
-	private $UINC_TIMEMODIFIED = "user_is_in_chat.timemodified";
+	private $UIIC_ID = "user_is_in_chat.uiicid";
+	private $UIIC_CID = "user_is_in_chat.cid";
+	private $UIIC_UID = "user_is_in_chat.uid";
+	private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
+	private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
 	
 	private $TABLE_MESSAGE = "message";
 	private $M_ID = "message.mid";
-	private $M_CID = "message.cid";
-	private $M_UID = "message.uid";
+	private $M_UIICID = "message.uiicid";
 	private $M_MESSAGE = "message.message";
 	private $M_TIMEADDED = "message.timeadded";
 	private $M_TIMEMODIFIED = "message.timemodified";
@@ -62,13 +61,14 @@ class Database {
 		}
 	}
 	
-	public function userExists($email) {
+	public function userExists($name, $email) {
 		try {
 			$stmt = $this->db->prepare("SELECT {$this->U_ID}
 					FROM {$this->TABLE_USER}
-					WHERE {$this->U_MAIL} = :email");
+					WHERE {$this->U_NAME} LIKE :name
+					OR {$this->U_MAIL} = :email");
 			
-			if($stmt->execute(array(':email' => $email))) {
+			if($stmt->execute(array(':name' => $name, ':email' => $email))) {
 				return $stmt->rowCount() > 0;
 			}
 			else {
@@ -155,16 +155,17 @@ class Database {
 					GROUP BY chat.id)
 					GROUP BY chat_user.chat_id
 					ORDER BY chat_user.chat_id";*/
-			$stmt = $this->db->prepare("SELECT {$this->UINC_CID}, GROUP_CONCAT({$this->U_NAME})
+			$stmt = $this->db->prepare("SELECT {$this->UIIC_CID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
 					FROM {$this->TABLE_USER_IS_IN_CHAT}
-					JOIN user ON ({$this->UINC_UID} = {$this->U_ID})
-					WHERE {$this->UINC_CID} IN (
+					JOIN user ON ({$this->UIIC_UID} = {$this->U_ID})
+					JOIN chat ON ({$this->UIIC_CID} = {$this->C_ID})
+					WHERE {$this->UIIC_CID} IN (
 					SELECT {$this->C_ID} FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}
-					JOIN {$this->TABLE_USER} ON ({$this->UINC_UID} = {$this->U_ID})
+					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
 					WHERE {$this->U_ID} = :userId
 					GROUP BY {$this->C_ID})
-					GROUP BY {$this->UINC_CID}
-					ORDER BY {$this->UINC_ID}");
+					GROUP BY {$this->UIIC_CID}
+					ORDER BY {$this->UIIC_ID}");
 			
 			if($stmt->execute(array(':userId' => $userId))) {
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -177,14 +178,18 @@ class Database {
 			return "Error: " . $e->getMessage();
 		}
 	}
-	
-	public function getAllMessagesFromChat($chatId) {
+	public function getAllChatsFromCurrentUser() {
 		try {
-			$stmt = $this->db->prepare("SELECT user.name, nachricht.text, nachricht.timestamp FROM nachricht
-					JOIN user ON (nachricht.sender_id = user.id)
-					WHERE nachricht.chat_id = :chatId");
+			$currentUser = $this->getCurrentUser();
 			
-			if($stmt->execute(array(':chatId' => $chatId))) {
+			$stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
+					FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
+					WHERE {$this->UIIC_CID} = {$this->C_ID}
+					AND {$this->UIIC_UID} = {$this->U_ID}
+					GROUP BY {$this->C_ID}
+					HAVING members LIKE '%$currentUser%'");
+
+			if($stmt->execute()) {
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 			else {
@@ -194,7 +199,68 @@ class Database {
 		catch(PDOException $e) {
 			return "Error: " . $e->getMessage();
 		}
-		
 	}
+
+	public function getCurrentUser() {
+		return $_SESSION['name'];
+	}
+
+	public function getAllMessagesFromChat($chatId) {
+		try {
+			$stmt = $this->db->prepare("SELECT {$this->M_MESSAGE}, {$this->M_TIMEADDED}
+					FROM {$this->TABLE_MESSAGE}
+					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
+					WHERE {$this->UIIC_CID} = :chatid");
+
+			/*
+			SELECT *
+			FROM message AS m
+			JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
+			JOIN chat AS c on (uiic.cid = c.cid)
+			*/
+
+			if($stmt->execute(array(':chatid' => $chatId))) {
+				return $stmt->fetchAll(PDO::FETCH_ASSOC);
+			}
+			else {
+				return false;
+			}
+		}
+		catch(PDOException $e) {
+			return "Error: " . $e->getMessage();
+		}
+
+	}
+
+    public function getUserID($userName){
+        try{                 //nutze hier extra "as '0'" da ich sonst das Array der Ergebnissmenge so ansprechen müsste  $userid[0]['uid']; //print_r($userid); zur ausgabe
+            $stmt = $this->db->prepare("SELECT user.uid as '0' FROM user WHERE user.name = :username");
+            if($stmt->execute(array(':username' => $userName))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function getEmail($userId){
+        try{
+
+            $stmt = $this->db->prepare("SELECT user.mail as '0' FROM user WHERE user.uid = :userID");
+            if($stmt->execute(array(':userID' => $userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+    }
 }
 ?>
