@@ -183,7 +183,6 @@ class Database {
 	public function getAllChatsFromCurrentUser() {
 		try {
 			$currentUser = $this->getCurrentUser();
-
 			$stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
 					FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
 					WHERE {$this->UIIC_CID} = {$this->C_ID}
@@ -192,7 +191,9 @@ class Database {
 					HAVING members LIKE '%$currentUser%'");
 
 			if($stmt->execute()) {
+				//return $stmt;
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
+				//return $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
 			}
 			else {
 				return false;

@@ -29,7 +29,7 @@ if(!$Database->isLoggedIn()) {
     // zur Login-Seite weiterleiten
     header('Location: /../');
 }
-
+//print_r($chats);
 ?>
 
 
@@ -56,45 +56,44 @@ if(!$Database->isLoggedIn()) {
         </header>
         <!-- Bereich links Chats auflistung-->
         <div class="chats">
-            <div class="chatButton active">
-                <div class="chatInfo">
-                    <div class="image">
-                        <!--holt das Profilbild des Chatsparter -->
-                    </div>
-                    <p class="name">
-                        Doge
-                    </p>
-                    <!-- hier letzte Geschriebene Nachricht -->
-                    <!--<p class="message">Du: ...</p>-->
-                </div>
-                <!-- Status der letzen nachricht - erstmal weg-->
-                <!--<div class="status onTop">
-                    <p class="date">00:02</p>
-                    <p class="count">10</p>
-                    <i class="material-icons read">done_all</i>
-                    <!-- angeheftete Nachricht <i class="material-icons fixed">loyalty</i> -->
-                <!--</div>-->
-            </div>
-            <!-- nicht ausgewählte Chats, Chat übersicht am besten mit JS -->
-            <div class="chatButton">
-                <div class="chatInfo">
-                    <div class="image">
+            <?php
+                $chats = $Database->getAllChatsFromCurrentUser();
+                $count = count($chats);
+                //echo $count;
+                if ($count > 0){
+                    echo "<br>";
+                    for ($j=0;$j<$count;$j++){
+                        $cid[$j]=$chats[$j]['cid'];
+                        $chatname[$j] =$chats[$j]['chatname'];
+                        $members[$j] =$chats[$j]['members'];
+                        $members[$j] = explode(',',$members[$j]);
+                        $count_2 = count($members[$j]);
+                        //echo "Chat_Id: ".$cid[$j]." Chatname: ".$chatname[$j]." Members: ";
+                        $members_2="";
+                        for ($i=0;$i<$count_2;$i++){
+                            if($members_2==""){
+                                $members_2 = $members[$j][$i];
+                            }else $members_2 =$members_2." , ".$members[$j][$i];
 
-                    </div>
+                        }
+                        echo "<div class='chatButton'>
+                                <div class='chatInfo'>
+                                    <div class='image'>
+                                        
+                                    </div>
+                                    <p class='name'>
+                                        $chatname[$j]                        
+                                    </p>
+                                    <p class='message'>
+                                        Mitglieder: $members_2
+                                    </p>
+                                </div>
+                              </div>
+                        ";
+                    }
+                }
+                ?>
 
-                    <p class="name">
-                        Other Doge
-                    </p>
-
-                    <!--<p class="message">Other Wow!</p>-->
-                </div>
-                <!--<div class="status normal">
-                    <p class="date">02:22</p>
-                    <p class="count">42</p>
-                    <i class="material-icons read">done_all</i>
-                    <i class="material-icons fixed">loyalty</i>
-                </div>-->
-            </div>
         </div>
     </div>
     <!-- Rechte Seite der Seite in JS -->
@@ -396,13 +395,11 @@ if(!$Database->isLoggedIn()) {
 </div>
 
 <?php
-//echo $username;
+$username = $Database->getCurrentUser();
 $userid = $Database->getUserID($username);
 $userid = $userid[0][0];
-//echo $userid;
 $email = $Database->getEmail($userid);
 $email = $email[0][0];
-//echo $email;
 
 echo "<script>
     document.getElementById('nutzernamen').innerHTML = '$username';
