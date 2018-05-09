@@ -501,28 +501,31 @@ header {
 	float: left;
 }
 
-.chatInfo .image {
+/*.chatInfo .image {
 	position: absolute;
 	width: 55px;
 	height: 55px;
-    background: #FFF url(../images/Profilbild_defualt_2.jpg) no-repeat center;
+    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
     background-size: cover;
 	border-radius: 100%;
 	margin: 13px 13px;
-}
+}*/
 
 .chatInfo .name {
 	float: left;
 	font-weight: 600;
-	margin-left: 80px;
+	/*margin-left: 80px;*/
+	margin-left: 20px;
 	margin-top: 18px;
 }
 
 .chatInfo .message {
 	float: left;
 	clear: left;
-	margin-left: 80px;
+	/*margin-left: 80px;*/
+    margin-left: 30px;
 	margin-top: 7px;
+    font-size: small;
 }
 
 .status {
