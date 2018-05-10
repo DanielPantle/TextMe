@@ -36,7 +36,7 @@ if(isset($_POST['register-submit'])) {
 	}
 	else {
 		// Benutzer-Name überprüfen (ob vorhanden)
-		if($Database->userExists($email)) {
+		if($Database->userExists($username, $email)) {
 			echo "<h3>Registrierung fehlgeschlagen! E-Mail ist schon vergeben!</h3>";
 		}
 		else {
@@ -95,13 +95,13 @@ if($Database->isLoggedIn()) {
                         <div class="col-lg-12">
                             <form id="login-form" action="/chat/index.php" method="post" role="form" style="display: block;">
                                 <div class="form-group">
-                                    <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                    <input type="text" name="username" id="login-username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
-                                <p style="color: crimson; display:none;" id="username-error">minimum three characters!</p>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="username-error">minimum three characters!</div>
                                 <div class="form-group">
-                                    <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                    <input type="password" name="password" id="login-password" tabindex="2" class="form-control" placeholder="Password">
                                 </div>
-                                <p style="color: crimson; display:none;" id="password-error">minimum six characters!</p>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
                                 <div class="form-group text-center">
                                     <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
                                     <label for="remember"> Remember Me</label>
@@ -125,17 +125,21 @@ if($Database->isLoggedIn()) {
                             </form>
                             <form id="register-form" action="" method="post" role="form" style="display: none;">
                                 <div class="form-group">
-                                    <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                    <input type="text" name="username" id="register-username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="register-username-error">minimum three characters!</div>
                                 <div class="form-group">
                                     <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
                                 </div>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="register-email-error">invalid email!</div>
                                 <div class="form-group">
-                                    <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                    <input type="password" name="password" id="register-password" tabindex="2" class="form-control" placeholder="Password">
                                 </div>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="register-password-error">minimum six characters!</div>
                                 <div class="form-group">
                                     <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
                                 </div>
+                                <div class="alert alert-danger" role="alert" style=" display:none;" id="register-password-confirm-error">passwords doesn't match!</div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-3">
