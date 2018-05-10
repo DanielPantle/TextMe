@@ -1,6 +1,11 @@
 
 <?php
-session_start();
+if(session_status()){
+
+}else {
+    session_start();
+}
+
 
 class Database {
 	
@@ -31,6 +36,7 @@ class Database {
 	private $M_ID = "message.mid";
 	private $M_CID = "message.cid";
 	private $M_UID = "message.uid";
+    private $M_UIICID = "message.uiicid";
 	private $M_MESSAGE = "message.message";
 	private $M_TIMEADDED = "message.timeadded";
 	private $M_TIMEMODIFIED = "message.timemodified";
@@ -216,12 +222,23 @@ class Database {
 					WHERE {$this->UIIC_CID} = :chatid");
 
 			/*
-			SELECT *
+			SELECT message,timeadded
 			FROM message AS m
 			JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
 			JOIN chat AS c on (uiic.cid = c.cid)
+			WHERE user_is_in_chat.cid = 3
 			*/
-
+			$stmt=$this->db->prepare("SELECT {$this->M_UIICID},{$this->UIIC_UID},{$this->M_MESSAGE},{$this->M_TIMEADDED}
+			                                    FROM {$this->TABLE_MESSAGE}
+			                                    JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
+					                            WHERE {$this->UIIC_CID} = :chatid");
+			/*
+			SELECT message.uiicid,message.message,message.timeadded, user_is_in_chat.uid
+            FROM message
+            JOIN user_is_in_chat on (message.uiicid = user_is_in_chat.uiicid)
+            JOIN chat on (user_is_in_chat.cid = chat.cid)
+            WHERE user_is_in_chat.cid = 3
+            */
 			if($stmt->execute(array(':chatid' => $chatId))) {
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
@@ -235,8 +252,9 @@ class Database {
 
 	}
 
-    public function getUserID($userName){
-        try{                 //nutze hier extra "as '0'" da ich sonst das Array der Ergebnissmenge so ansprechen müsste  $userid[0]['uid']; //print_r($userid); zur ausgabe
+    public function getUserID(){
+        try{//nutze hier extra "as '0'" da ich sonst das Array der Ergebnissmenge so ansprechen müsste  $userid[0]['uid']; //print_r($userid); zur ausgabe
+            $userName = $this->getCurrentUser();
             $stmt = $this->db->prepare("SELECT user.uid as '0' FROM user WHERE user.name = :username");
             if($stmt->execute(array(':username' => $userName))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -252,8 +270,22 @@ class Database {
 
     public function getEmail($userId){
         try{
-
             $stmt = $this->db->prepare("SELECT user.mail as '0' FROM user WHERE user.uid = :userID");
+            if($stmt->execute(array(':userID' => $userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function getUsername($userId){
+        try{
+            $stmt = $this->db->prepare("SELECT user.name as '0' FROM user WHERE user.uid = :userID");
             if($stmt->execute(array(':userID' => $userId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }

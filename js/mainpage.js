@@ -82,5 +82,20 @@ function sendChatMsg() {
 function logout(){
     window.location.href='/../logout.php';
 }
+//$cid[$j],$chatname[$j],$members_2
 
-
+function chatButtonClick(cid,chatname,members,history) {
+    //console.log(cid);
+    document.getElementById('chatname').innerHTML = chatname;
+    document.getElementById('mitglieder').innerHTML = "Mitglieder: "+members;
+    //document.getElementById('chatVerlauf').innerHTML =cid;
+    //window.location.href = "../chat/index.php?convHistory=" + cid;
+    //window.log(history);
+    document.getElementById('chatVerlauf').innerHTML = history;
+    /*count = history.length;
+    for(var i=0;i<count;i++){
+        if(i==0){
+            document.getElementById('chatVerlauf').innerHTML = history[i];
+        }else document.getElementById('chatVerlauf').innerHTML += history[i];
+    }*/
+}

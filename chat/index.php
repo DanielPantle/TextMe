@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <?php
-
 include("../php/db.php");
 $Database = new Database();
-
 $username;
 // Login überprüfen
 if(isset($_POST['login-submit'])) {
@@ -20,19 +18,15 @@ if(isset($_POST['login-submit'])) {
         </script>
         <?php
     }
-
-
 }
-
 // prüfen, ob User eingeloggt ist
 if(!$Database->isLoggedIn()) {
     // zur Login-Seite weiterleiten
     header('Location: /../');
 }
-//print_r($chats);
+//print_r($chatverlauf);
+
 ?>
-
-
     <meta charset="UTF-8">
     <title>TextMe - Pineapple</title>
     <meta charset="UTF-8">
@@ -67,6 +61,7 @@ if(!$Database->isLoggedIn()) {
                         $chatname[$j] =$chats[$j]['chatname'];
                         $members[$j] =$chats[$j]['members'];
                         $members[$j] = explode(',',$members[$j]);
+                        $members_0 = $members[$j];
                         $count_2 = count($members[$j]);
                         //echo "Chat_Id: ".$cid[$j]." Chatname: ".$chatname[$j]." Members: ";
                         $members_2="";
@@ -76,7 +71,13 @@ if(!$Database->isLoggedIn()) {
                             }else $members_2 =$members_2." , ".$members[$j][$i];
 
                         }
-                        echo "<div class='chatButton'>
+                        //conHistory($cid[$j],$Database);
+                        //echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\");conHistory($cid[$j]);'>
+                        //echo "<div class='chatButton' onclick=''conHistory('$cid[$j]'');'>
+                        //echo "<script> document.getElementById('chatVerlauf').innerHTML =";conHistory($cid[$j],$Database); echo " </script>";
+                        $history = conHistory($cid[$j],$Database,$count_2);
+                        if($count_2>2){
+                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -89,11 +90,35 @@ if(!$Database->isLoggedIn()) {
                                     </p>
                                 </div>
                               </div>
-                        ";
+                            ";
+                        }else {
+                            $username = $Database->getCurrentUser();
+                            $members_10 = $members_0[0];
+                            $members_20 = $members_0[1];
+                            if($members_10==$username){
+                                $members_0 = $members_10;
+                            }else {
+                                $members_0 = $members_20;
+                            }
+                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
+                                <div class='chatInfo'>
+                                    <div class='image'>
+                                        
+                                    </div>
+                                    <p class='name'>
+                                        $chatname[$j]                        
+                                    </p>
+                                    <p class='message'>
+                                        An: $members_0
+                                    </p>
+                                </div>
+                              </div>
+                            ";
+                        }
+
                     }
                 }
                 ?>
-
         </div>
     </div>
     <!-- Rechte Seite der Seite in JS -->
@@ -110,15 +135,43 @@ if(!$Database->isLoggedIn()) {
             </div>
 
             <div class="leftSide">
-                <p class="chatName">Doge</p>
-                <p class="chatStatus">Online</p>
+                <p class="chatName" id="chatname"></p>
+                <p class="chatStatus" id="mitglieder"></p>
             </div>
         </div>
         <!-- Chat verlauf -->
-        <div class="convHistory userBg">
+        <div class="convHistory userBg" id="chatVerlauf">
             <!-- CONVERSATION GOES HERE! -->
-
-            <div class="msg messageReceived">
+            <?php
+                function conHistory($chatid,$Database,$count_2){
+                    //include("../php/db.php");
+                    //$Database = new Database();
+                    $chatverlauf = $Database->getAllMessagesFromChat($chatid);
+                    $count_verlauf = count($chatverlauf);
+                    $userid = $Database->getUserID();
+                    $userid = $userid[0][0];
+                    $return[0] ="";
+                    for ($k=0;$k<$count_verlauf;$k++){
+                        $uiicid_sql[$k]=$chatverlauf[$k]['uiicid'];
+                        $uid_sql[$k]=$chatverlauf[$k]['uid'];
+                        $message_sql[$k]=$chatverlauf[$k]['message'];
+                        $timeadded_sql[$k]=$chatverlauf[$k]['timeadded'];
+                        $bkabka = str_split($timeadded_sql[$k],11);
+                        if($uid_sql[$k]==$userid){
+                            $return[$k] = "<div class=\\\"msg messageSent\\\">$message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
+                        }else {
+                            if($count_2>2){
+                                $user=$Database->getUsername($uid_sql[$k]);
+                                $user = $user[0][0];
+                                $return[$k] = "<div class=\\\"msg messageReceived\\\">$user: $message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
+                            }else $return[$k] = "<div class=\\\"msg messageReceived\\\">$message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
+                        }
+                    }
+                    $return_2 = join(" ",$return);
+                    return $return_2;
+                }
+            ?>
+            <!--<div class="msg messageReceived">
                 Wow!
                 <span class="timestamp">00:00</span>
             </div>
@@ -153,7 +206,7 @@ if(!$Database->isLoggedIn()) {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore fuga cumque aut, harum mollitia aperiam similique dolore voluptates reprehenderit, reiciendis ipsum totam, assumenda autem explicabo amet dolorum eveniet vero delectus?
                 <i class="material-icons readStatus">done</i>
                 <span class="timestamp">00:04</span>
-            </div>
+            </div>-->
         </div>
         <!-- Leiste unter dem Chat -->
         <div class="replyBar">
@@ -396,7 +449,7 @@ if(!$Database->isLoggedIn()) {
 
 <?php
 $username = $Database->getCurrentUser();
-$userid = $Database->getUserID($username);
+$userid = $Database->getUserID();
 $userid = $userid[0][0];
 $email = $Database->getEmail($userid);
 $email = $email[0][0];
