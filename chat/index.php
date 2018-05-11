@@ -361,19 +361,8 @@ if(!$Database->isLoggedIn()) {
         </div>
     </section>
 
-    <p class="confTitle">Change Account data</p>
     <section class="configSect second">
 
-        <div class="optionWrapper">
-            <label for="emailField">E-Mail</label>
-            <input type="email" id="emailChangeField">
-            <label for="passwordOldField">Old Password</label>
-            <input type="password" id="passwordOldField">
-            <label for="passwordChangeField">Change Password</label>
-            <input type="password" id="passwordChangeField">
-            <label for="passwordConfirmChangeField">Confirm Password</label>
-            <input type="password" id="passwordConfirmChangeField">
-        </div>
 
         <!-- PROFILE INFO SECTION -->
         <!--<p class="confTitle">Your Info</p>
@@ -386,7 +375,7 @@ if(!$Database->isLoggedIn()) {
             </ul>
         </div>-->
 
-        <!-- NOTIFICATIONS SECTION
+        <!-- NOTIFICATIONS SECTION -->
         <p class="confTitle">Notifications</p>
 
         <div class="optionWrapper deskNotif">
@@ -436,7 +425,6 @@ if(!$Database->isLoggedIn()) {
             </label>
             <p>Night Mode</p>
         </div>
--->
 
     </section>
 </section>
