@@ -61,6 +61,14 @@ $(document).ready(function() {
             }, 500);
         });
 
+        /**
+         * click listener on chats to add class 'active' respectively remove it from other chats
+         **/
+        $(".chatButton").click(function () {
+            jQuery(".active").removeClass("active");
+            jQuery(this).addClass("active");
+        });
+
         /* Show or Hide Emoji Panel */
         $(".emoji").click(function () {
             $(".emojiBar").fadeToggle(120);
