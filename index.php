@@ -67,6 +67,7 @@ if($Database->isLoggedIn()) {
 
 <head>
     <title>TextMe</title>
+
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/login-signup.css">
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>-->
