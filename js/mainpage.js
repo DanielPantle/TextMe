@@ -36,6 +36,31 @@ $(document).ready(function() {
             $(".searchChats").focus();
         });
 
+        /**
+         * input listener for search field
+         * shows/hides chats depending on search input
+         * 500ms delay after input changes to prevent multiple fire events
+         **/
+        var timeout = null;
+        $(".searchChats").on("input", function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+
+                var chatList = $(".chats .chatButton");
+                var filterString = $(".searchChats").val().toLowerCase().trim();
+                if (chatList.length !== 0) {
+                    chatList.each(function (index, chat) {
+                        var chatName = $(chat).find(".name").text().toLowerCase().trim();
+                        if (chatName.indexOf(filterString) >= 0) {
+                            $(chat).show();
+                        } else {
+                            $(chat).hide();
+                        }
+                    });
+                }
+            }, 500);
+        });
+
         /* Show or Hide Emoji Panel */
         $(".emoji").click(function () {
             $(".emojiBar").fadeToggle(120);
