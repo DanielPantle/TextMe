@@ -363,6 +363,7 @@ if(!$Database->isLoggedIn()) {
 
     <section class="configSect second">
 
+
         <!-- PROFILE INFO SECTION -->
         <!--<p class="confTitle">Your Info</p>
 
