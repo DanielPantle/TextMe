@@ -52,6 +52,7 @@ if(!$Database->isLoggedIn()) {
         <div class="chats">
             <?php
                 $chats = $Database->getAllChatsFromCurrentUser();
+                //print_r($chats);
                 $count = count($chats);
                 //echo $count;
                 if ($count > 0){
@@ -96,9 +97,9 @@ if(!$Database->isLoggedIn()) {
                             $members_10 = $members_0[0];
                             $members_20 = $members_0[1];
                             if($members_10==$username){
-                                $members_0 = $members_10;
-                            }else {
                                 $members_0 = $members_20;
+                            }else {
+                                $members_0 = $members_10;
                             }
                             echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
                                 <div class='chatInfo'>
@@ -144,9 +145,8 @@ if(!$Database->isLoggedIn()) {
             <!-- CONVERSATION GOES HERE! -->
             <?php
                 function conHistory($chatid,$Database,$count_2){
-                    //include("../php/db.php");
-                    //$Database = new Database();
                     $chatverlauf = $Database->getAllMessagesFromChat($chatid);
+                    //print_r($chatverlauf);
                     $count_verlauf = count($chatverlauf);
                     $userid = $Database->getUserID();
                     $userid = $userid[0][0];
@@ -248,10 +248,6 @@ if(!$Database->isLoggedIn()) {
             <div class="otherTools">
                 <button class="toolButtons emoji">
                     <i class="material-icons">face</i>
-                </button>
-
-                <button class="toolButtons audio">
-                    <i class="material-icons">mic</i>
                 </button>
             </div>
         </div>

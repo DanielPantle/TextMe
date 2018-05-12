@@ -80,6 +80,8 @@ $(document).ready(function() {
 
         });
 
+        sessionStorage.aktuelleChatId = 0;
+
     }
 
 
@@ -89,14 +91,19 @@ $(document).ready(function() {
 function runScript(e) {
     if (e.keyCode == 13) {
         var tb = document.getElementById("inputChatMessage");
-        console.log("Es wurde ENTER gedruckt -  \"" + tb.value + "\"");
-        sendChatMsg();
+        //console.log("Es wurde ENTER gedruckt -  \"" + tb.value + "\"");
+        var cid = parseInt(sessionStorage.aktuelleChatId);
+        if(cid!=0){
+            console.log("Es wurde-  \"" + tb.value + "\" an "+cid+" verschickt");
+            sendChatMsg(cid);
+        }else console.log ("keine cid");
         return false;
     }
 }
 
-function sendChatMsg() {
+function sendChatMsg(chatroomId) {
     var chatText = $("#inputChatMessage").val();
+    //var chatroomId = parseInt(sessionStorage.aktuelleChatId);
     if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
         $("#inputChatMessage").val("");
@@ -104,7 +111,9 @@ function sendChatMsg() {
     } else {
         chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
         chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
-        window.alert("Die Nachricht  \""+chatText+"\" wurde gesendet");
+        var jsonSend = '{"i":"send-message","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
+        //callChatctl(jsonSend, function() {});
+        callChatctl(jsonSend);
         $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
         $("#inputChatMessage").focus();
     }
@@ -131,4 +140,26 @@ function chatButtonClick(cid,chatname,members,history) {
             document.getElementById('chatVerlauf').innerHTML = history[i];
         }else document.getElementById('chatVerlauf').innerHTML += history[i];
     }*/
+    sessionStorage.aktuelleChatId = cid;
+}
+
+function callChatctl(functionString) {
+    $.ajax({
+        async: true,
+        contentType: "application/json",
+        url: '../php/ajax_sendmessage.php',
+        type : "POST",
+        data: functionString,
+        dataType: 'json',   //data format
+        success: function (response) {
+            console.log(response);
+            console.log("Hat geklappt");
+        },
+        error: function(response, status, error) {
+            console.log(response);
+            console.log(status);
+            console.log(error);
+            console.log("Fehler");
+        }
+    });
 }

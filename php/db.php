@@ -6,9 +6,9 @@ if(session_status() !== PHP_SESSION_ACTIVE){
 
 
 class Database {
-	
+
 	private $db;
-	
+
 	private $TABLE_USER = "user";
 	private $U_ID = "user.uid";
 	private $U_NAME = "user.name";
@@ -16,30 +16,30 @@ class Database {
 	private $U_PASSWORD = "user.password";
 	private $U_TIMEADDED = "user.timeadded";
 	private $U_TIMEMODIFIED = "user.timemodified";
-	
+
 	private $TABLE_CHAT = "chat";
 	private $C_ID = "chat.cid";
 	private $C_NAME = "chat.name";
 	private $C_TIMEADDED = "chat.timeadded";
 	private $C_TIMEMODIFIED = "chat.timemodified";
-	
+
 	private $TABLE_USER_IS_IN_CHAT = "user_is_in_chat";
 	private $UIIC_ID = "user_is_in_chat.uiicid";
 	private $UIIC_CID = "user_is_in_chat.cid";
 	private $UIIC_UID = "user_is_in_chat.uid";
 	private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
 	private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
-	
+
 	private $TABLE_MESSAGE = "message";
 	private $M_ID = "message.mid";
     private $M_UIICID = "message.uiicid";
 	private $M_MESSAGE = "message.message";
 	private $M_TIMEADDED = "message.timeadded";
 	private $M_TIMEMODIFIED = "message.timemodified";
-	
+
 	function __construct() {
 		include("config.php");
-		
+
 		try {
 			$this->db = new PDO('mysql:host=' . MYSQL_HOST . ';dbname=' . MYSQL_DB . ';charset=utf8', MYSQL_USER, MYSQL_PASSWORD);
 		}
@@ -288,19 +288,36 @@ class Database {
 			WHERE user_is_in_chat.cid = 2
 			AND user_is_in_chat.uid = 3
 			*/
-            $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
+			$stmt = $this->db->prepare("INSERT INTO user_is_in_chat (cid,uid) VALUES (?,?)");
+            $ret = $stmt->execute(array($chatId,$userId));
+            if($ret == 0) throw new Exception('Nachricht kann nicht vom Server gespeicher werden.');
+            else {
+                $uiicid = $this->db->lastInsertId('uiicid');
+                $stmt_2 = $this->db->prepare("INSERT INTO message (uiicid,message)VALUES (?,?)");
+                $ret_2 = $stmt_2->execute(array($uiicid,$message));
+                if($ret_2==0) throw new Exception('Nachricht kann nicht vom Server gespeicher werden.');
+                else return $this->db->lastInsertId();
+            }
+            /*$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
 					({$this->M_UIICID}, {$this->M_MESSAGE})
 					SELECT {$this->UIIC_ID}, :message
 					FROM {$this->TABLE_USER_IS_IN_CHAT}
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
-			
-            if($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
-                return $this->db->lastInsertId();
+
+            /*$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
+					({$this->M_UIICID}, {$this->M_MESSAGE})
+					SELECT {$this->UIIC_ID}, '%$message%'
+					FROM {$this->TABLE_USER_IS_IN_CHAT}
+					WHERE {$this->UIIC_CID} = '%$chatId%'
+					AND {$this->UIIC_UID} = '%$userId%'");*/
+
+			/*if($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
+                    return $this->db->lastInsertId();
             }
             else {
                 return false;
-            }
+            }*/
         }
         catch (PDOException $e){
             return "Error: " . $e->getMessage();
