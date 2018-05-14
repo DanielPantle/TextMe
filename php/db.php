@@ -210,12 +210,14 @@ class Database {
 			JOIN user AS u on (uiic.uid = u.uid)
 			JOIN chat AS c on (uiic.cid = c.cid)
 			WHERE uiic.cid = 2
+			ORDER BY m.timeadded
 			*/
 			$stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, {$this->U_ID}, {$this->U_NAME}
 					FROM {$this->TABLE_MESSAGE}
 					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
 					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
-					WHERE {$this->UIIC_CID} = :chatid");
+					WHERE {$this->UIIC_CID} = :chatid
+					ORDER BY {$this->M_TIMEADDED}");
 			
 			if($stmt->execute(array(':chatid' => $chatId))) {
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -228,6 +230,63 @@ class Database {
 			return "Error: " . $e->getMessage();
 		}
 
+	}
+	
+	public function getAllMessagesFromChat_v2($chatId) {
+		try {
+			/*
+			SELECT m.message, u.name, m.timeadded,
+			DATEDIFF(NOW(), m.timeadded) AS date
+			FROM message AS m
+			JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
+			JOIN user AS u on (uiic.uid = u.uid)
+			JOIN chat AS c on (uiic.cid = c.cid)
+			WHERE uiic.cid = 2
+			ORDER BY m.timeadded
+			*/
+			$stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, {$this->U_ID}, {$this->U_NAME}
+					FROM {$this->TABLE_MESSAGE}
+					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
+					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
+					WHERE {$this->UIIC_CID} = :chatid
+					ORDER BY datediff");
+			
+			if($stmt->execute(array(':chatid' => $chatId))) {
+				$res = array();
+				
+				foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $message) {
+					if($message['datediff'] == 0) {
+						// Nachricht heute
+						if(!array_key_exists('t', $res)) {
+							$res['t'] = array();
+						}
+						array_push($res['t'], $message);
+					}
+					else if($message['datediff'] == 1) {
+						// Nachricht gestern
+						if(!array_key_exists('y', $res)) {
+							$res['y'] = array();
+						}
+						array_push($res['y'], $message);
+					}
+					else {
+						// sonstige Nachrichten
+						if(!array_key_exists($message['date'], $res)) {
+							$res[$message['date']] = array();
+						}
+						array_push($res[$message['date']], $message);
+					}
+				}
+				
+				return $res;
+			}
+			else {
+				return false;
+			}
+		}
+		catch(PDOException $e) {
+			return "Error: " . $e->getMessage();
+		}
 	}
 
     public function getUserID(){
@@ -318,6 +377,35 @@ class Database {
             else {
                 return false;
             }*/
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+	}
+	
+	public function writeMessage_v2($chatId, $userId, $message) {
+		try{
+			/*
+			INSERT INTO message
+			(uiicid, message)
+			SELECT user_is_in_chat.uiicid, 'testmessage'
+			FROM user_is_in_chat
+			WHERE user_is_in_chat.cid = 2
+			AND user_is_in_chat.uid = 3
+			*/
+			$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
+					({$this->M_UIICID}, {$this->M_MESSAGE})
+					SELECT {$this->UIIC_ID}, :message
+					FROM {$this->TABLE_USER_IS_IN_CHAT}
+					WHERE {$this->UIIC_CID} = :chatId
+					AND {$this->UIIC_UID} = :userId");
+			
+			if($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
+                    return $this->db->lastInsertId();
+            }
+            else {
+                return false;
+            }
         }
         catch (PDOException $e){
             return "Error: " . $e->getMessage();
