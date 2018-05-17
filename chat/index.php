@@ -39,6 +39,14 @@ if(!$Database->isLoggedIn()) {
 <!-- -------- -->
 <!-- MAIN APP -->
 <!-- -------- -->
+
+<noscript>
+    <div id="nojavascript">
+        Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
+        Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+        und laden Sie die Seite neu.
+    </div>
+</noscript>
 <section class="mainApp">
     <div class="leftPanel">
         <!--Bereich oben links Menü und suchleiste-->
@@ -216,7 +224,7 @@ if(!$Database->isLoggedIn()) {
                 <i class="material-icons d45">attach_file</i>
             </button>-->
             <!-- Eingabefeld -->
-            <input id="inputChatMessage" type="text" onkeypress="return runScript(event)" class="replyMessage" placeholder="Type your message..."/>
+            <input id="inputChatMessage" type="text" onkeypress="return onEnter(event)" class="replyMessage" placeholder="Type your message..."/>
 
             <div class="emojiBar">
                 <!-- Emoji's /Stickers / GIF -->

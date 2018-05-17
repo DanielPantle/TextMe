@@ -88,7 +88,7 @@ $(document).ready(function() {
 
 });
 
-function runScript(e) {
+function onEnter(e) {
     if (e.keyCode == 13) {
         var tb = document.getElementById("inputChatMessage");
         //console.log("Es wurde ENTER gedruckt -  \"" + tb.value + "\"");
