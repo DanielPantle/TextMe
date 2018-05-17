@@ -244,7 +244,7 @@ class Database {
 			WHERE uiic.cid = 2
 			ORDER BY m.timeadded
 			*/
-			$stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, {$this->U_ID}, {$this->U_NAME}
+			$stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%h:%i') AS time, {$this->U_ID}, {$this->U_NAME}
 					FROM {$this->TABLE_MESSAGE}
 					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
 					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
@@ -338,52 +338,6 @@ class Database {
     }
 	
 	public function writeMessage($chatId, $userId, $message) {
-		try{
-			/*
-			INSERT INTO message
-			(uiicid, message)
-			SELECT user_is_in_chat.uiicid, 'testmessage'
-			FROM user_is_in_chat
-			WHERE user_is_in_chat.cid = 2
-			AND user_is_in_chat.uid = 3
-			*/
-			$stmt = $this->db->prepare("INSERT INTO user_is_in_chat (cid,uid) VALUES (?,?)");
-            $ret = $stmt->execute(array($chatId,$userId));
-            if($ret == 0) throw new Exception('Nachricht kann nicht vom Server gespeicher werden.');
-            else {
-                $uiicid = $this->db->lastInsertId('uiicid');
-                $stmt_2 = $this->db->prepare("INSERT INTO message (uiicid,message)VALUES (?,?)");
-                $ret_2 = $stmt_2->execute(array($uiicid,$message));
-                if($ret_2==0) throw new Exception('Nachricht kann nicht vom Server gespeicher werden.');
-                else return $this->db->lastInsertId();
-            }
-            /*$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
-					({$this->M_UIICID}, {$this->M_MESSAGE})
-					SELECT {$this->UIIC_ID}, :message
-					FROM {$this->TABLE_USER_IS_IN_CHAT}
-					WHERE {$this->UIIC_CID} = :chatId
-					AND {$this->UIIC_UID} = :userId");
-
-            /*$stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
-					({$this->M_UIICID}, {$this->M_MESSAGE})
-					SELECT {$this->UIIC_ID}, '%$message%'
-					FROM {$this->TABLE_USER_IS_IN_CHAT}
-					WHERE {$this->UIIC_CID} = '%$chatId%'
-					AND {$this->UIIC_UID} = '%$userId%'");*/
-
-			/*if($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
-                    return $this->db->lastInsertId();
-            }
-            else {
-                return false;
-            }*/
-        }
-        catch (PDOException $e){
-            return "Error: " . $e->getMessage();
-        }
-	}
-	
-	public function writeMessage_v2($chatId, $userId, $message) {
 		try{
 			/*
 			INSERT INTO message
