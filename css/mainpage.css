@@ -13,6 +13,9 @@ body {
 
 a {
 	text-decoration: none;
+	border: 0;
+	color: #000;
+	cursor: pointer;
 }
 
 button {
@@ -950,4 +953,22 @@ div[class~="onTop"] > .count {
 	.switchMobile {
 		width: calc(220px - 20px);
 	}
+}
+
+#nojavascript a {
+	color: #fff;
+	border-bottom: 2px dotted #fff;
+}
+#nojavascript {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 9000;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	line-height: 125%;
+	font-size: 24px;
 }
