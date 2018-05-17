@@ -30,6 +30,19 @@ try {
             //$return_array = $Database->writeMessage($p['chat_id'],$user_id,$p['msg']);
             $return_array =$Database->writeMessage($chat_id,$user_id,$msg);
             break;
+        case "getAllChatsFromCurrentUser":
+            $return_array = $Database->getAllChatsFromCurrentUser();
+            break;
+        case "getCurrentUser":
+            $return_array = $Database->getCurrentUser();
+            break;
+        case "logout":
+            $return_array = $Database->logout();
+            break;
+        case "getAllMessagesFromChat":
+            $chat_id = $p['chat_id'];
+            $return_array = $Database->getAllMessagesFromChat($p['chatId']);
+            break;
 
         default:
             throw new Exception('Instruktion nicht gefunden.');
