@@ -177,6 +177,8 @@ function chatloeschenclick() {
     if(chat_id>0){
         var functionString = '{"i":"chatloeschen","chat_id":'+chat_id+'}';
         callChatctl(functionString);
+        var jsonSend = '{"i":"sendmessage","chat_id":'+chat_id+',"msg":" hat den Chat verlassen"}';
+        callChatctl(jsonSend);
         window.location="";
     }else console.log("kein aktueller chat raum");
 }

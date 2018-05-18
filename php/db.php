@@ -383,4 +383,29 @@ class Database {
             return "Error: " . $e->getMessage();
         }
 	}
+
+	public function getMembersOfChat($chatId){
+        try{
+            /*
+             * SELECT user.name, user_is_in_chat.uid
+             * FROM user_is_in_chat
+             * JOIN USER on user_is_in_chat.uid = USER.uid
+             * WHERE user_is_in_chat.cid=3 AND NOT(user_is_in_chat.deleted)
+            */
+            $stmt = $this->db->prepare("SELECT {$this->U_NAME} 
+            		FROM {$this->TABLE_USER_IS_IN_CHAT}
+            		JOIN {$this->TABLE_USER} ON {$this->UIIC_UID}={$this->U_ID}
+					WHERE {$this->UIIC_CID} = :chatId
+					AND NOT ({$this->UIIC_deleted})");
+            if($stmt->execute(array( ':chatId' => $chatId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+    }
 }

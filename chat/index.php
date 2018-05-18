@@ -68,10 +68,27 @@ if(!$Database->isLoggedIn()) {
                     echo "<br>";
                     for ($j=0;$j<$count;$j++){
                         $deleted[$j] = $Database->isChatDeletedForUser($chats[$j]['cid']);
+                        //print_r($members_2[$j]);
+                        //$deleted[$j]=1;
                         if (!$deleted[$j]){
                             $cid[$j]=$chats[$j]['cid'];
                             $chatname[$j] =$chats[$j]['chatname'];
-                            $members[$j] =$chats[$j]['members'];
+                            $members[$j] = $Database->getMembersOfChat($chats[$j]['cid']);
+                            $count_2 = count($members[$j]);
+                            $members_2[$j]="";
+                            if($count_2>1){
+                                $members_10=$members[$j][0]['name'];
+                                $members_20=$members[$j][1]['name'];
+                            }else {
+                                $members_10=$members[$j][0]['name'];
+                                $members_20="NV";
+                            }
+                            for ($i=0;$i<$count_2;$i++){
+                                if($members_2[$j]==""){
+                                    $members_2[$j] = $members[$j][$i]['name'];
+                                }else $members_2[$j]=$members_2[$j]." , ".$members[$j][$i]['name'];
+                            }
+                            /*$members[$j] =$chats[$j]['members'];
                             $members[$j] = explode(',',$members[$j]);
                             $members_0 = $members[$j];
                             $count_2 = count($members[$j]);
@@ -81,10 +98,11 @@ if(!$Database->isLoggedIn()) {
                                     $members_2 = $members[$j][$i];
                                 }else $members_2 =$members_2." , ".$members[$j][$i];
 
-                            }
+                            }*/
+                            //$members[$j] = $Database->getMembersOfChat($cid[$j]);
                             $history = conHistory($cid[$j],$Database,$count_2);
                             if($count_2>2){
-                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
+                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -93,21 +111,23 @@ if(!$Database->isLoggedIn()) {
                                         $chatname[$j]                        
                                     </p>
                                     <p class='message'>
-                                        Mitglieder: $members_2
+                                        Mitglieder: $members_2[$j]
                                     </p>
                                 </div>
                               </div>
                             ";
                             }else {
-                                $username = $Database->getCurrentUser();
-                                $members_10 = $members_0[0];
-                                $members_20 = $members_0[1];
-                                if($members_10==$username){
-                                    $members_0 = $members_20;
+                                if($members_20=="NV"){
+                                    $members_0="--> kein Chat Partner vorhanden <--";
                                 }else {
-                                    $members_0 = $members_10;
+                                    $username = $Database->getCurrentUser();
+                                    if($members_10==$username){
+                                        $members_0 = "An: ".$members_20;
+                                    }else {
+                                        $members_0 = "An: ".$members_10;
+                                    }
                                 }
-                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
+                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -116,7 +136,7 @@ if(!$Database->isLoggedIn()) {
                                         $chatname[$j]                        
                                     </p>
                                     <p class='message'>
-                                        An: $members_0
+                                        $members_0
                                     </p>
                                 </div>
                               </div>
@@ -156,13 +176,17 @@ if(!$Database->isLoggedIn()) {
                             $zeit = $message['time'];
                             $name = $message['name'];
                             $username = $Database->getCurrentUser();
-                            if($username==$name){
-                                $return = $return."<div class=\\\"msg messageSent\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
-                            }
-                            else if($count_2>2){
-                                $return = $return."<div class=\\\"msg messageReceived\\\">$name: $nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                            if($nachricht==" hat den Chat verlassen"){
+                                $return =$return."<div class=\\\"chatVerlassen\\\"><b>$name</b>$nachricht</div>";
                             }else {
-                                $return = $return."<div class=\\\"msg messageReceived\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                                if($username==$name){
+                                    $return = $return."<div class=\\\"msg messageSent\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                                }
+                                else if($count_2>2){
+                                    $return = $return."<div class=\\\"msg messageReceived\\\">$name: $nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                                }else {
+                                    $return = $return."<div class=\\\"msg messageReceived\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                                }
                             }
                         }
                     }
