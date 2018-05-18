@@ -723,6 +723,20 @@ div[class~="onTop"] > .count {
 
 }
 
+.chatVerlassen {
+    text-align: center;
+    max-height: 0px;
+    padding: 10px;
+    padding-bottom: 27px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    background: rgba(228, 226, 221, 0.74);
+    border-radius: 100px;
+    clear: both;
+
+}
+
 .messageReceived {
 	float: left;
 	background: #FFF;
