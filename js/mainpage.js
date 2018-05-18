@@ -27,7 +27,7 @@ $(document).ready(function() {
         });
 
         /* small conversation menu */
-        $(".otherOptions").click(function () {
+        $("#chatOption").click(function () {
             $(".moreMenu").slideToggle("fast");
         });
 
@@ -84,12 +84,18 @@ $(document).ready(function() {
             logout();
         });
 
-        sessionStorage.aktuelleChatId = 0;
+        $(".option").click(function () {
+            $(".moreMenu").slideToggle("fast");
+            chatloeschenclick();
+        });
 
+        sessionStorage.aktuelleChatId = 0;
+        chatloeschen();
     }
 
 
 });
+
 function onEnter(e) {
     if (e.keyCode == 13) {
         var tb = document.getElementById("inputChatMessage");
@@ -105,7 +111,6 @@ function onEnter(e) {
 
 function sendChatMsg(chatroomId) {
     var chatText = $("#inputChatMessage").val();
-    //var chatroomId = parseInt(sessionStorage.aktuelleChatId);
     if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
         $("#inputChatMessage").val("");
@@ -113,7 +118,7 @@ function sendChatMsg(chatroomId) {
     } else {
         chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
         chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
-        var jsonSend = '{"i":"send-message","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
+        var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
         callChatctl(jsonSend);
         $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
         $("#inputChatMessage").focus();
@@ -125,17 +130,17 @@ function sendChatMsg(chatroomId) {
 function logout(){
     var jsonSend = '{"i":"logout"}';
     callChatctl(jsonSend);
-    window.location.href='/../logout.php';
+    window.location.href='./../logout.php';
 }
-//$cid[$j],$chatname[$j],$members_2
 
 function chatButtonClick(cid,chatname,members,history) {
-    document.getElementById('chatname').innerHTML = chatname;
-    document.getElementById('mitglieder').innerHTML = "Mitglieder: "+members;
-    document.getElementById('chatVerlauf').innerHTML = history;
+    $('#chatname').html(chatname);
+    $('#mitglieder').html("Mitglieder: "+members);
+    $('#chatVerlauf').html(history);
     sessionStorage.aktuelleChatId = cid;
     var chathistory = document.getElementById('chatVerlauf');
     chathistory.scrollTop = chathistory.scrollHeight;
+    chatloeschen();
 }
 
 function callChatctl(functionString) {
@@ -148,13 +153,30 @@ function callChatctl(functionString) {
         dataType: 'json',   //data format
         success: function (response) {
             console.log(response);
-            console.log("Hat geklappt");
         },
         error: function(response, status, error) {
             console.log(response);
             console.log(status);
             console.log(error);
-            console.log("Fehler");
         }
     });
+}
+
+function chatloeschen() {
+    var chatid = sessionStorage.aktuelleChatId;
+    var chatOption = document.getElementById("chatOption")
+    if(chatid>0){
+        chatOption.style.visibility="visible";
+    }else {
+        chatOption.style.visibility="hidden";
+    }
+}
+
+function chatloeschenclick() {
+    var chat_id = sessionStorage.aktuelleChatId;
+    if(chat_id>0){
+        var functionString = '{"i":"chatloeschen","chat_id":'+chat_id+'}';
+        callChatctl(functionString);
+        window.location="";
+    }else console.log("kein aktueller chat raum");
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <?php
-include("../php/db.php");
+include("./../php/db.php");
 $Database = new Database();
 $username;
 // Login überprüfen
@@ -22,7 +22,7 @@ if(isset($_POST['login-submit'])) {
 // prüfen, ob User eingeloggt ist
 if(!$Database->isLoggedIn()) {
     // zur Login-Seite weiterleiten
-    header('Location: /../');
+    header('Location: ./../');
 }
 //print_r($chatverlauf);
 
@@ -32,8 +32,9 @@ if(!$Database->isLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../css/Icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/mainpage.css">
+    <link href="./../css/Icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="./../css/mainpage.css">
+    <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
 </head>
 <body>
 <!-- -------- -->
@@ -66,27 +67,24 @@ if(!$Database->isLoggedIn()) {
                 if ($count > 0){
                     echo "<br>";
                     for ($j=0;$j<$count;$j++){
-                        $cid[$j]=$chats[$j]['cid'];
-                        $chatname[$j] =$chats[$j]['chatname'];
-                        $members[$j] =$chats[$j]['members'];
-                        $members[$j] = explode(',',$members[$j]);
-                        $members_0 = $members[$j];
-                        $count_2 = count($members[$j]);
-                        //echo "Chat_Id: ".$cid[$j]." Chatname: ".$chatname[$j]." Members: ";
-                        $members_2="";
-                        for ($i=0;$i<$count_2;$i++){
-                            if($members_2==""){
-                                $members_2 = $members[$j][$i];
-                            }else $members_2 =$members_2." , ".$members[$j][$i];
+                        $deleted[$j] = $Database->isChatDeletedForUser($chats[$j]['cid']);
+                        if (!$deleted[$j]){
+                            $cid[$j]=$chats[$j]['cid'];
+                            $chatname[$j] =$chats[$j]['chatname'];
+                            $members[$j] =$chats[$j]['members'];
+                            $members[$j] = explode(',',$members[$j]);
+                            $members_0 = $members[$j];
+                            $count_2 = count($members[$j]);
+                            $members_2="";
+                            for ($i=0;$i<$count_2;$i++){
+                                if($members_2==""){
+                                    $members_2 = $members[$j][$i];
+                                }else $members_2 =$members_2." , ".$members[$j][$i];
 
-                        }
-                        //conHistory($cid[$j],$Database);
-                        //echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\");conHistory($cid[$j]);'>
-                        //echo "<div class='chatButton' onclick=''conHistory('$cid[$j]'');'>
-                        //echo "<script> document.getElementById('chatVerlauf').innerHTML =";conHistory($cid[$j],$Database); echo " </script>";
-                        $history = conHistory($cid[$j],$Database,$count_2);
-                        if($count_2>2){
-                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
+                            }
+                            $history = conHistory($cid[$j],$Database,$count_2);
+                            if($count_2>2){
+                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -100,16 +98,16 @@ if(!$Database->isLoggedIn()) {
                                 </div>
                               </div>
                             ";
-                        }else {
-                            $username = $Database->getCurrentUser();
-                            $members_10 = $members_0[0];
-                            $members_20 = $members_0[1];
-                            if($members_10==$username){
-                                $members_0 = $members_20;
                             }else {
-                                $members_0 = $members_10;
-                            }
-                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
+                                $username = $Database->getCurrentUser();
+                                $members_10 = $members_0[0];
+                                $members_20 = $members_0[1];
+                                if($members_10==$username){
+                                    $members_0 = $members_20;
+                                }else {
+                                    $members_0 = $members_10;
+                                }
+                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -123,8 +121,8 @@ if(!$Database->isLoggedIn()) {
                                 </div>
                               </div>
                             ";
+                            }
                         }
-
                     }
                 }
                 ?>
@@ -135,11 +133,8 @@ if(!$Database->isLoggedIn()) {
         <!-- obere Leiste des Chats -->
         <div class="topBar">
             <div class="rightSide">
-                <button class="tbButton search">
-                    <i class="material-icons">&#xE8B6;</i>
-                </button>
-                <button class="tbButton otherOptions">
-                    <i class="material-icons">more_vert</i>
+                <button id="chatOption">
+                        <i class="material-icons">more_vert</i>
                 </button>
             </div>
 
@@ -355,7 +350,7 @@ if(!$Database->isLoggedIn()) {
 <!-- CONVERSATION OPTIONS MENU -->
 <!-- drei Punkte oben rechts -->
 <div class="moreMenu">
-    <button class="option about">Irgendwas</button>
+    <button class="option about">Chat löschen</button>
 </div>
 
 <?php
@@ -374,7 +369,7 @@ echo "<script>
 ?>
 
 <!-- JS einbinden -->
-<script src='../js/vendor/jquery.min.js'></script>
-<script  src="../js/mainpage.js"></script>
+<script src='./../js/vendor/jquery.min.js'></script>
+<script  src="./../js/mainpage.js"></script>
 </body>
 </html>

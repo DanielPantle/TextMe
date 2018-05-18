@@ -1,7 +1,7 @@
 
 <?php
 
-include("php/db.php");
+include("./php/db.php");
 $Database = new Database();
 
 
@@ -55,7 +55,7 @@ if(isset($_POST['register-submit'])) {
 // prüfen, ob User eingeloggt ist
 if($Database->isLoggedIn()) {
     // zur Chat-Seite weiterleiten
-    header('Location: /chat');
+    header('Location: ./chat');
 
 
 }

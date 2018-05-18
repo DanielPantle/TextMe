@@ -29,6 +29,7 @@ class Database {
 	private $UIIC_UID = "user_is_in_chat.uid";
 	private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
 	private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
+	private $UIIC_deleted ="user_is_in_chat.deleted";
 
 	private $TABLE_MESSAGE = "message";
 	private $M_ID = "message.mid";
@@ -334,5 +335,52 @@ class Database {
             return "Error: " . $e->getMessage();
         }
 	}
+
+	public function deleteChat($chatId){
+        try{
+            /*
+             * UPDATE `user_is_in_chat` SET `deleted`=1 WHERE `cid`= 1 AND `uid` 5
+            */
+            $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER_IS_IN_CHAT}
+		            SET {$this->UIIC_deleted} = 1
+					WHERE {$this->UIIC_CID} = :chatId
+					AND {$this->UIIC_UID} = :userId");
+            $userId = $this->getUserID();
+            $userId = $userId[0][0];
+            if($stmt->execute(array( ':chatId' => $chatId, ':userId' => $userId))) {
+                return $this->db->lastInsertId();
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function isChatDeletedForUser($chatId){
+        try{
+            /*
+             * SELECT `deleted` FROM `user_is_in_chat` WHERE `cid` = 1 AND `uid` = 1
+            */
+            $stmt = $this->db->prepare("SELECT {$this->UIIC_deleted} 
+            		FROM {$this->TABLE_USER_IS_IN_CHAT}
+					WHERE {$this->UIIC_CID} = :chatId
+					AND {$this->UIIC_UID} = :userId");
+            $userId = $this->getUserID();
+            $userId = $userId[0][0];
+            if($stmt->execute(array( ':chatId' => $chatId, ':userId' => $userId))) {
+                $deleted= $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $deleted=$deleted[0]['deleted'];
+                return $deleted;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (PDOException $e){
+            return "Error: " . $e->getMessage();
+        }
+	}
 }
-?>

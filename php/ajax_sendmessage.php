@@ -1,5 +1,5 @@
 <?php
-include("db.php");
+include("./db.php");
 $Database = new Database();
 $return_array = array();
 function done(){
@@ -22,13 +22,10 @@ try {
     if (!done()){ switch ($p['i']) {
 
         //Erwartet die ID des Chats sowie die Nachricht
-        case "send-message":
+        case "sendmessage":
             $user_id = $Database->getUserID();
             $user_id = $user_id[0][0];
-            $msg = $p['msg'];
-            $chat_id = $p['chat_id'];
-            //$return_array = $Database->writeMessage($p['chat_id'],$user_id,$p['msg']);
-            $return_array =$Database->writeMessage($chat_id,$user_id,$msg);
+            $return_array =$Database->writeMessage($p['chat_id'],$user_id,$p['msg']);
             break;
         case "getAllChatsFromCurrentUser":
             $return_array = $Database->getAllChatsFromCurrentUser();
@@ -40,10 +37,11 @@ try {
             $return_array = $Database->logout();
             break;
         case "getAllMessagesFromChat":
-            $chat_id = $p['chat_id'];
-            $return_array = $Database->getAllMessagesFromChat($p['chatId']);
+            $return_array = $Database->getAllMessagesFromChat($p['chat_id']);
             break;
-
+        case "chatloeschen";
+            $return_array = $Database->deleteChat($p['chat_id']);
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 
