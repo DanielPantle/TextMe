@@ -153,30 +153,25 @@ if(!$Database->isLoggedIn()) {
             <!-- CONVERSATION GOES HERE! -->
             <?php
                 function conHistory($chatid,$Database,$count_2){
-                    $chatverlauf = $Database->getAllMessagesFromChat($chatid);
-                    //print_r($chatverlauf);
-                    $count_verlauf = count($chatverlauf);
-                    $userid = $Database->getUserID();
-                    $userid = $userid[0][0];
-                    $return[0] ="";
-                    for ($k=0;$k<$count_verlauf;$k++){
-                        $uiicid_sql[$k]=$chatverlauf[$k]['uiicid'];
-                        $uid_sql[$k]=$chatverlauf[$k]['uid'];
-                        $message_sql[$k]=$chatverlauf[$k]['message'];
-                        $timeadded_sql[$k]=$chatverlauf[$k]['timeadded'];
-                        $bkabka = str_split($timeadded_sql[$k],11);
-                        if($uid_sql[$k]==$userid){
-                            $return[$k] = "<div class=\\\"msg messageSent\\\">$message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
-                        }else {
-                            if($count_2>2){
-                                $user=$Database->getUsername($uid_sql[$k]);
-                                $user = $user[0][0];
-                                $return[$k] = "<div class=\\\"msg messageReceived\\\">$user: $message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
-                            }else $return[$k] = "<div class=\\\"msg messageReceived\\\">$message_sql[$k]<span class=\\\"timestamp\\\">$bkabka[1]</span></div>";
+                    $return = "";
+                    foreach ($Database->getAllMessagesFromChat($chatid) as $date => $messages) {
+                        $return = $return."<div class=\\\"chatDatum\\\">$date</div>";
+                        foreach ($messages as $message) {
+                            $nachricht = $message['message'];
+                            $zeit = $message['time'];
+                            $name = $message['name'];
+                            $username = $Database->getCurrentUser();
+                            if($username==$name){
+                                $return = $return."<div class=\\\"msg messageSent\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                            }
+                            else if($count_2>2){
+                                $return = $return."<div class=\\\"msg messageReceived\\\">$name: $nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                            }else {
+                                $return = $return."<div class=\\\"msg messageReceived\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                            }
                         }
                     }
-                    $return_2 = join(" ",$return);
-                    return $return_2;
+                    return $return;
                 }
             ?>
         </div>

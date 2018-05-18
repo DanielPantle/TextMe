@@ -675,8 +675,8 @@ div[class~="onTop"] > .count {
 	height: auto;
 	padding: 25px;
 	padding-bottom: 35px;
-	margin: 20px 15px;
-	margin-bottom: 0px;
+	margin: 10px 15px;
+	margin-bottom: 10px;
 	background: #FFF;
 	border-radius: 7px;
 	clear: both;
@@ -693,6 +693,21 @@ div[class~="onTop"] > .count {
 	bottom: 6px;
 	color: #AAA;
 	user-select: none;
+}
+
+.chatDatum {
+    text-align: center;
+    max-height: 0px;
+    max-width: 80px;
+    padding: 10px;
+    padding-bottom: 27px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    background: rgba(228, 226, 221, 0.74);
+    border-radius: 100px;
+    clear: both;
+
 }
 
 .messageReceived {

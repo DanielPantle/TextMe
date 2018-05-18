@@ -204,37 +204,6 @@ class Database {
 	public function getAllMessagesFromChat($chatId) {
 		try {
 			/*
-			SELECT m.message, m.timeadded, u.name
-			FROM message AS m
-			JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
-			JOIN user AS u on (uiic.uid = u.uid)
-			JOIN chat AS c on (uiic.cid = c.cid)
-			WHERE uiic.cid = 2
-			ORDER BY m.timeadded
-			*/
-			$stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, {$this->U_ID}, {$this->U_NAME}
-					FROM {$this->TABLE_MESSAGE}
-					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
-					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
-					WHERE {$this->UIIC_CID} = :chatid
-					ORDER BY {$this->M_TIMEADDED}");
-			
-			if($stmt->execute(array(':chatid' => $chatId))) {
-				return $stmt->fetchAll(PDO::FETCH_ASSOC);
-			}
-			else {
-				return false;
-			}
-		}
-		catch(PDOException $e) {
-			return "Error: " . $e->getMessage();
-		}
-
-	}
-	
-	public function getAllMessagesFromChat_v2($chatId) {
-		try {
-			/*
 			SELECT m.message, u.name, m.timeadded,
 			DATEDIFF(NOW(), m.timeadded) AS date
 			FROM message AS m
@@ -249,7 +218,7 @@ class Database {
 					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
 					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
 					WHERE {$this->UIIC_CID} = :chatid
-					ORDER BY datediff");
+					ORDER BY datediff DESC");
 			
 			if($stmt->execute(array(':chatid' => $chatId))) {
 				$res = array();
@@ -257,17 +226,17 @@ class Database {
 				foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $message) {
 					if($message['datediff'] == 0) {
 						// Nachricht heute
-						if(!array_key_exists('t', $res)) {
-							$res['t'] = array();
+						if(!array_key_exists('Heute', $res)) {
+							$res['Heute'] = array();
 						}
-						array_push($res['t'], $message);
+						array_push($res['Heute'], $message);
 					}
 					else if($message['datediff'] == 1) {
 						// Nachricht gestern
-						if(!array_key_exists('y', $res)) {
-							$res['y'] = array();
+						if(!array_key_exists('Gestern', $res)) {
+							$res['Gestern'] = array();
 						}
-						array_push($res['y'], $message);
+						array_push($res['Gestern'], $message);
 					}
 					else {
 						// sonstige Nachrichten
