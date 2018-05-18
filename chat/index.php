@@ -179,50 +179,10 @@ if(!$Database->isLoggedIn()) {
                     return $return_2;
                 }
             ?>
-            <!--<div class="msg messageReceived">
-                Wow!
-                <span class="timestamp">00:00</span>
-            </div>
-
-            <div class="msg messageSent">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore fuga cumque aut, harum mollitia aperiam similique dolore voluptates reprehenderit, reiciendis ipsum totam, assumenda autem explicabo amet dolorum eveniet vero delectus?
-                <i class="material-icons readStatus">done_all</i>
-                <span class="timestamp">00:01</span>
-            </div>
-
-            <div class="msg messageReceived">
-                Wow!
-                <span class="timestamp">00:02</span>
-            </div>
-
-            <div class="msg messageReceived">
-                Wow!
-                <span class="timestamp">00:02</span>
-            </div>
-
-            <div class="msg messageReceived">
-                Wow!
-                <span class="timestamp">00:02</span>
-            </div>
-
-            <div class="msg messageReceived">
-                Wow!
-                <span class="timestamp">00:02</span>
-            </div>
-
-            <div class="msg messageSent">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore fuga cumque aut, harum mollitia aperiam similique dolore voluptates reprehenderit, reiciendis ipsum totam, assumenda autem explicabo amet dolorum eveniet vero delectus?
-                <i class="material-icons readStatus">done</i>
-                <span class="timestamp">00:04</span>
-            </div>-->
         </div>
         <!-- Leiste unter dem Chat -->
         <div class="replyBar">
 
-            <!-- Anhang kann meiner Meinung erstmal weg -->
-            <!--<button class="attach">
-                <i class="material-icons d45">attach_file</i>
-            </button>-->
             <!-- Eingabefeld -->
             <input id="inputChatMessage" type="text" onkeypress="return onEnter(event)" class="replyMessage" placeholder="Type your message..."/>
 
@@ -230,9 +190,6 @@ if(!$Database->isLoggedIn()) {
                 <!-- Emoji's /Stickers / GIF -->
                 <div class="emoticonType">
                     <button id="panelEmoji">Emojis</button>
-                    <!-- kann erstmal weg -->
-                    <!--<button id="panelStickers">Stickers</button>
-                    <button id="panelGIFs">GIFs</button>-->
                 </div>
 
                 <!-- Emoji panel -->
@@ -244,13 +201,6 @@ if(!$Database->isLoggedIn()) {
                     <button id="somface" class="pick"></button>
                     <button id="swfface" class="pick"></button>
                 </div>
-
-                <!-- the best part of telegram ever: STICKERS!! -->
-                <!--<div class="stickerList">
-                    <button id="smileface" class="pick"></button>
-                    <button id="grinningface" class="pick"></button>
-                    <button id="tearjoyface" class="pick"></button>
-                </div>-->
             </div>
 
             <div class="otherTools">
@@ -276,20 +226,12 @@ if(!$Database->isLoggedIn()) {
             <div class="myinfo">
                 <p class="name" id="nutzernamen">Random Name</p>
                 <p id="email"> eMail Adresse?</p>
-                <!--<p class="phone">+1 12 1234 5678</p>-->
             </div>
-
-            <!--<button class="cloud">
-                <i class="material-icons">cloud</i>
-            </button>-->
 
             <button class="settings">
                 <i class="material-icons">settings</i>
             </button>
 
-            <!--<button class="cloud">
-                <i class="material-icons">cloud</i>
-            </button>-->
         </div>
         <!-- Navigationsleiste "mitte" -->
         <nav>
@@ -308,21 +250,7 @@ if(!$Database->isLoggedIn()) {
                 <span>Contacts</span>
             </button>
 
-            <!--<button class="cl">
-                <i class="material-icons">&#xE0B0;</i>
-
-                <span>Calls History</span>
-            </button>-->
-
-            <!--<a href="https://telegram.org/faq" target="_blank">
-                <button class="faq">
-                    <i class="material-icons">&#xE000;</i>
-
-                    <span>FAQ and Support</span>
-                </button>
-            </a>-->
-
-            <button class="lo" onclick="logout()">
+            <button class="lo">
                 <i class="material-icons">&#xE879;</i>
                 <span>Logout</span>
             </button>
@@ -330,8 +258,7 @@ if(!$Database->isLoggedIn()) {
 
         <div class="info">
             <p>TextMe - Pineapple</p>
-            <p>Version 0.0.0 <!--- <a href="https://en.wikipedia.org/wiki/Telegram_(messaging_service)">About</a>--></p>
-            <!--<p>Layout coded by: <a href="https://www.facebook.com/mayrinckdesign">Mayrinck</a></p>-->
+            <p>Version 0.0.0</p>
         </div>
     </div>
 </section>
@@ -357,7 +284,6 @@ if(!$Database->isLoggedIn()) {
             <div class="side">
                 <p class="name" id="nutzernamen2">Random Name</p>
                 <p id="email2">email Adresse?</p>
-                <!--<p class="pStatus">Online</p>-->
             </div>
 
             <button class="changePic">Change Profile Picture</button>
@@ -366,18 +292,6 @@ if(!$Database->isLoggedIn()) {
     </section>
 
     <section class="configSect second">
-
-
-        <!-- PROFILE INFO SECTION -->
-        <!--<p class="confTitle">Your Info</p>
-
-        <div class="information">
-            <ul>
-                <li>eMail-Adresse: <span class="blue phone">+1 12 1234 5678</span></li>
-                <li>Username: <span class="blue username">USERNAME</span></li>
-                <li>Profile: <span class="blue">https://t.me/USERNAME</span></li>
-            </ul>
-        </div>-->
 
         <!-- NOTIFICATIONS SECTION -->
         <p class="confTitle">Notifications</p>
@@ -447,9 +361,6 @@ if(!$Database->isLoggedIn()) {
 <!-- drei Punkte oben rechts -->
 <div class="moreMenu">
     <button class="option about">Irgendwas</button>
-    <!--<button class="option about">See Info</button>
-    <button class="option notify">Disable Notifications</button>
-    <button class="option block">Block User</button>-->
 </div>
 
 <?php

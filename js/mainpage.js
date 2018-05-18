@@ -80,14 +80,16 @@ $(document).ready(function() {
 
         });
 
+        $(".lo").click(function () {
+            logout();
+        });
+
         sessionStorage.aktuelleChatId = 0;
 
     }
 
 
-
 });
-
 function onEnter(e) {
     if (e.keyCode == 13) {
         var tb = document.getElementById("inputChatMessage");
@@ -112,7 +114,6 @@ function sendChatMsg(chatroomId) {
         chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
         chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
         var jsonSend = '{"i":"send-message","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
-        //callChatctl(jsonSend, function() {});
         callChatctl(jsonSend);
         $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
         $("#inputChatMessage").focus();
@@ -122,6 +123,8 @@ function sendChatMsg(chatroomId) {
 }
 
 function logout(){
+    var jsonSend = '{"i":"logout"}';
+    callChatctl(jsonSend);
     window.location.href='/../logout.php';
 }
 //$cid[$j],$chatname[$j],$members_2
