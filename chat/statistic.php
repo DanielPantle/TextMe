@@ -25,6 +25,7 @@ $onlineUsers = '<div class="form-group" id="statisticContent">Nutzer online: ' .
     <title>TextMe - Statistik</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./../css/statistic.css" rel="stylesheet">
+    <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
 </head>
 <body>
 
