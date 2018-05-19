@@ -3,7 +3,7 @@
 
 
 ?>
-
+<title>TextMe - Passwort vergessen..</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <script src="../js/vendor/jquery-3.3.1.js"></script>
 <script src="../js/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>

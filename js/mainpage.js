@@ -89,6 +89,10 @@ $(document).ready(function() {
             chatloeschenclick();
         });
 
+        $(".cn").click(function () {
+            window.location.href='./statistic.php';
+        });
+
         sessionStorage.aktuelleChatId = 0;
         chatloeschen();
     }
@@ -182,3 +186,8 @@ function chatloeschenclick() {
         window.location="";
     }else console.log("kein aktueller chat raum");
 }
+
+window.setInterval(function () {
+    var functionString = '{"i":"ping"}';
+    callChatctl(functionString);
+},500);

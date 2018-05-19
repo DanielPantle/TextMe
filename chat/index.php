@@ -28,12 +28,13 @@ if(!$Database->isLoggedIn()) {
 
 ?>
     <meta charset="UTF-8">
-    <title>TextMe - Pineapple</title>
+    <title>TextMe - Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="./../css/Icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./../css/mainpage.css">
     <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
 <!-- -------- -->
@@ -250,18 +251,21 @@ if(!$Database->isLoggedIn()) {
         <nav>
             <button class="ng">
                 <i class="material-icons">&#xE8D3;</i>
-                <span>New Group</span>
+                <span>Neue Gruppe</span>
             </button>
 
             <button class="nc">
                 <i class="material-icons">&#xE0B6;</i>
-                <span>New Channel</span>
+                <span>Neuer Chat </span>
             </button>
-
-            <button class="cn">
-                <i class="material-icons">&#xE851;</i>
-                <span>Contacts</span>
-            </button>
+            <?php
+                if($Database->isUserAdmin()){
+                    echo "<button class=\"cn\">
+                                <i class=\"fa fa-bar-chart-o\" style=\"font-size:20px;color:#999\"></i>
+                                <span>Statistik</span>
+                            </button>";
+                }
+            ?>
 
             <button class="lo">
                 <i class="material-icons">&#xE879;</i>

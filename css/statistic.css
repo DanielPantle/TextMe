@@ -1,0 +1,52 @@
+.modal-content {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 8px;
+    background : url("../images/background_body.jpg") 100% center;
+}
+
+.modal-header {
+    color: #555;
+    margin-left: 10px;
+}
+
+.modal-body {
+    height: 70vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    background : url("../images/chat_hintergrund.jpg") 100% center;
+    /*background-color: #404040;*/
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #f7f7f7;
+}
+
+#statisticContent {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 20px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    background: rgba(228, 226, 221, 0.74);
+    clear: both;
+}
+
+
+
+.modal-footer {
+    color: #555;
+    margin-left: 10px;
+}
+
+
+#toChat {
+    text-decoration: none;
+    color: #555;
+}
+
+#toLogout {
+    text-decoration: none;
+    color: #555;
+}

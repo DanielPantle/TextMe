@@ -39,8 +39,11 @@ try {
         case "getAllMessagesFromChat":
             $return_array = $Database->getAllMessagesFromChat($p['chat_id']);
             break;
-        case "chatloeschen";
+        case "chatloeschen":
             $return_array = $Database->deleteChat($p['chat_id']);
+            break;
+        case "ping":
+            $return_array = $Database->ping();
             break;
         default:
             throw new Exception('Instruktion nicht gefunden.');

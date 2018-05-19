@@ -66,7 +66,7 @@ if($Database->isLoggedIn()) {
 
 
 ?>
-        <title>TextMe - Pineapple</title>
+        <title>TextMe - Login/Registrierung</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="./css/login-signup.css">
