@@ -497,4 +497,21 @@ class Database
             return "Error: " . $e->getMessage();
         }
     }
+
+    function getCurrentUser_v2(){
+        /*
+         * SELECT USER.name FROM `user` WHERE user.uid = 1
+         */
+        $userid = $this->getUserID();
+        $userid = $userid[0][0];
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_ID}= :userId");
+            if($stmt->execute(array(':userId' => $userid))){
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result[0][0];
+            }
+        }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
 }

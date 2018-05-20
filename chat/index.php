@@ -175,7 +175,7 @@ if(!$Database->isLoggedIn()) {
                             $nachricht = $message['message'];
                             $zeit = $message['time'];
                             $name = $message['name'];
-                            $username = $Database->getCurrentUser();
+                            $username = $Database->getCurrentUser_v2();
                             if($nachricht==" hat den Chat verlassen"){
                                 $return =$return."<div class=\\\"chatVerlassen\\\"><b>$name</b>$nachricht</div>";
                             }else {
