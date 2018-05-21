@@ -1481,7 +1481,7 @@ function isFunction(functionToCheck) {
 }
 
 /**
- * Get CSS computed property of the given element
+ * Get css computed property of the given element
  * @method
  * @memberof Popper.Utils
  * @argument {Eement} element
@@ -2120,7 +2120,7 @@ function getOppositePlacement(placement) {
  * Get offsets to the popper
  * @method
  * @memberof Popper.Utils
- * @param {Object} position - CSS position the Popper will get applied
+ * @param {Object} position - css position the Popper will get applied
  * @param {HTMLElement} popper - the popper element
  * @param {Object} referenceOffsets - the reference offsets (the popper will be relative to this)
  * @param {String} placement - one of the valid placement options
@@ -2677,7 +2677,7 @@ function arrow(data, options) {
 
   var arrowElement = options.element;
 
-  // if arrowElement is a string, suppose it's a CSS selector
+  // if arrowElement is a string, suppose it's a css selector
   if (typeof arrowElement === 'string') {
     arrowElement = data.instance.popper.querySelector(arrowElement);
 
@@ -3305,8 +3305,8 @@ var modifiers = {
    * - `px` or unitless, interpreted as pixels
    * - `%` or `%r`, percentage relative to the length of the reference element
    * - `%p`, percentage relative to the length of the popper element
-   * - `vw`, CSS viewport width unit
-   * - `vh`, CSS viewport height unit
+   * - `vw`, css viewport width unit
+   * - `vh`, css viewport height unit
    *
    * For length is intended the main axis relative to the placement of the popper.<br />
    * This means that if the placement is `top` or `bottom`, the length will be the
@@ -3491,7 +3491,7 @@ var modifiers = {
   /**
    * Modifier used to hide the popper when its reference element is outside of the
    * popper boundaries. It will set a `x-out-of-boundaries` attribute which can
-   * be used to hide with a CSS selector the popper when its reference is
+   * be used to hide with a css selector the popper when its reference is
    * out of boundaries.
    *
    * Requires the `preventOverflow` modifier before it in order to work.
@@ -3531,7 +3531,7 @@ var modifiers = {
     fn: computeStyle,
     /**
      * @prop {Boolean} gpuAcceleration=true
-     * If true, it uses the CSS 3d transformation to position the popper.
+     * If true, it uses the css 3d transformation to position the popper.
      * Otherwise, it will use the `top` and `left` properties.
      */
     gpuAcceleration: true,
@@ -3576,7 +3576,7 @@ var modifiers = {
     /**
      * @deprecated since version 1.10.0, the property moved to `computeStyle` modifier
      * @prop {Boolean} gpuAcceleration=true
-     * If true, it uses the CSS 3d transformation to position the popper.
+     * If true, it uses the css 3d transformation to position the popper.
      * Otherwise, it will use the `top` and `left` properties.
      */
     gpuAcceleration: undefined
@@ -3593,8 +3593,8 @@ var modifiers = {
  * @property {Boolean} data.flipped True if popper has been flipped by flip modifier
  * @property {Boolean} data.hide True if the reference element is out of boundaries, useful to know when to hide the popper.
  * @property {HTMLElement} data.arrowElement Node used as arrow by arrow modifier
- * @property {Object} data.styles Any CSS property defined here will be applied to the popper, it expects the JavaScript nomenclature (eg. `marginBottom`)
- * @property {Object} data.arrowStyles Any CSS property defined here will be applied to the popper arrow, it expects the JavaScript nomenclature (eg. `marginBottom`)
+ * @property {Object} data.styles Any css property defined here will be applied to the popper, it expects the JavaScript nomenclature (eg. `marginBottom`)
+ * @property {Object} data.arrowStyles Any css property defined here will be applied to the popper arrow, it expects the JavaScript nomenclature (eg. `marginBottom`)
  * @property {Object} data.boundaries Offsets of the popper boundaries
  * @property {Object} data.offsets The measurements of popper, reference and arrow elements.
  * @property {Object} data.offsets.popper `top`, `left`, `width`, `height` values

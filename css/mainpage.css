@@ -162,7 +162,6 @@ input[type="checkbox"] {
 .me .settings {
 	position: absolute;
 	right: 20px;
-	/*bottom: 65px;*/
     bottom: 15px;
 	width: 40px;
 	height: 40px;
@@ -179,7 +178,6 @@ input[type="checkbox"] {
 .me .cloud {
 	position: absolute;
 	right: 20px;
-	/*bottom: 15px;*/
     bottom: 65px;
 	width: 40px;
 	height: 40px;
@@ -286,7 +284,6 @@ nav button > span {
 .profile .image {
 	width: 140px;
 	height: 140px;
-    /*background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;*/
 	background-size: cover;
 	border-radius: 100%;
 	cursor: pointer;
@@ -508,7 +505,6 @@ header {
 	position: absolute;
 	width: 55px;
 	height: 55px;
-    /*background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;*/
     background-size: cover;
 	border-radius: 100%;
 	margin: 13px 13px;
@@ -518,7 +514,6 @@ header {
 	float: left;
 	font-weight: 600;
 	margin-left: 80px;
-	/*margin-left: 20px;*/
 	margin-top: 18px;
 }
 
@@ -526,7 +521,6 @@ header {
 	float: left;
 	clear: left;
 	margin-left: 80px;
-    /*margin-left: 30px;*/
 	margin-top: 7px;
     font-size: small;
 }
@@ -664,7 +658,7 @@ div[class~="onTop"] > .count {
     background: #DDD;
 }
 
-/* THE CONVERSATION HISTORY CSS */
+/* THE CONVERSATION HISTORY css */
 
 .convHistory {
 	float: left;
@@ -786,7 +780,7 @@ div[class~="onTop"] > .count {
 }
 
 
-/* THE REPLY BAR CSS */
+/* THE REPLY BAR css */
 
 .replyBar {
 	width: 100%;
@@ -830,7 +824,7 @@ div[class~="onTop"] > .count {
 }
 
 .emojiBar {
-	display: none;
+    display: none;
 	position: absolute;
 	width: 325px;
 	height: 200px;
@@ -907,7 +901,7 @@ div[class~="onTop"] > .count {
 	display: none;
 }
 
-/* CSS FOR THE EMOJI IMAGES, JUST SOME */
+/* css FOR THE EMOJI IMAGES, JUST SOME */
 
 #smileface {
 	background-image: url(https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/96/grinning-face_1f600.png);

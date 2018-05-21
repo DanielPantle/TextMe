@@ -498,7 +498,7 @@
     }
     var Sizzle =
         /*!
- * Sizzle CSS Selector Engine v2.3.3
+ * Sizzle css Selector Engine v2.3.3
  * https://sizzlejs.com/
  *
  * Copyright jQuery Foundation and other contributors
@@ -580,7 +580,7 @@
                 attributes = "\\[" + whitespace + "*(" + identifier + ")(?:" + whitespace +
                     // Operator (capture 2)
                     "*([*^$|!~]?=)" + whitespace +
-                    // "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+                    // "Attribute values must be css identifiers [capture 5] or strings [capture 3 or capture 4]"
                     "*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
                     "*\\]",
 
@@ -632,7 +632,7 @@
 
                 rsibling = /[+~]/,
 
-                // CSS escapes
+                // css escapes
                 // http://www.w3.org/TR/CSS21/syndata.html#escaped-characters
                 runescape = new RegExp( "\\\\([\\da-f]{1,6}" + whitespace + "?|(" + whitespace + ")|.)", "ig" ),
                 funescape = function( _, escaped, escapedWhitespace ) {
@@ -649,7 +649,7 @@
                             String.fromCharCode( high >> 10 | 0xD800, high & 0x3FF | 0xDC00 );
                 },
 
-                // CSS string/identifier serialization
+                // css string/identifier serialization
                 // https://drafts.csswg.org/cssom/#common-serializing-idioms
                 rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\0-\x1f\x7f-\uFFFF\w-]/g,
                 fcssescape = function( ch, asCodePoint ) {
@@ -4528,7 +4528,7 @@
         if ( initialInUnit && initialInUnit[ 3 ] !== unit ) {
 
             // Support: Firefox <=54
-            // Halve the iteration target value to prevent interference from CSS upper bounds (gh-2144)
+            // Halve the iteration target value to prevent interference from css upper bounds (gh-2144)
             initial = initial / 2;
 
             // Trust units reported by jQuery.css
@@ -6452,7 +6452,7 @@
                 style = elem.style;
 
             // Make sure that we're working with the right name. We don't
-            // want to query the value if it is a CSS custom property
+            // want to query the value if it is a css custom property
             // since they are user-defined.
             if ( !isCustomProp ) {
                 name = finalPropName( origName );
@@ -6478,7 +6478,7 @@
                     return;
                 }
 
-                // If a number was passed in, add the unit (except for certain CSS properties)
+                // If a number was passed in, add the unit (except for certain css properties)
                 if ( type === "number" ) {
                     value += ret && ret[ 3 ] || ( jQuery.cssNumber[ origName ] ? "" : "px" );
                 }
@@ -6519,7 +6519,7 @@
                 isCustomProp = rcustomProp.test( name );
 
             // Make sure that we're working with the right name. We don't
-            // want to modify the value if it is a CSS custom property
+            // want to modify the value if it is a css custom property
             // since they are user-defined.
             if ( !isCustomProp ) {
                 name = finalPropName( origName );
@@ -6929,7 +6929,7 @@
             // the overflowX value there.
             opts.overflow = [ style.overflow, style.overflowX, style.overflowY ];
 
-            // Identify a display type, preferring old show/hide data over the CSS cascade
+            // Identify a display type, preferring old show/hide data over the css cascade
             restoreDisplay = dataShow && dataShow.display;
             if ( restoreDisplay == null ) {
                 restoreDisplay = dataPriv.get( elem, "display" );
@@ -10031,7 +10031,7 @@
         },
 
         // position() relates an element's margin box to its offset parent's padding box
-        // This corresponds to the behavior of CSS absolute positioning
+        // This corresponds to the behavior of css absolute positioning
         position: function() {
             if ( !this[ 0 ] ) {
                 return;
