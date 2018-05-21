@@ -60,49 +60,49 @@ if(!$Database->isLoggedIn()) {
         <!-- Bereich links Chats auflistung-->
         <div class="chats">
             <?php
-                $chats = $Database->getAllChatsFromCurrentUser();
-                //print_r($chats);
-                $count = count($chats);
-                //echo $count;
-                if ($count > 0){
-                    echo "<br>";
-                    for ($j=0;$j<$count;$j++){
-                        $deleted[$j] = $Database->isChatDeletedForUser($chats[$j]['cid']);
-                        //print_r($members_2[$j]);
-                        //$deleted[$j]=1;
-                        if (!$deleted[$j]){
-                            $cid[$j]=$chats[$j]['cid'];
-                            $chatname[$j] =$chats[$j]['chatname'];
-                            $members[$j] = $Database->getMembersOfChat($chats[$j]['cid']);
-                            $count_2 = count($members[$j]);
-                            $members_2[$j]="";
-                            if($count_2>1){
-                                $members_10=$members[$j][0]['name'];
-                                $members_20=$members[$j][1]['name'];
-                            }else {
-                                $members_10=$members[$j][0]['name'];
-                                $members_20="NV";
-                            }
-                            for ($i=0;$i<$count_2;$i++){
-                                if($members_2[$j]==""){
-                                    $members_2[$j] = $members[$j][$i]['name'];
-                                }else $members_2[$j]=$members_2[$j]." , ".$members[$j][$i]['name'];
-                            }
-                            /*$members[$j] =$chats[$j]['members'];
-                            $members[$j] = explode(',',$members[$j]);
-                            $members_0 = $members[$j];
-                            $count_2 = count($members[$j]);
-                            $members_2="";
-                            for ($i=0;$i<$count_2;$i++){
-                                if($members_2==""){
-                                    $members_2 = $members[$j][$i];
-                                }else $members_2 =$members_2." , ".$members[$j][$i];
+            $chats = $Database->getAllChatsFromCurrentUser();
+            //print_r($chats);
+            $count = count($chats);
+            //echo $count;
+            if ($count > 0){
+                echo "<br>";
+                for ($j=0;$j<$count;$j++){
+                    $deleted[$j] = $Database->isChatDeletedForUser($chats[$j]['cid']);
+                    //print_r($members_2[$j]);
+                    //$deleted[$j]=1;
+                    if (!$deleted[$j]){
+                        $cid[$j]=$chats[$j]['cid'];
+                        $chatname[$j] =$chats[$j]['chatname'];
+                        $members[$j] = $Database->getMembersOfChat($chats[$j]['cid']);
+                        $count_2 = count($members[$j]);
+                        $members_2[$j]="";
+                        if($count_2>1){
+                            $members_10=$members[$j][0]['name'];
+                            $members_20=$members[$j][1]['name'];
+                        }else {
+                            $members_10=$members[$j][0]['name'];
+                            $members_20="NV";
+                        }
+                        for ($i=0;$i<$count_2;$i++){
+                            if($members_2[$j]==""){
+                                $members_2[$j] = $members[$j][$i]['name'];
+                            }else $members_2[$j]=$members_2[$j]." , ".$members[$j][$i]['name'];
+                        }
+                        /*$members[$j] =$chats[$j]['members'];
+                        $members[$j] = explode(',',$members[$j]);
+                        $members_0 = $members[$j];
+                        $count_2 = count($members[$j]);
+                        $members_2="";
+                        for ($i=0;$i<$count_2;$i++){
+                            if($members_2==""){
+                                $members_2 = $members[$j][$i];
+                            }else $members_2 =$members_2." , ".$members[$j][$i];
 
-                            }*/
-                            //$members[$j] = $Database->getMembersOfChat($cid[$j]);
-                            $history = conHistory($cid[$j],$Database,$count_2);
-                            if($count_2>2){
-                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
+                        }*/
+                        //$members[$j] = $Database->getMembersOfChat($cid[$j]);
+                        $history = conHistory($cid[$j],$Database,$count_2);
+                        if($count_2>2){
+                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
                                 <div class='chatInfo'>
                                     <div class='image'>
                                         
@@ -116,36 +116,53 @@ if(!$Database->isLoggedIn()) {
                                 </div>
                               </div>
                             ";
+                        }else {
+                            $members_picture="";
+                            if($members_20=="NV"){
+                                $members_0="--> kein Chat Partner vorhanden <--";
                             }else {
-                                if($members_20=="NV"){
-                                    $members_0="--> kein Chat Partner vorhanden <--";
+                                $username = $Database->getCurrentUser_v2();
+                                if($members_10==$username){
+                                    $members_0 = "An: ".$members_20;
+                                    $members_picture=$members_20;
                                 }else {
-                                    $username = $Database->getCurrentUser();
-                                    if($members_10==$username){
-                                        $members_0 = "An: ".$members_20;
-                                    }else {
-                                        $members_0 = "An: ".$members_10;
-                                    }
+                                    $members_0 = "An: ".$members_10;
+                                    $members_picture=$members_10;
                                 }
-                                echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
-                                <div class='chatInfo'>
-                                    <div class='image'>
-                                        
-                                    </div>
-                                    <p class='name'>
-                                        $chatname[$j]                        
-                                    </p>
-                                    <p class='message'>
-                                        $members_0
-                                    </p>
-                                </div>
-                              </div>
-                            ";
                             }
+                            $image = "";
+                            if(!$members_picture==""){
+                                $userid_members_picture = $Database->getUserIdByName($members_picture);
+                                $picture = $Database->showPictureByUserId($userid_members_picture);
+                                $count_picture = count($picture);
+                                if($count_picture>0){
+                                    $bild= $picture[0]['imgdata'];
+                                    $image =  '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
+                                }else {
+                                    $image = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+                                }
+                            }
+
+
+                            echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
+                                         <div class='chatInfo'>
+                                    
+                                                ".$image." 
+                                    
+                                                <p class='name'>
+                                                    $chatname[$j]                        
+                                                </p>
+                                                <p class='message'>
+                                                    $members_0
+                                                </p>
+                                        </div>
+                                      </div>
+                                    ";
                         }
                     }
                 }
-                ?>
+            }
+            ?>
         </div>
     </div>
     <!-- Rechte Seite der Seite in JS -->
@@ -183,7 +200,16 @@ if(!$Database->isLoggedIn()) {
                                     $return = $return."<div class=\\\"msg messageSent\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
                                 }
                                 else if($count_2>2){
-                                    $return = $return."<div class=\\\"msg messageReceived\\\">$name: $nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
+                                    $userid_members_picture = $Database->getUserIdByName($name);
+                                    $picture = $Database->showPictureByUserId($userid_members_picture);
+                                    $count = count($picture);
+                                    if($count>0){
+                                        $bild= $picture[0]['imgdata'];
+                                        $return = $return. "<div class= \\\"msgimage\\\" style=\\\"background: #FFF url(data:image;base64,".$bild.") no-repeat center;background-size:cover\\\"></div>";
+                                    }else {
+                                        $return = $return."<div class= \\\"msgimage\\\" style=\\\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\\\"></div>";
+                                    }
+                                    $return = $return."<div class=\\\"msg messageReceivedGroup\\\">$name: $nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
                                 }else {
                                     $return = $return."<div class=\\\"msg messageReceived\\\">$nachricht<span class=\\\"timestamp\\\">$zeit</span></div>";
                                 }
@@ -236,7 +262,16 @@ if(!$Database->isLoggedIn()) {
         <!-- menu oben -->
         <div class="me userBg">
             <div class="image"></div>
-
+                <?php
+                    $picture = $Database->showPictureFromCurrentUser();
+                    $count = count($picture);
+                    if($count>0){
+                        $bild= $picture[0]['imgdata'];
+                        echo '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
+                    }else {
+                        echo '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+                    }
+                ?>
             <div class="myinfo">
                 <p class="name" id="nutzernamen">Random Name</p>
                 <p id="email"> eMail Adresse?</p>
@@ -296,7 +331,16 @@ if(!$Database->isLoggedIn()) {
         <div class="profile">
             <p class="confTitle">Settings</p>
 
-            <div class="image"></div>
+            <?php
+            $picture = $Database->showPictureFromCurrentUser();
+            $count = count($picture);
+            if($count>0){
+                $bild= $picture[0]['imgdata'];
+                echo '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
+            }else {
+                echo '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+            }
+            ?>
 
             <div class="side">
                 <p class="name" id="nutzernamen2">Random Name</p>

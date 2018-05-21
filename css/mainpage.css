@@ -153,7 +153,7 @@ input[type="checkbox"] {
 .me .image {
 	width: 70px;
 	height: 70px;
-    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
+	position: absolute;
 	background-size: cover;
 	border-radius: 100%;
 	cursor: pointer;
@@ -286,7 +286,7 @@ nav button > span {
 .profile .image {
 	width: 140px;
 	height: 140px;
-    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
+    /*background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;*/
 	background-size: cover;
 	border-radius: 100%;
 	cursor: pointer;
@@ -504,29 +504,29 @@ header {
 	float: left;
 }
 
-/*.chatInfo .image {
+.chatInfo .image {
 	position: absolute;
 	width: 55px;
 	height: 55px;
-    background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;
+    /*background: #FFF url(../images/Profilbild_default.jpg) no-repeat center;*/
     background-size: cover;
 	border-radius: 100%;
 	margin: 13px 13px;
-}*/
+}
 
 .chatInfo .name {
 	float: left;
 	font-weight: 600;
-	/*margin-left: 80px;*/
-	margin-left: 20px;
+	margin-left: 80px;
+	/*margin-left: 20px;*/
 	margin-top: 18px;
 }
 
 .chatInfo .message {
 	float: left;
 	clear: left;
-	/*margin-left: 80px;*/
-    margin-left: 30px;
+	margin-left: 80px;
+    /*margin-left: 30px;*/
 	margin-top: 7px;
     font-size: small;
 }
@@ -692,7 +692,7 @@ div[class~="onTop"] > .count {
 	margin-bottom: 10px;
 	background: #FFF;
 	border-radius: 7px;
-	clear: both;
+	/*clear: both;*/
 }
 
 .msg:nth-last-child(1) {
@@ -740,11 +740,36 @@ div[class~="onTop"] > .count {
 .messageReceived {
 	float: left;
 	background: #FFF;
+    clear: both;
+}
+
+.messageReceivedGroup{
+    float: left;
+    background: #FFF;
+}
+
+
+
+.msgimage{
+    float: left;
+    max-width:45%;
+    height: auto;
+    padding: 30px;
+    /*margin: 10px;*/
+    margin-top: 12px;
+    margin-right: -5px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    border-radius: 50px;
+    clear:both;
+
+
 }
 
 .messageSent {
 	float: right;
 	background: #effdde;
+    clear: both;
 }
 
 .messageSent > .timestamp, .messageSent > .readStatus {

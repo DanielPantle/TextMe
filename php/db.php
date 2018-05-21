@@ -31,7 +31,7 @@ class Database
     private $UIIC_UID = "user_is_in_chat.uid";
     private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
     private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
-    private $UIIC_deleted = "user_is_in_chat.deleted";
+    private $UIIC_DELETED = "user_is_in_chat.deleted";
 
     private $TABLE_MESSAGE = "message";
     private $M_ID = "message.mid";
@@ -39,6 +39,12 @@ class Database
     private $M_MESSAGE = "message.message";
     private $M_TIMEADDED = "message.timeadded";
     private $M_TIMEMODIFIED = "message.timemodified";
+
+    private $TABLE_IMAGES = "images";
+    private $I_UID = "images.uid";
+    private $I_CID = "images.cid";
+    private $I_IMGDATA ="images.imgdata";
+    private $I_IMGNAME = "images.imgname";
 
     function __construct()
     {
@@ -335,7 +341,7 @@ class Database
              * UPDATE `user_is_in_chat` SET `deleted`=1 WHERE `cid`= 1 AND `uid` 5
             */
             $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER_IS_IN_CHAT}
-		            SET {$this->UIIC_deleted} = 1
+		            SET {$this->UIIC_DELETED} = 1
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
             $userId = $this->getUserID();
@@ -356,7 +362,7 @@ class Database
             /*
              * SELECT `deleted` FROM `user_is_in_chat` WHERE `cid` = 1 AND `uid` = 1
             */
-            $stmt = $this->db->prepare("SELECT {$this->UIIC_deleted} 
+            $stmt = $this->db->prepare("SELECT {$this->UIIC_DELETED} 
             		FROM {$this->TABLE_USER_IS_IN_CHAT}
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
@@ -387,7 +393,7 @@ class Database
             		FROM {$this->TABLE_USER_IS_IN_CHAT}
             		JOIN {$this->TABLE_USER} ON {$this->UIIC_UID}={$this->U_ID}
 					WHERE {$this->UIIC_CID} = :chatId
-					AND NOT ({$this->UIIC_deleted})");
+					AND NOT ({$this->UIIC_DELETED})");
             if ($stmt->execute(array(':chatId' => $chatId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
@@ -513,5 +519,87 @@ class Database
         }catch (PDOException $e){
             return "Error: ".$e->getMessage();
         }
+    }
+
+    function createPictureFromUser($name,$image){
+        try {
+            /*
+             * INSERT INTO images (uid,imdata) VALUES (:uid,:imdata)
+            */
+            $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_IMAGES}
+		            ({$this->I_UID},{$this->I_IMGNAME},{$this->I_IMGDATA}) VALUES (:userId,:imgname,:imgdata)");
+            $userId = $this->getUserID();
+            $userId = $userId[0][0];
+            if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
+                return $this->db->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    function showPictureFromCurrentUser(){
+        try{
+            $userId = $this->getUserID();
+            $userId = $userId[0][0];
+            $stmt = $this->db->prepare("SELECT {$this->I_IMGNAME},{$this->I_IMGDATA} FROM {$this->TABLE_IMAGES} WHERE {$this->I_UID}=:userId");
+            if($stmt->execute(array(':userId' => $userId))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else return false;
+        }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    function showPictureByUserId($userId){
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->I_IMGNAME},{$this->I_IMGDATA} FROM {$this->TABLE_IMAGES} WHERE {$this->I_UID}=:userId");
+            if($stmt->execute(array(':userId' => $userId))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else return false;
+        }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    function getUserIdByName($username){
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->U_ID} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_NAME}=:username");
+            if($stmt->execute(array(':username' => $username))){
+                $return = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $return[0][0];
+            }else return false;
+        }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    function updatePictureFromCurrentUser($name,$image){
+        try {
+            /*
+             * UPDATE images SET imgdata=:imgdata,imgname=:imgname WEHRE uid=:userId
+            */
+            $stmt = $this->db->prepare("UPDATE {$this->TABLE_IMAGES}
+		            SET {$this->I_IMGNAME}=:imgname,{$this->I_IMGDATA}=:imgdata WHERE {$this->I_UID}=:userId");
+            $userId = $this->getUserID();
+            $userId = $userId[0][0];
+            if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
+                return $this->db->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    function haveUserPicture(){
+        $picture = $this->showPictureFromCurrentUser();
+        $count = count($picture);
+        if($count>0){
+            return true;
+        }else return false;
     }
 }
