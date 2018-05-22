@@ -329,7 +329,7 @@ if(!$Database->isLoggedIn()) {
 <section class="config">
     <section class="configSect">
         <div class="profile">
-            <p class="confTitle">Settings</p>
+            <p class="confTitle">Einstellungen</p>
 
             <?php
             $picture = $Database->showPictureFromCurrentUser();
@@ -347,14 +347,56 @@ if(!$Database->isLoggedIn()) {
                 <p id="email2">email Adresse?</p>
             </div>
 
-            <button class="changePic">Change Profile Picture</button>
             <button class="edit">Edit Profile Info</button>
         </div>
     </section>
 
     <section class="configSect second">
+        <p class="confTitle">Profilbild</p>
+
+        <form method="post" enctype="multipart/form-data">
+            <br>
+            <input class="choosePicture"  type="file" name="image">
+            <br> <br>
+            <input class="changePicture" type="submit" name="submit-create" value="Speichern">
+        </form>
+    </section>
+    <?php
+    if(isset($_POST['submit-create'])){
+        if(getimagesize($_FILES['image']['tmp_name'])==false){
+            echo "Please select an image";
+        }else {
+            $image = addslashes($_FILES['image']['tmp_name']);
+            $name = addslashes($_FILES['image']['name']);
+            $image = file_get_contents($image);
+            $image= base64_encode($image);
+            $result ="";
+            if($Database->haveUserPicture()){
+                $result = $Database->updatePictureFromCurrentUser($name,$image);
+                //echo "user hat ein bild";
+                //echo $result;
+            }else {
+                $result = $Database->createPictureFromUser($name,$image);
+                //echo "user hat kein bild";
+                //echo $result;
+            }
+        }
+    }
+    $result = $Database->showPictureFromCurrentUser();
+    //print_r($result);
+    $count = count($result);
+    if($count>0){
+        $bild= $result[0]['imgdata'];
+        //echo '<img  src="data:image;base64,'.$bild.'">';
+    }else //echo '<img src="./../images/Profilbild_default.jpg">'
+    ?>
+
+
 
         <!-- NOTIFICATIONS SECTION -->
+
+
+    <!--<section class="configSect second">
         <p class="confTitle">Notifications</p>
 
         <div class="optionWrapper deskNotif">
@@ -404,8 +446,7 @@ if(!$Database->isLoggedIn()) {
             </label>
             <p>Night Mode</p>
         </div>
-
-    </section>
+    </section>-->
 </section>
 
 <!-- DARK FRAME OVERLAY -->
