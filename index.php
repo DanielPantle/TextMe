@@ -155,6 +155,32 @@ if($Database->isLoggedIn()) {
         </div>
     </div>
 
+    <!-- Cookie Popup -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#edeff5",
+                        "text": "#838391"
+                    },
+                    "button": {
+                        "background": "transparent",
+                        "text": "#4b81e8",
+                        "border": "#4b81e8"
+                    }
+                },
+                "content": {
+                    "message": "Diese Website verwendet Cookies. Informationen zu Cookies und ihrer Deaktivierung finden Sie ",
+                    "dismiss": "Verstanden und weiter",
+                    "link": "hier.",
+                }
+            })});
+    </script>
+
+
     <script src="js/vendor/jquery-3.3.1.js"></script>
     <script src="js/vendor/bootstrap-4.0.0-dist/js/bootstrap.js"></script>
     <script src="js/login-signup.js"></script>
