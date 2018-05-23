@@ -141,10 +141,10 @@ class Database
             $pw = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER}
-					({$this->U_NAME}, {$this->U_MAIL}, {$this->U_PASSWORD})
-					VALUES (:name, :email, :password)");
+					({$this->U_NAME}, {$this->U_MAIL}, {$this->U_PASSWORD}, {$this->U_ISADMIN})
+					VALUES (:name, :email, :password, :isAdmin)");
 
-            if ($stmt->execute(array(':name' => $name, ':email' => $email, ':password' => $pw))) {
+            if ($stmt->execute(array(':name' => $name, ':email' => $email, ':password' => $pw, ':isAdmin' => 0))) {
                 return $this->db->lastInsertId();
             } else {
                 return false;
@@ -152,6 +152,23 @@ class Database
         } catch (PDOException $e) {
             return "Error: " . $e->getMessage();
         }
+    }
+
+    public function changePasswordByEmail($email, $password)
+    {
+     try {
+         $pw = password_hash($password, PASSWORD_DEFAULT);
+         $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER} SET {$this->U_PASSWORD} = :password 
+         WHERE {$this->U_MAIL} = :email");
+
+         if ($stmt->execute(array(':password' => $pw, ':email' => $email))) {
+             return true;
+         } else {
+             return false;
+         }
+     } catch (PDOException $e) {
+         return "Error: " . $e->getMessage();
+     }
     }
 
     public function getAllChatsFromUser($userId)
