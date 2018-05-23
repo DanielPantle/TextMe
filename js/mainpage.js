@@ -21,6 +21,7 @@ $(document).ready(function() {
 
         /* close all overlay elements */
         $(".overlay").click(function () {
+            $(".editPersonalInfoDiv").hide();
             $(".overlay, .menuWrap").fadeOut(180);
             $(".menu").animate({opacity: "0", left: "-320px"}, 180);
             $(".config").animate({opacity: "0", right: "-200vw"}, 180);
@@ -67,6 +68,10 @@ $(document).ready(function() {
         $(".chatButton").click(function () {
             jQuery(".active").removeClass("active");
             jQuery(this).addClass("active");
+        });
+
+        $(".edit").click(function () {
+            jQuery(".editPersonalInfoDiv").show();
         });
 
         /* Show or Hide Emoji Panel */

@@ -1,5 +1,46 @@
 <?php
 
+include("db.php");
+$Database = new Database();
+
+$generatedPassword = generatePassword();
+
+if(isset($_POST) & !empty($_POST)){
+    $mail = $_POST['email'];
+    $userExists = $Database->userExists("",$mail);
+    if($userExists == 1){
+        if($Database->changePasswordByEmail($mail,$generatedPassword)) {
+           echo "<div class='alert alert-info'>PW:[".$generatedPassword."]</div>";
+           sendPasswordByMail($mail, $generatedPassword);
+        }
+    }else{
+        echo "<div  class='alert alert-danger'>E-Mail does not exist in database</div>";
+    }
+}
+
+function sendPasswordByMail($to, $password) {
+    $subject = "Your Recovered Password";
+
+    $message = "Please use this password to login [" . $password . "]";
+    $headers = "From : TextMe";
+    if(mail($to, $subject, $message, $headers)){
+        echo "<div class='alert alert-info'>Your Password has been sent to your email</div>";
+    }else{
+        echo "<div class='alert alert-danger'>Failed to Recover your password, try again</div>x";
+    }
+}
+
+function generatePassword($length = 8) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!§$%&?';
+    $count = mb_strlen($chars);
+
+    for ($i = 0, $result = ''; $i < $length; $i++) {
+        $index = rand(0, $count - 1);
+        $result .= mb_substr($chars, $index, 1);
+    }
+    return $result;
+}
+
 
 
 ?>
@@ -33,6 +74,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+                                </div>
+                                <div class="text-center">
+                                    <a href="../../" tabindex="5" class="return-to-mainpage">Return to Mainpage</a>
                                 </div>
 
                                 <input type="hidden" class="hide" name="token" id="token" value="">

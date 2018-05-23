@@ -1047,6 +1047,19 @@ div[class~="onTop"] > .count {
     cursor: pointer;
 }
 
+.editSubmitButton{
+	width: auto;
+	font-size: 16px;
+	font-weight: 600;
+	background: #419fd9;
+	color: #fff;
+	border-radius: 4px;
+	padding: 10px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
 .choosePicture{
     width: auto;
     font-size: 16px;
