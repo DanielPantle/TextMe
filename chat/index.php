@@ -360,7 +360,27 @@ if(!$Database->isLoggedIn()) {
             <br> <br>
             <input class="changePicture" type="submit" name="submit-create" value="Speichern">
         </form>
+
+        <br>
+        <div class="editPersonalInfoDiv" style="display: none">
+            <p class="confTitle">Change Account data</p>
+
+            <form method="post" class="editPersonalInfoForm">
+                <label for="emailField">E-Mail</label>
+                <input type="email" id="emailChangeField">
+                <label for="passwordOldField">Old Password</label>
+                <input type="password" id="passwordOldField">
+                <label for="passwordChangeField">Change Password</label>
+                <input type="password" id="passwordChangeField">
+                <label for="passwordConfirmChangeField">Confirm Password</label>
+                <input type="password" id="passwordConfirmChangeField">
+                <br> <br>
+                <input class="editSubmitButton" type="submit"  value="Speichern">
+            </form>
+        </div>
     </section>
+
+
     <?php
     if(isset($_POST['submit-create'])){
         if(getimagesize($_FILES['image']['tmp_name'])==false){
