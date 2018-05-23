@@ -15,10 +15,10 @@ if(isset($_POST['login-submit'])) {
 	
 	// Einloggen
 	if($Database->login($username, $password)) {
-		echo "<h3>Login erfolgreich!</h3>";
+		echo "<div class='alert alert-success'>Login erfolgreich!</div>";
 	}
 	else {
-		echo "<h3>Login fehlgeschlagen!</h3>";
+		echo "<div class='alert alert-danger'>Login fehlgeschlagen!</div>";
 	}
 }
 
@@ -34,20 +34,20 @@ if(isset($_POST['register-submit'])) {
 	
 	// Passwörter überprüfen
 	if($password != $confirm_password) {
-		echo "<h3>Registrierung fehlgeschlagen! Passwörter stimmen nicht überein!</h3>";
+		echo "<div class='alert alert-danger'>Registrierung fehlgeschlagen! Passwörter stimmen nicht überein!</div>";
 	}
 	else {
 		// Benutzer-Name überprüfen (ob vorhanden)
 		if($Database->userExists($username, $email)) {
-			echo "<h3>Registrierung fehlgeschlagen! E-Mail ist schon vergeben!</h3>";
+			echo "<div class='alert alert-danger'>Registrierung fehlgeschlagen! E-Mail ist schon vergeben!</div>";
 		}
 		else {
 			// Registrieren
 			if($Database->register($username, $email, $password)) {
-				echo "<h3>Registrierung erfolgreich!</h3>";
+				echo "<div class='alert alert-success'>Registrierung erfolgreich!</div>";
 			}
 			else {
-				echo "<h3>Registrierung fehlgeschlagen!</h3>";
+				echo "<div class='alert alert-danger'>Registrierung fehlgeschlagen!</div>";
 			}
 		}
 	}
@@ -101,10 +101,7 @@ if($Database->isLoggedIn()) {
                                         <input type="password" name="password" id="login-password" tabindex="2" class="form-control" placeholder="Password">
                                     </div>
                                     <div class="alert alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
-                                    <div class="form-group text-center">
-                                        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                                        <label for="remember"> Remember Me</label>
-                                    </div>
+
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
