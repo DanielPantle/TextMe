@@ -84,9 +84,14 @@ $(document).ready(function() {
             logout();
         });
 
-        $(".option").click(function () {
+        $("#delete_chat").click(function () {
             $(".moreMenu").slideToggle("fast");
             chatloeschenclick();
+        });
+
+        $("#send_invitation").click(function () {
+            $(".moreMenu").slideToggle("fast");
+            sendinvitationclick();
         });
 
         $(".cn").click(function () {
@@ -166,6 +171,23 @@ function callChatctl(functionString) {
     });
 }
 
+function callChatctlWithSuccess(functionString, successFunction) {
+    $.ajax({
+        async: true,
+        contentType: "application/json",
+        url: '../php/ajax_sendmessage.php',
+        type : "POST",
+        data: functionString,
+        dataType: 'json',   //data format
+        success: successFunction,
+        error: function(response, status, error) {
+            console.log(response);
+            console.log(status);
+            console.log(error);
+        }
+    });
+}
+
 function chatloeschen() {
     var chatid = sessionStorage.aktuelleChatId;
     var chatOption = document.getElementById("chatOption")
@@ -185,6 +207,17 @@ function chatloeschenclick() {
         callChatctl(jsonSend);
         window.location="";
     }else console.log("kein aktueller chat raum");
+}
+
+function sendinvitationclick() {
+    var chat_id = sessionStorage.aktuelleChatId;
+    if(chat_id > 0) {
+        var getLinkString = '{"i":"getinvitationlink","chat_id":'+chat_id+'}';
+        callChatctlWithSuccess(getLinkString, function (response) {
+            console.log(response);
+            alert("Mit diesem Link kannst du Andere in diesen Chat einladen:\n\nlocalhost/link/" + response['link']);
+        });
+    }
 }
 
 window.setInterval(function () {

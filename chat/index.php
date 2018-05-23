@@ -26,6 +26,33 @@ if(!$Database->isLoggedIn()) {
 }
 //print_r($chatverlauf);
 
+
+// Link überprüfen
+if(isset($_SESSION['link'])) {
+    $link = $_SESSION['link'];
+    $uiic = $Database->getLinkData($link);
+
+    if($uiic) {
+        $uid = $uiic['uid'];
+        $cid = $uiic['cid'];
+        $chatName = $Database->getChatnameById($cid);
+
+        $res = $Database->joinChat($cid);
+        
+        if($res && $res > 0) {
+            $invitor = $Database->getUserNameById($uid);
+            $linkResult = "Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)";
+        }
+        else {
+            $invitor = $Database->getUserNameById($uid);
+            $linkResult = "Du bist schon in dem Chat $chatName. (Eingeladen von $invitor)";
+        }
+    }
+
+    unset($_SESSION['link']);
+}
+
+
 ?>
     <meta charset="UTF-8">
     <title>TextMe - Chat</title>
@@ -462,7 +489,8 @@ if(!$Database->isLoggedIn()) {
 <!-- CONVERSATION OPTIONS MENU -->
 <!-- drei Punkte oben rechts -->
 <div class="moreMenu">
-    <button class="option about">Chat löschen</button>
+    <button class="option about" id="delete_chat">Chat löschen</button>
+    <button class="option about" id="send_invitation">Einladung versenden</button>
 </div>
 
 <?php
@@ -478,6 +506,13 @@ echo "<script>
     document.getElementById('email').innerHTML='$email';
     document.getElementById('email2').innerHTML='$email';
 </script>";
+
+
+
+// Link-Ergebnis überprüfen und ggf. ausgeben
+if(isset($linkResult)) {
+    echo "<script>alert('$linkResult');</script>";
+}
 ?>
 
 <!-- JS einbinden -->

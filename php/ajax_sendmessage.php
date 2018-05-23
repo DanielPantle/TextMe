@@ -45,6 +45,11 @@ try {
         case "ping":
             $return_array = $Database->ping();
             break;
+
+        case "getinvitationlink":
+            $return_array = $Database->getInvitationLink($p['chat_id']);
+            break;
+
         default:
             throw new Exception('Instruktion nicht gefunden.');
 

@@ -29,6 +29,7 @@ class Database
     private $UIIC_ID = "user_is_in_chat.uiicid";
     private $UIIC_CID = "user_is_in_chat.cid";
     private $UIIC_UID = "user_is_in_chat.uid";
+    private $UIIC_LINK = "user_is_in_chat.link";
     private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
     private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
     private $UIIC_DELETED = "user_is_in_chat.deleted";
@@ -278,6 +279,21 @@ class Database
         }
     }
 
+    public function getUserID_v2()
+    {
+        try {
+            $userName = $this->getCurrentUser();
+            $stmt = $this->db->prepare("SELECT user.uid FROM user WHERE user.name = :username");
+            if ($stmt->execute(array(':username' => $userName))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['uid'];
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
     public function getEmail($userId)
     {
         try {
@@ -334,6 +350,89 @@ class Database
         }
     }
 
+    public function getInvitationLink($chatId) {
+        try {
+            $stmt = $this->db->prepare("SELECT {$this->UIIC_LINK} AS link
+                FROM {$this->TABLE_USER_IS_IN_CHAT}
+                WHERE {$this->UIIC_CID} = :chatId
+                AND {$this->UIIC_UID} = :userId");
+
+            $userId = $this->getUserID_v2();
+
+            if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function getLinkData($link) {
+        try {
+            $stmt = $this->db->prepare("SELECT {$this->UIIC_UID} AS uid, {$this->UIIC_CID} AS cid
+                FROM {$this->TABLE_USER_IS_IN_CHAT}
+                WHERE {$this->UIIC_LINK} LIKE :link");
+
+            if ($stmt->execute(array(':link' => $link))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function joinChat($chatId) {
+        try {
+            $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER_IS_IN_CHAT}
+                    ({$this->UIIC_UID}, {$this->UIIC_CID}, {$this->UIIC_LINK})
+                    VALUES(:userId, :chatId, :link)
+                    ON DUPLICATE KEY UPDATE deleted = 0");
+
+            $link = md5(rand(0,1000));
+
+            if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $this->getUserID_v2(), ':link' => $link))) {
+                return $this->db->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+
+    public function createChat($chatName, $userId) {
+        try {
+            $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_CHAT}
+                    ({$this->C_NAME})
+                    VALUES (:chatName)");
+
+            if ($stmt->execute(array(':chatName' => $chatName))) {
+                $chatId = $this->db->lastInsertId();
+
+                $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER_IS_IN_CHAT}
+                    ({$this->UIIC_CID}, {$this->UIIC_UID})
+                    VALUES (:chatId, :userId)");
+                
+                if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
+                    return $this->db->lastInsertId();
+                }
+                else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+
     public function deleteChat($chatId)
     {
         try {
@@ -344,8 +443,7 @@ class Database
 		            SET {$this->UIIC_DELETED} = 1
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
-            $userId = $this->getUserID();
-            $userId = $userId[0][0];
+            $userId = $this->getUserID_v2();
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 return $this->db->lastInsertId();
             } else {
@@ -572,6 +670,38 @@ class Database
                 return $return[0][0];
             }else return false;
         }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    function getUserNameById($userId) {
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS name
+                    FROM {$this->TABLE_USER} WHERE
+                    {$this->U_ID} = :userId");
+            if($stmt->execute(array(':userId' => $userId))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['name'];
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    function getChatnameById($chatId) {
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->C_NAME} AS name
+                    FROM {$this->TABLE_CHAT} WHERE
+                    {$this->C_ID} = :chatId");
+            if($stmt->execute(array(':chatId' => $chatId))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['name'];
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
             return "Error: ".$e->getMessage();
         }
     }
