@@ -38,9 +38,8 @@ if(isset($_POST['editSubmitButton'])) {
     $email = $email[0][0];
 
     if($Database->login($username, $currentPassword)) {
-        echo "password match!";
         if($newPassword != "" && $Database->changePasswordByEmail($email,$newPassword)) {
-            echo "success!";
+            echo "<div class='alert alert-success'>Password changed Successfully!</div>";
         } else {
             echo "failure!";
         }
@@ -413,20 +412,20 @@ if(isset($_SESSION['link'])) {
 
         <br>
         <div class="editPersonalInfoDiv" style="display: none">
-            <p class="confTitle">Change Account data</p>
+            <p class="confTitle">Change Password</p>
 
             <form method="post" class="editPersonalInfoForm">
                 <!--
                 <label for="emailField">E-Mail</label>
                 <input type="email" id="emailChangeField">
                 -->
-                <input type="password" name="currentPassword" placeholder="Current Password" id="passwordCurrentField">
+                <input class="form-control" type="password" name="currentPassword" placeholder="Current Password" id="passwordCurrentField">
                 <div class="alert alert-danger" role="alert" style=" display:none;" id="current-password-error">Current Password must not be empty!</div>
                 <br>
-                <input type="password" name="newPassword" placeholder="Change Password" id="passwordChangeField">
+                <input class="form-control" type="password" name="newPassword" placeholder="New Password" id="passwordChangeField">
                 <div class="alert alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
                 <br>
-                <input type="password" placeholder="Confirm Password" id="passwordConfirmChangeField">
+                <input class="form-control" type="password" placeholder="Confirm Password" id="passwordConfirmChangeField">
                 <div class="alert alert-danger" role="alert" style=" display:none;" id="password-confirm-error">passwords doesn't match!</div>
                 <br> <br>
                 <input class="editSubmitButton" name="editSubmitButton" type="submit"  value="Speichern">
