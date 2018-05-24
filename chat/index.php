@@ -62,9 +62,15 @@ if(isset($_SESSION['link'])) {
 
         $res = $Database->joinChat($cid);
         $invitor = $Database->getUserNameById($uid);
+        $current_uid =$Database->getUserID();
+        $current_uid=$current_uid[0][0];
 
         if($res && $res > 0) {
             echo "<script>var linkResult = 'Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)';</script>";
+            $username_link = $Database->getCurrentUser_v2();
+            $username_link = $username_link[0][0];
+            $message_link =" wurde dem Chat hinzugefügt";
+            $Database->writeMessage($cid,$current_uid,$message_link);
         }
         else {
             echo "<script>var linkResult = 'Du bist schon in dem Chat $chatName. (Eingeladen von $invitor)';</script>";
@@ -242,7 +248,9 @@ if(isset($_SESSION['link'])) {
                             $zeit = $message['time'];
                             $name = $message['name'];
                             $username = $Database->getCurrentUser_v2();
-                            if($nachricht==" hat den Chat verlassen"){
+                            if($nachricht==" wurde dem Chat hinzugefügt"){
+                                $return =$return."<div class=\\\"chatVerlassen\\\"><b>$name</b>$nachricht</div>";
+                            }else if($nachricht==" hat den Chat verlassen"){
                                 $return =$return."<div class=\\\"chatVerlassen\\\"><b>$name</b>$nachricht</div>";
                             }else {
                                 if($username==$name){
