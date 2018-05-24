@@ -452,6 +452,43 @@ class Database
         }
     }
 
+    public function createRandomChat() {
+        try {
+            $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_CHAT}
+                    ({$this->C_NAME})
+                    VALUES ('Random-Chat')");
+
+            if ($stmt->execute()) {
+                $chatId = $this->db->lastInsertId();
+
+                $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER_IS_IN_CHAT}
+                    ({$this->UIIC_CID}, {$this->UIIC_UID}, {$this->UIIC_LINK}) VALUES (:chatId, :userId1, :link1);
+
+                    INSERT INTO {$this->TABLE_USER_IS_IN_CHAT}
+                    ({$this->UIIC_CID}, {$this->UIIC_UID}, {$this->UIIC_LINK})
+                    SELECT :chatId, {$this->UIIC_UID}, :link1 FROM {$this->TABLE_USER_IS_IN_CHAT}
+                    WHERE {$this->UIIC_UID} != :userId1
+                    ORDER BY RAND() LIMIT 1;");
+
+                $link1 = md5(rand(0,1000));
+                $link2 = md5(rand(0,1000));
+                $userId = $this->getUserID_v2();
+                
+                if ($stmt->execute(array(':chatId' => $chatId, ':userId1' => $userId, ':link1' => $link1, ':link2' => $link2))) {
+                    $stmt->closeCursor();
+                    return $this->getUserNameFromUserIsInChatId($this->db->lastInsertId());
+                }
+                else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
 
     public function deleteChat($chatId)
     {
@@ -697,9 +734,27 @@ class Database
     function getUserNameById($userId) {
         try{
             $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS name
-                    FROM {$this->TABLE_USER} WHERE
-                    {$this->U_ID} = :userId");
+                    FROM {$this->TABLE_USER}
+                    WHERE {$this->U_ID} = :userId");
             if($stmt->execute(array(':userId' => $userId))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['name'];
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    public function getUserNameFromUserIsInChatId($userIsInChatId)
+    {
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS name
+                    FROM {$this->TABLE_USER}, {$this->TABLE_USER_IS_IN_CHAT}
+                    WHERE {$this->UIIC_ID} = :userIsInChatId AND {$this->UIIC_UID} = {$this->U_ID}");
+            
+            if($stmt->execute(array(':userIsInChatId' => $userIsInChatId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['name'];
             }
             else {

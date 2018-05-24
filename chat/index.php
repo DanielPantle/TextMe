@@ -310,17 +310,15 @@ if(isset($_SESSION['link'])) {
         </div>
         <!-- Navigationsleiste "mitte" -->
         <nav>
-            <!--
-            <button class="ng">
-                <i class="material-icons">&#xE8D3;</i>
-                <span>Neue Gruppe</span>
-            </button>
-            -->
-
             <button class="nc">
-                <i class="material-icons">&#xE0B6;</i>
-                <span>Neuer Chat </span>
+                <i class="material-icons">&#xE8D3;</i>
+                <span>Neuen Chat erstellen</span>
             </button>
+            <button class="ng">
+                <i class="material-icons">&#xE0B6;</i>
+                <span>Random-Chat erstellen</span>
+            </button>
+
             <?php
                 if($Database->isUserAdmin()){
                     echo "<button class=\"cn\">

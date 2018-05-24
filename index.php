@@ -57,6 +57,7 @@ if(isset($_POST['register-submit'])) {
 // Link prüfen und falls vorhanden speichern
 if(isset($_GET['link'])) {
 	$_SESSION['link'] = $_GET['link'];
+	echo "<script>var linkResult = 'Bitte melde dich an, damit der Link verarbeitet werden kann!';</script>";
 }
 
 
@@ -163,7 +164,7 @@ if($Database->isLoggedIn()) {
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
     <script>
-        window.addEventListener("load", function(){
+        window.addEventListener("load", function() {
             window.cookieconsent.initialise({
                 "palette": {
                     "popup": {
@@ -181,7 +182,12 @@ if($Database->isLoggedIn()) {
                     "dismiss": "Verstanden und weiter",
                     "link": "hier.",
                 }
-            })});
+            });
+
+            if(linkResult != null) {
+            	alert(linkResult);
+            }
+        });
     </script>
 
 

@@ -107,6 +107,11 @@ $(document).ready(function() {
             createchatclick();
         });
 
+        $(".ng").click(function () {
+            // Random-Chat erstellen
+            createrandomchatclick();
+        });
+
         sessionStorage.aktuelleChatId = 0;
         chatloeschen();
     }
@@ -118,7 +123,13 @@ $(document).ready(function() {
         sessionStorage.chatCreated = 0;
     }
 
-    if(linkResult != null) {
+    if(sessionStorage.randomChatCreatedWith != null && sessionStorage.randomChatCreatedWith != 0) {
+        // TODO: Ausgabe ändern
+        alert("Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!");
+        sessionStorage.randomChatCreatedWith = 0;
+    }
+
+    if(typeof linkResult !== 'undefined' && linkResult != null) {
         // TODO: Ausgabe ändern
         alert(linkResult);
     }
@@ -262,6 +273,17 @@ function createchatclick() {
             }
         });
     }
+}
+
+function createrandomchatclick() {
+    var createRandomChatString = '{"i":"createrandomchat"}';
+    callChatctlWithSuccess(createRandomChatString, function (response) {
+        console.log(response);
+        if(response != false) {
+            sessionStorage.randomChatCreatedWith = response;
+            window.location.href = window.location.href;
+        }
+    });
 }
 
 

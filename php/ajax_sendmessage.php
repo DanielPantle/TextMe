@@ -52,6 +52,9 @@ try {
         case "createchat":
             $return_array = $Database->createChat($p['chat_name']);
             break;
+        case "createrandomchat":
+            $return_array = $Database->createRandomChat();
+            break;
 
         default:
             throw new Exception('Instruktion nicht gefunden.');
