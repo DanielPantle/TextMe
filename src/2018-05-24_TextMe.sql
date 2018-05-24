@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 24. Mai 2018 um 02:14
+-- Erstellungszeit: 24. Mai 2018 um 11:32
 -- Server-Version: 5.7.22-0ubuntu0.17.10.1
 -- PHP-Version: 7.1.15-0ubuntu0.17.10.1
 
@@ -122,7 +122,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uid`, `name`, `mail`, `password`, `timeadded`, `timemodified`, `is_admin`) VALUES
-(1, 'Christian', 'christian@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-22 14:18:12', 1),
+(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$tPp27NChOTqYRlZcC7BcxOg8eb58x1oICFu3ZjybN89EG65cEYFhy', '2018-05-03 11:25:19', '2018-05-24 11:15:38', 1),
 (2, 'Dodo', 'dodo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:42:44', 0),
 (3, 'Daniel', 'daniel@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:40:53', 0),
 (4, 'Flo', 'flo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:40:46', 0),

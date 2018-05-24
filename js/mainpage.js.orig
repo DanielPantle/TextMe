@@ -106,13 +106,15 @@ $(document).ready(function() {
         $(".nc").click(function () {
             createchatclick();
         });
-        
+
+<<<<<<< HEAD
         $(".ng").click(function () {
             // Random-Chat erstellen
             createrandomchatclick();
         });
-
+=======
         validateChangeAccountData();
+>>>>>>> 6128bee102d9dc7fabe977d896c625d29db56191
 
         sessionStorage.aktuelleChatId = 0;
         chatloeschen();
