@@ -26,6 +26,30 @@ if(!$Database->isLoggedIn()) {
 }
 //print_r($chatverlauf);
 
+if(isset($_POST['editSubmitButton'])) {
+
+    $currentPassword = $_POST['currentPassword'];
+    $newPassword = $_POST['newPassword'];
+
+    $username = $Database->getCurrentUser();
+    $userid = $Database->getUserID();
+    $userid = $userid[0][0];
+    $email = $Database->getEmail($userid);
+    $email = $email[0][0];
+
+    if($Database->login($username, $currentPassword)) {
+        echo "password match!";
+        if($newPassword != "" && $Database->changePasswordByEmail($email,$newPassword)) {
+            echo "success!";
+        } else {
+            echo "failure!";
+        }
+    } else {
+        echo "False current Password!";
+    }
+
+}
+
 
 // Link überprüfen
 if(isset($_SESSION['link'])) {
@@ -394,16 +418,20 @@ if(isset($_SESSION['link'])) {
             <p class="confTitle">Change Account data</p>
 
             <form method="post" class="editPersonalInfoForm">
+                <!--
                 <label for="emailField">E-Mail</label>
                 <input type="email" id="emailChangeField">
-                <label for="passwordOldField">Old Password</label>
-                <input type="password" id="passwordOldField">
-                <label for="passwordChangeField">Change Password</label>
-                <input type="password" id="passwordChangeField">
-                <label for="passwordConfirmChangeField">Confirm Password</label>
-                <input type="password" id="passwordConfirmChangeField">
+                -->
+                <input type="password" name="currentPassword" placeholder="Current Password" id="passwordCurrentField">
+                <div class="alert alert-danger" role="alert" style=" display:none;" id="current-password-error">Current Password must not be empty!</div>
+                <br>
+                <input type="password" name="newPassword" placeholder="Change Password" id="passwordChangeField">
+                <div class="alert alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
+                <br>
+                <input type="password" placeholder="Confirm Password" id="passwordConfirmChangeField">
+                <div class="alert alert-danger" role="alert" style=" display:none;" id="password-confirm-error">passwords doesn't match!</div>
                 <br> <br>
-                <input class="editSubmitButton" type="submit"  value="Speichern">
+                <input class="editSubmitButton" name="editSubmitButton" type="submit"  value="Speichern">
             </form>
         </div>
     </section>

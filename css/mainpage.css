@@ -1072,3 +1072,14 @@ div[class~="onTop"] > .count {
     outline: none;
     cursor: pointer;
 }
+
+input.invalid {
+    border:1px solid red;
+    box-shadow: 0 0 5px 1px red;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

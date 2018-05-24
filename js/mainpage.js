@@ -107,6 +107,8 @@ $(document).ready(function() {
             createchatclick();
         });
 
+        validateChangeAccountData();
+
         sessionStorage.aktuelleChatId = 0;
         chatloeschen();
     }
@@ -124,6 +126,76 @@ $(document).ready(function() {
     }
 });
 
+
+function validateChangeAccountData() {
+
+    const currentPasswordField = $("#passwordCurrentField");
+    const passwordField = $("#passwordChangeField");
+    const passwordConfirmField = $("#passwordConfirmChangeField");
+
+    $(".editSubmitButton").click(function (e) {
+        const currentPassword = currentPasswordField.val();
+        const password = passwordField.val();
+        const passwordConfirm = passwordConfirmField.val();
+
+        const passwordMessage = validatePassword(password);
+
+        if (currentPassword === ""){
+            e.preventDefault();
+            currentPasswordField.addClass("invalid");
+            jQuery("#current-password-error").show();
+        }
+
+        if (passwordMessage !== "") {
+            e.preventDefault();
+            console.log(passwordMessage);
+            passwordField.addClass("invalid");
+            jQuery("#password-error").html(passwordMessage);
+            jQuery("#password-error").show();
+        }
+        if (passwordConfirm !== password) {
+            e.preventDefault();
+            console.log("password confirm error");
+            passwordConfirmField.addClass("invalid");
+            jQuery("#password-confirm-error").show();
+        }
+    });
+
+    currentPassword.keypress(function () {
+        if(currentPassword.hasClass("invalid")) {
+            currentPassword.removeClass("invalid");
+            jQuery("#current-password-error").hide();
+        }
+    });
+    passwordField.keypress(function () {
+        if(passwordField.hasClass("invalid")) {
+            passwordField.removeClass("invalid");
+            jQuery("#password-error").hide();
+        }
+    });
+    passwordConfirmField.keypress(function () {
+        if(passwordConfirmField.hasClass("invalid")) {
+            passwordConfirmField.removeClass("invalid");
+            jQuery("#password-confirm-error").hide();
+        }
+    });
+}
+
+function validatePassword(str) {
+    let returnMessage = "";
+    if (str.length < 6) {
+        returnMessage = returnMessage.concat("<li>must be at least 6 characters</li><br>");
+    } if (str.search(/\d/) == -1) {
+        returnMessage = returnMessage.concat("<li>must contain at least 1 digit</li><br>");
+    } if (str.search(/[A-Z]/) == -1) {
+        returnMessage = returnMessage.concat("<li>must contain at least 1 upper case letter</li><br>");
+    } if (str.search(/[a-z]/) == -1) {
+        returnMessage = returnMessage.concat("<li>must contain at least 1 lower case letter</li><br>");
+    } if (str.search(/[!"#\$%&'\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`{\|}~]/) == -1) {
+        returnMessage = returnMessage.concat("<li>must contain at least 1 special character</li>");
+    }
+    return(returnMessage);
+}
 
 function onEnter(e) {
     if (e.keyCode == 13) {
