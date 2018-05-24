@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 24. Mai 2018 um 11:32
+-- Erstellungszeit: 24. Mai 2018 um 17:47
 -- Server-Version: 5.7.22-0ubuntu0.17.10.1
 -- PHP-Version: 7.1.15-0ubuntu0.17.10.1
 
@@ -98,8 +98,7 @@ INSERT INTO `message` (`mid`, `uiicid`, `message`, `timeadded`, `timemodified`) 
 (7, 7, 'wie gehts?', '2018-05-03 12:30:17', '2018-05-03 12:30:17'),
 (8, 4, 'hi gruppe', '2018-05-03 12:30:17', '2018-05-03 12:30:17'),
 (9, 8, 'guten tag gruppe', '2018-05-03 12:30:17', '2018-05-03 12:30:17'),
-(10, 9, 'ahoi pineapples!!!', '2018-05-03 12:30:17', '2018-05-03 12:30:17'),
-(19, 7, 'cool', '2018-05-21 12:49:19', '2018-05-21 12:49:19');
+(10, 9, 'ahoi pineapples!!!', '2018-05-03 12:30:17', '2018-05-03 12:30:17');
 
 -- --------------------------------------------------------
 
@@ -114,7 +113,7 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `timeadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `timemodified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `is_admin` tinyint(1) NOT NULL
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -122,11 +121,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uid`, `name`, `mail`, `password`, `timeadded`, `timemodified`, `is_admin`) VALUES
-(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$tPp27NChOTqYRlZcC7BcxOg8eb58x1oICFu3ZjybN89EG65cEYFhy', '2018-05-03 11:25:19', '2018-05-24 11:15:38', 1),
+(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:38:34', 1),
 (2, 'Dodo', 'dodo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:42:44', 0),
-(3, 'Daniel', 'daniel@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:40:53', 0),
-(4, 'Flo', 'flo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:40:46', 0),
-(5, 'Jule', 'jule@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 20:44:06', 0),
+(3, 'Daniel', 'daniel@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:38:01', 0),
+(4, 'Flo', 'flo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:31:36', 0),
+(5, 'Jule', 'jule@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:47:03', 0),
 (6, 'tim', 'tim@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:40:06', '2018-05-21 12:40:37', 0);
 
 -- --------------------------------------------------------
@@ -141,7 +140,7 @@ CREATE TABLE `user_is_in_chat` (
   `uid` int(11) NOT NULL,
   `timeadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `timemodified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted` tinyint(1) NOT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
   `link` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -222,7 +221,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT für Tabelle `message`
 --
 ALTER TABLE `message`
-  MODIFY `mid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `mid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
@@ -232,7 +231,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `user_is_in_chat`
 --
 ALTER TABLE `user_is_in_chat`
-  MODIFY `uiicid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `uiicid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- Constraints der exportierten Tabellen
 --
