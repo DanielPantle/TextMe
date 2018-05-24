@@ -143,7 +143,6 @@ $(document).ready(function() {
     }
 });
 
-
 function validateChangeAccountData() {
 
     const currentPasswordField = $("#passwordCurrentField");
@@ -325,7 +324,8 @@ function sendinvitationclick() {
         callChatctlWithSuccess(getLinkString, function (response) {
             console.log(response);
             // TODO: Ausgabe ändern
-            prompt("Mit diesem Link kannst du Andere in diesen Chat einladen:", "\n\nlocalhost/link/" + response['link']);
+            var location = window.location.hostname+"/link/"+response['link'];
+            prompt("Mit diesem Link kannst du Andere in diesen Chat einladen:", "\n\n"+ location);
         });
     }
 }
@@ -334,7 +334,6 @@ function showlinkresult() {
     // TODO: Ausgabe ändern
     alert('$linkResult');
 }
-
 
 function createchatclick() {
     // TODO: Eingabe des Chat-Namens ändern
@@ -363,7 +362,6 @@ function createrandomchatclick() {
         }
     });
 }
-
 
 window.setInterval(function () {
     var functionString = '{"i":"ping"}';

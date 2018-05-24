@@ -421,7 +421,6 @@ class Database
         }
     }
 
-
     public function createChat($chatName) {
         try {
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_CHAT}
@@ -488,7 +487,6 @@ class Database
             return "Error: " . $e->getMessage();
         }
     }
-
 
     public function deleteChat($chatId)
     {
