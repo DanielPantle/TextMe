@@ -112,6 +112,12 @@ $(document).ready(function() {
             createrandomchatclick();
         });
 
+        jQuery(".alert").each(function (index) {
+            jQuery(this).click(function () {
+                jQuery(this).hide();
+            });
+        });
+
         validateChangeAccountData();
 
         sessionStorage.aktuelleChatId = 0;
