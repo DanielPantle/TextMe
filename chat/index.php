@@ -38,14 +38,13 @@ if(isset($_SESSION['link'])) {
         $chatName = $Database->getChatnameById($cid);
 
         $res = $Database->joinChat($cid);
-        
+        $invitor = $Database->getUserNameById($uid);
+
         if($res && $res > 0) {
-            $invitor = $Database->getUserNameById($uid);
-            $linkResult = "Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)";
+            echo "<script>var linkResult = 'Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)';</script>";
         }
         else {
-            $invitor = $Database->getUserNameById($uid);
-            $linkResult = "Du bist schon in dem Chat $chatName. (Eingeladen von $invitor)";
+            echo "<script>var linkResult = 'Du bist schon in dem Chat $chatName. (Eingeladen von $invitor)';</script>";
         }
     }
 
@@ -93,11 +92,11 @@ if(isset($_SESSION['link'])) {
             //echo $count;
             if ($count > 0){
                 echo "<br>";
-                for ($j=0;$j<$count;$j++){
+                for ($j=0;$j<$count;$j++) {
                     $deleted[$j] = $Database->isChatDeletedForUser($chats[$j]['cid']);
                     //print_r($members_2[$j]);
                     //$deleted[$j]=1;
-                    if (!$deleted[$j]){
+                    if (!$deleted[$j]) {
                         $cid[$j]=$chats[$j]['cid'];
                         $chatname[$j] =$chats[$j]['chatname'];
                         $members[$j] = $Database->getMembersOfChat($chats[$j]['cid']);
@@ -311,10 +310,12 @@ if(isset($_SESSION['link'])) {
         </div>
         <!-- Navigationsleiste "mitte" -->
         <nav>
+            <!--
             <button class="ng">
                 <i class="material-icons">&#xE8D3;</i>
                 <span>Neue Gruppe</span>
             </button>
+            -->
 
             <button class="nc">
                 <i class="material-icons">&#xE0B6;</i>
@@ -527,12 +528,6 @@ echo "<script>
     document.getElementById('email2').innerHTML='$email';
 </script>";
 
-
-
-// Link-Ergebnis überprüfen und ggf. ausgeben
-if(isset($linkResult)) {
-    echo "<script>alert('$linkResult');</script>";
-}
 ?>
 
 <!-- JS einbinden -->

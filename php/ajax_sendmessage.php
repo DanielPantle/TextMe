@@ -49,6 +49,9 @@ try {
         case "getinvitationlink":
             $return_array = $Database->getInvitationLink($p['chat_id']);
             break;
+        case "createchat":
+            $return_array = $Database->createChat($p['chat_name']);
+            break;
 
         default:
             throw new Exception('Instruktion nicht gefunden.');

@@ -422,7 +422,7 @@ class Database
     }
 
 
-    public function createChat($chatName, $userId) {
+    public function createChat($chatName) {
         try {
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_CHAT}
                     ({$this->C_NAME})
@@ -432,10 +432,13 @@ class Database
                 $chatId = $this->db->lastInsertId();
 
                 $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER_IS_IN_CHAT}
-                    ({$this->UIIC_CID}, {$this->UIIC_UID})
-                    VALUES (:chatId, :userId)");
+                    ({$this->UIIC_CID}, {$this->UIIC_UID}, {$this->UIIC_LINK})
+                    VALUES (:chatId, :userId, :link)");
+
+                $link = md5(rand(0,1000));
+                $userId = $this->getUserID_v2();
                 
-                if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
+                if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId, ':link' => $link))) {
                     return $this->db->lastInsertId();
                 }
                 else {

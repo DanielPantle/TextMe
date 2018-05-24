@@ -103,12 +103,27 @@ $(document).ready(function() {
             window.location.href='./statistic.php';
         });
 
+        $(".nc").click(function () {
+            createchatclick();
+        });
+
         sessionStorage.aktuelleChatId = 0;
         chatloeschen();
     }
 
 
+    if(sessionStorage.chatCreated != null && sessionStorage.chatCreated != 0) {
+        // TODO: Ausgabe ändern
+        alert("Chat " + sessionStorage.chatCreated + " erfolgreich erstellt!");
+        sessionStorage.chatCreated = 0;
+    }
+
+    if(linkResult != null) {
+        // TODO: Ausgabe ändern
+        alert(linkResult);
+    }
 });
+
 
 function onEnter(e) {
     if (e.keyCode == 13) {
@@ -220,10 +235,35 @@ function sendinvitationclick() {
         var getLinkString = '{"i":"getinvitationlink","chat_id":'+chat_id+'}';
         callChatctlWithSuccess(getLinkString, function (response) {
             console.log(response);
-            alert("Mit diesem Link kannst du Andere in diesen Chat einladen:\n\nlocalhost/link/" + response['link']);
+            // TODO: Ausgabe ändern
+            prompt("Mit diesem Link kannst du Andere in diesen Chat einladen:", "\n\nlocalhost/link/" + response['link']);
         });
     }
 }
+
+function showlinkresult() {
+    // TODO: Ausgabe ändern
+    alert('$linkResult');
+}
+
+
+function createchatclick() {
+    // TODO: Eingabe des Chat-Namens ändern
+    var chatName = prompt("Gib den Chat-Namen ein:", "");
+
+    if(chatName != null && chatName != "") {
+        var createChatString = '{"i":"createchat","chat_name":"'+chatName+'"}';
+        callChatctlWithSuccess(createChatString, function (response) {
+            console.log(response);
+            if(response > 0) {
+                //$.post("../php/chat_created.php", {"chatName": chatName});
+                sessionStorage.chatCreated = chatName;
+                window.location.href = window.location.href;
+            }
+        });
+    }
+}
+
 
 window.setInterval(function () {
     var functionString = '{"i":"ping"}';
