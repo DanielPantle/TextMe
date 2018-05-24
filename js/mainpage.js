@@ -172,7 +172,7 @@ function validateChangeAccountData() {
         }
     });
 
-    currentPassword.keypress(function () {
+    currentPasswordField.keypress(function () {
         if(currentPassword.hasClass("invalid")) {
             currentPassword.removeClass("invalid");
             jQuery("#current-password-error").hide();
