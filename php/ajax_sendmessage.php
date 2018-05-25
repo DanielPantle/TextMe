@@ -23,9 +23,7 @@ try {
 
         //Erwartet die ID des Chats sowie die Nachricht
         case "sendmessage":
-            $user_id = $Database->getUserID();
-            $user_id = $user_id[0][0];
-            $return_array =$Database->writeMessage($p['chat_id'],$user_id,$p['msg']);
+            $return_array = $Database->writeMessage($p['chat_id'], $p['msg']);
             break;
         case "getAllChatsFromCurrentUser":
             $return_array = $Database->getAllChatsFromCurrentUser();

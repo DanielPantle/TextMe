@@ -236,12 +236,22 @@ function sendChatMsg(chatroomId) {
         chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
         chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
         var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
-        callChatctl(jsonSend);
+        callChatctlWithSuccess(jsonSend, function (response) {
+            console.log(response);
+            // Nachricht ausgeben
+            $("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
+            scrollChatVerlauf();
+        });
         $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
         $("#inputChatMessage").focus();
     }
 
     //sendReadUntil(sessionStorage.aktuelleChatId);
+}
+
+function scrollChatVerlauf() {
+    var chathistory = document.getElementById('chatVerlauf');
+    chathistory.scrollTop = chathistory.scrollHeight;
 }
 
 function logout(){
@@ -255,8 +265,7 @@ function chatButtonClick(cid,chatname,members,history) {
     $('#mitglieder').html("Mitglieder: "+members);
     $('#chatVerlauf').html(history);
     sessionStorage.aktuelleChatId = cid;
-    var chathistory = document.getElementById('chatVerlauf');
-    chathistory.scrollTop = chathistory.scrollHeight;
+    scrollChatVerlauf();
     chatloeschen();
 }
 

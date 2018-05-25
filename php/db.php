@@ -223,12 +223,12 @@ class Database
             WHERE uiic.cid = 2
             ORDER BY m.timeadded
             */
-            $stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%h:%i') AS time, {$this->U_ID}, {$this->U_NAME}
+            $stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%H:%i') AS time, {$this->U_ID}, {$this->U_NAME}
                     FROM {$this->TABLE_MESSAGE}
                     JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
                     JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
                     WHERE {$this->UIIC_CID} = :chatid
-                    ORDER BY datediff DESC");
+                    ORDER BY {$this->M_TIMEADDED} ASC, {$this->M_ID} ASC");
 
             if ($stmt->execute(array(':chatid' => $chatId))) {
                 $res = array();
@@ -295,9 +295,10 @@ class Database
         }
     }
 
-    public function writeMessage($chatId, $userId, $message)
+    public function writeMessage($chatId, $message)
     {
         try {
+            $userId = $this->getUserID();
             /*
             INSERT INTO message
             (uiicid, message)
@@ -313,8 +314,15 @@ class Database
                     WHERE {$this->UIIC_CID} = :chatId
                     AND {$this->UIIC_UID} = :userId");
 
-            if ($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
-                return $this->db->lastInsertId();
+            if ($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId)) && $this->db->lastInsertId() > 0) {
+                // Nachricht zurückgeben, damit Datum ausgegeben werden kann
+                $stmt2 = $this->db->prepare("SELECT DATE_FORMAT({$this->M_TIMEADDED}, '%H:%i') AS time FROM {$this->TABLE_MESSAGE} ORDER BY {$this->M_ID} DESC LIMIT 1");
+                if($stmt2->execute()) {
+                    return $stmt2->fetchAll(PDO::FETCH_ASSOC)[0]['time'];
+                }
+                else {
+                    return false;
+                }
             } else {
                 return false;
             }
