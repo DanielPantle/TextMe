@@ -737,4 +737,22 @@ class Database
             return true;
         }else return false;
     }
+
+    public function deletePicture(){
+        try {
+            /*
+             * DELETE FROM `images` WHERE `uid`
+            */
+            $stmt = $this->db->prepare("DELETE FROM {$this->TABLE_IMAGES}
+                    WHERE {$this->I_UID} = :userId");
+            $userId = $this->getUserID();
+            if ($stmt->execute(array(':userId' => $userId))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
 }

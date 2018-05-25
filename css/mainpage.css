@@ -1049,7 +1049,7 @@ div[class~="onTop"] > .count {
 }
 
 .changePicture{
-    width: auto;
+    width: 120px;
     font-size: 16px;
     font-weight: 600;
     background: #419fd9;
@@ -1062,7 +1062,7 @@ div[class~="onTop"] > .count {
 }
 
 .editSubmitButton{
-	width: auto;
+	width: 120px;
 	font-size: 16px;
 	font-weight: 600;
 	background: #419fd9;

@@ -65,7 +65,6 @@ if(isset($_SESSION['link'])) {
         if($res && $res > 0) {
             echo "<script>var linkResult = 'Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)';</script>";
             $username_link = $Database->getCurrentUser();
-            $username_link = $username_link[0][0];
             $message_link =" wurde dem Chat hinzugefügt";
             $Database->writeMessage($cid,$current_uid,$message_link);
         }
@@ -413,10 +412,13 @@ if(isset($_SESSION['link'])) {
             <input class="choosePicture"  type="file" name="image">
             <br> <br>
             <input class="changePicture" type="submit" name="submit-create" value="Speichern">
+            <input class="changePicture" type="submit" name="submit-delete" value="Löschen">
         </form>
 
         <br>
-        <div class="editPersonalInfoDiv" style="display: none">
+    </section>
+    <section class="configSect second" style="display: none">
+        <div class="editPersonalInfoDiv">
             <p class="confTitle">Change Password</p>
 
             <form method="post" class="editPersonalInfoForm">
@@ -451,22 +453,31 @@ if(isset($_SESSION['link'])) {
             $result ="";
             if($Database->haveUserPicture()){
                 $result = $Database->updatePictureFromCurrentUser($name,$image);
+                // TODO:  hier seite neu laden --> ajax -> dodo
                 //echo "user hat ein bild";
                 //echo $result;
             }else {
                 $result = $Database->createPictureFromUser($name,$image);
+                // TODO:  hier seite neu laden --> ajax -> dodo
                 //echo "user hat kein bild";
                 //echo $result;
             }
         }
     }
-    $result = $Database->showPictureFromCurrentUser();
+    if(isset($_POST['submit-delete'])){
+        if($Database->haveUserPicture()){
+            $result = $Database->deletePicture();
+            // TODO:  hier seite neu laden --> ajax -> dodo
+        }
+    }
+
+    /*$result = $Database->showPictureFromCurrentUser();
     //print_r($result);
     $count = count($result);
     if($count>0){
         $bild= $result[0]['imgdata'];
-        //echo '<img  src="data:image;base64,'.$bild.'">';
-    }else //echo '<img src="./../images/Profilbild_default.jpg">'
+        echo '<img  src="data:image;base64,'.$bild.'">';
+    }else echo '<img src="./../images/Profilbild_default.jpg">'*/
     ?>
 
 
