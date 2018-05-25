@@ -281,6 +281,14 @@ nav button > span {
 	background: #FFF;
 }
 
+.configSect2 {
+    float: left;
+    width: calc(100% - 60px);
+    padding: 15px 30px;
+    margin-bottom: 10px;
+    background: #FFF;
+}
+
 .profile .image {
 	width: 140px;
 	height: 140px;

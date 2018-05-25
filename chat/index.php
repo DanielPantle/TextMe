@@ -413,10 +413,9 @@ if(isset($_SESSION['link'])) {
             <input class="changePicture" type="submit" name="submit-create" value="Speichern">
             <input class="changePicture" type="submit" name="submit-delete" value="Löschen">
         </form>
-
         <br>
     </section>
-    <section class="configSect second" style="display: none">
+    <section class="configSect2" style="display: none">
         <div class="editPersonalInfoDiv">
             <p class="confTitle">Change Password</p>
 

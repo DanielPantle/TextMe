@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         /* close all overlay elements */
         $(".overlay").click(function () {
-            $(".editPersonalInfoDiv").hide();
+            $(".configSect2").hide();
             $(".overlay, .menuWrap").fadeOut(180);
             $(".menu").animate({opacity: "0", left: "-320px"}, 180);
             $(".config").animate({opacity: "0", right: "-200vw"}, 180);
@@ -71,7 +71,7 @@ $(document).ready(function() {
         });
 
         $(".edit").click(function () {
-            jQuery(".configSect").show();
+            jQuery(".configSect2").show();
         });
 
         /* Show or Hide Emoji Panel */
