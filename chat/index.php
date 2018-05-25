@@ -189,18 +189,18 @@ if(isset($_SESSION['link'])) {
                                 $count_picture = count($picture);
                                 if($count_picture>0){
                                     $bild= $picture[0]['imgdata'];
-                                    $image =  '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
+                                    $image =  '<div class= "imagenew" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
                                 }else {
-                                    $image = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+                                    $image = '<div class= "imagenew" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
                                 }
                             }
 
 
                             echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
-                                         <div class='chatInfo'>
+                                        
                                     
                                                 ".$image." 
-                                    
+                                        <div class='chatInfo'> 
                                                 <p class='name'>
                                                     $chatname[$j]                        
                                                 </p>

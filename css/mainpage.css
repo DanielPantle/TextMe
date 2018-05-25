@@ -501,6 +501,20 @@ header {
 	float: left;
 }
 
+.imagenew {
+    float: left;
+    max-width: 45%;
+    height: auto;
+    padding: 30px;
+    /* margin: 10px; */
+    margin-top: 12px;
+    margin-right: -5px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    border-radius: 50px;
+    clear: both;
+}
+
 .chatInfo .image {
 	position: absolute;
 	width: 55px;
@@ -513,14 +527,14 @@ header {
 .chatInfo .name {
 	float: left;
 	font-weight: 600;
-	margin-left: 80px;
+	margin-left: 15px;
 	margin-top: 18px;
 }
 
 .chatInfo .message {
 	float: left;
 	clear: left;
-	margin-left: 80px;
+	margin-left: 15px;
 	margin-top: 7px;
     font-size: small;
 }
