@@ -60,13 +60,12 @@ if(isset($_SESSION['link'])) {
 
         $res = $Database->joinChat($cid);
         $invitor = $Database->getUserNameById($uid);
-        $current_uid =$Database->getUserID();
 
         if($res && $res > 0) {
             echo "<script>var linkResult = 'Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)';</script>";
             $username_link = $Database->getCurrentUser();
             $message_link =" wurde dem Chat hinzugefügt";
-            $Database->writeMessage($cid,$current_uid,$message_link);
+            $Database->writeMessage($cid,$message_link);
         }
         else {
             echo "<script>var linkResult = 'Du bist schon in dem Chat $chatName. (Eingeladen von $invitor)';</script>";
