@@ -71,7 +71,7 @@ $(document).ready(function() {
         });
 
         $(".edit").click(function () {
-            jQuery(".editPersonalInfoDiv").show();
+            jQuery(".configSect").show();
         });
 
         /* Show or Hide Emoji Panel */
