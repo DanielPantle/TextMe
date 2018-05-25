@@ -1,7 +1,7 @@
 
 <?php
 if(session_status() !== PHP_SESSION_ACTIVE){
-	session_start();
+    session_start();
 }
 
 
@@ -77,9 +77,9 @@ class Database
     {
         try {
             $stmt = $this->db->prepare("SELECT {$this->U_ID}
-					FROM {$this->TABLE_USER}
-					WHERE {$this->U_NAME} LIKE :name
-					OR {$this->U_MAIL} = :email");
+                    FROM {$this->TABLE_USER}
+                    WHERE {$this->U_NAME} LIKE :name
+                    OR {$this->U_MAIL} = :email");
 
             if ($stmt->execute(array(':name' => $name, ':email' => $email))) {
                 return $stmt->rowCount() > 0;
@@ -95,8 +95,8 @@ class Database
     {
         try {
             $stmt = $this->db->prepare("SELECT {$this->U_PASSWORD}
-					FROM {$this->TABLE_USER}
-					WHERE {$this->U_NAME} LIKE :name");
+                    FROM {$this->TABLE_USER}
+                    WHERE {$this->U_NAME} LIKE :name");
 
             if ($stmt->execute(array(':name' => $name))) {
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -142,8 +142,8 @@ class Database
             $pw = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_USER}
-					({$this->U_NAME}, {$this->U_MAIL}, {$this->U_PASSWORD}, {$this->U_ISADMIN})
-					VALUES (:name, :email, :password, :isAdmin)");
+                    ({$this->U_NAME}, {$this->U_MAIL}, {$this->U_PASSWORD}, {$this->U_ISADMIN})
+                    VALUES (:name, :email, :password, :isAdmin)");
 
             if ($stmt->execute(array(':name' => $name, ':email' => $email, ':password' => $pw, ':isAdmin' => 0))) {
                 return $this->db->lastInsertId();
@@ -177,11 +177,11 @@ class Database
         try {
             $currentUser = $this->getCurrentUser();
             $stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT(distinct {$this->U_NAME}) AS members
-					FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
-					WHERE {$this->UIIC_CID} = {$this->C_ID}
-					AND {$this->UIIC_UID} = {$this->U_ID}
-					GROUP BY {$this->C_ID}
-					HAVING members LIKE '%$currentUser%'");
+                    FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
+                    WHERE {$this->UIIC_CID} = {$this->C_ID}
+                    AND {$this->UIIC_UID} = {$this->U_ID}
+                    GROUP BY {$this->C_ID}
+                    HAVING members LIKE '%$currentUser%'");
 
             if ($stmt->execute()) {
                 //return $stmt;
@@ -224,11 +224,11 @@ class Database
             ORDER BY m.timeadded
             */
             $stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%h:%i') AS time, {$this->U_ID}, {$this->U_NAME}
-					FROM {$this->TABLE_MESSAGE}
-					JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
-					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
-					WHERE {$this->UIIC_CID} = :chatid
-					ORDER BY datediff DESC");
+                    FROM {$this->TABLE_MESSAGE}
+                    JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
+                    JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
+                    WHERE {$this->UIIC_CID} = :chatid
+                    ORDER BY datediff DESC");
 
             if ($stmt->execute(array(':chatid' => $chatId))) {
                 $res = array();
@@ -307,11 +307,11 @@ class Database
             AND user_is_in_chat.uid = 3
             */
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_MESSAGE}
-					({$this->M_UIICID}, {$this->M_MESSAGE})
-					SELECT {$this->UIIC_ID}, :message
-					FROM {$this->TABLE_USER_IS_IN_CHAT}
-					WHERE {$this->UIIC_CID} = :chatId
-					AND {$this->UIIC_UID} = :userId");
+                    ({$this->M_UIICID}, {$this->M_MESSAGE})
+                    SELECT {$this->UIIC_ID}, :message
+                    FROM {$this->TABLE_USER_IS_IN_CHAT}
+                    WHERE {$this->UIIC_CID} = :chatId
+                    AND {$this->UIIC_UID} = :userId");
 
             if ($stmt->execute(array(':message' => $message, ':chatId' => $chatId, ':userId' => $userId))) {
                 return $this->db->lastInsertId();
@@ -451,9 +451,9 @@ class Database
              * UPDATE `user_is_in_chat` SET `deleted`=1 WHERE `cid`= 1 AND `uid` 5
             */
             $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER_IS_IN_CHAT}
-		            SET {$this->UIIC_DELETED} = 1
-					WHERE {$this->UIIC_CID} = :chatId
-					AND {$this->UIIC_UID} = :userId");
+                    SET {$this->UIIC_DELETED} = 1
+                    WHERE {$this->UIIC_CID} = :chatId
+                    AND {$this->UIIC_UID} = :userId");
             $userId = $this->getUserID();
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 return $this->db->lastInsertId();
@@ -472,9 +472,9 @@ class Database
              * SELECT `deleted` FROM `user_is_in_chat` WHERE `cid` = 1 AND `uid` = 1
             */
             $stmt = $this->db->prepare("SELECT {$this->UIIC_DELETED} 
-            		FROM {$this->TABLE_USER_IS_IN_CHAT}
-					WHERE {$this->UIIC_CID} = :chatId
-					AND {$this->UIIC_UID} = :userId");
+                    FROM {$this->TABLE_USER_IS_IN_CHAT}
+                    WHERE {$this->UIIC_CID} = :chatId
+                    AND {$this->UIIC_UID} = :userId");
             $userId = $this->getUserID();
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 $deleted = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -498,10 +498,10 @@ class Database
              * WHERE user_is_in_chat.cid=3 AND NOT(user_is_in_chat.deleted)
             */
             $stmt = $this->db->prepare("SELECT {$this->U_NAME} 
-            		FROM {$this->TABLE_USER_IS_IN_CHAT}
-            		JOIN {$this->TABLE_USER} ON {$this->UIIC_UID}={$this->U_ID}
-					WHERE {$this->UIIC_CID} = :chatId
-					AND NOT ({$this->UIIC_DELETED})");
+                    FROM {$this->TABLE_USER_IS_IN_CHAT}
+                    JOIN {$this->TABLE_USER} ON {$this->UIIC_UID}={$this->U_ID}
+                    WHERE {$this->UIIC_CID} = :chatId
+                    AND NOT ({$this->UIIC_DELETED})");
             if ($stmt->execute(array(':chatId' => $chatId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
@@ -596,8 +596,8 @@ class Database
              * UPDATE `user` SET USER.timemodified=CURRENT_TIMESTAMP   WHERE USER.uid = 1
             */
             $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER}
-		            SET {$this->U_TIMEMODIFIED} = CURRENT_TIMESTAMP 
-					WHERE {$this->U_ID} = :userId");
+                    SET {$this->U_TIMEMODIFIED} = CURRENT_TIMESTAMP 
+                    WHERE {$this->U_ID} = :userId");
             $userId = $this->getUserID();
             if ($stmt->execute(array(':userId' => $userId))) {
                 return $this->db->lastInsertId();
@@ -615,7 +615,7 @@ class Database
              * INSERT INTO images (uid,imdata) VALUES (:uid,:imdata)
             */
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_IMAGES}
-		            ({$this->I_UID},{$this->I_IMGNAME},{$this->I_IMGDATA}) VALUES (:userId,:imgname,:imgdata)");
+                    ({$this->I_UID},{$this->I_IMGNAME},{$this->I_IMGDATA}) VALUES (:userId,:imgname,:imgdata)");
             $userId = $this->getUserID();
             if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
                 return $this->db->lastInsertId();
@@ -718,7 +718,7 @@ class Database
              * UPDATE images SET imgdata=:imgdata,imgname=:imgname WEHRE uid=:userId
             */
             $stmt = $this->db->prepare("UPDATE {$this->TABLE_IMAGES}
-		            SET {$this->I_IMGNAME}=:imgname,{$this->I_IMGDATA}=:imgdata WHERE {$this->I_UID}=:userId");
+                    SET {$this->I_IMGNAME}=:imgname,{$this->I_IMGDATA}=:imgdata WHERE {$this->I_UID}=:userId");
             $userId = $this->getUserID();
             if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
                 return $this->db->lastInsertId();
