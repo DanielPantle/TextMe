@@ -172,31 +172,6 @@ class Database
      }
     }
 
-    public function getAllChatsFromUser($userId)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT {$this->UIIC_CID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT({$this->U_NAME}) AS members
-					FROM {$this->TABLE_USER_IS_IN_CHAT}
-					JOIN user ON ({$this->UIIC_UID} = {$this->U_ID})
-					JOIN chat ON ({$this->UIIC_CID} = {$this->C_ID})
-					WHERE {$this->UIIC_CID} IN (
-					SELECT {$this->C_ID} FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}
-					JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
-					WHERE {$this->U_ID} = :userId
-					GROUP BY {$this->C_ID})
-					GROUP BY {$this->UIIC_CID}
-					ORDER BY {$this->UIIC_ID}");
-
-            if ($stmt->execute(array(':userId' => $userId))) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
-
     public function getAllChatsFromCurrentUser()
     {
         try {
@@ -220,9 +195,19 @@ class Database
         }
     }
 
-    public function getCurrentUser()
-    {
-        return $_SESSION['name'];
+    public function getCurrentUser(){
+        /*
+         * SELECT USER.name FROM `user` WHERE user.name = "christian"
+         */
+        $username = $_SESSION['name'];
+        try{
+            $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_NAME}= :username");
+            if($stmt->execute(array(':username' => $username))){
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0][0];
+            }
+        }catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
     }
 
     public function getAllMessagesFromChat($chatId)
@@ -285,21 +270,6 @@ class Database
             //nutze hier extra "as '0'" da ich sonst das Array der Ergebnissmenge so ansprechen müsste  $userid[0]['uid']; //print_r($userid); zur ausgabe
 
             $userName = $this->getCurrentUser();
-            $stmt = $this->db->prepare("SELECT user.uid as '0' FROM user WHERE user.name = :username");
-            if ($stmt->execute(array(':username' => $userName))) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
-
-    public function getUserID_v2()
-    {
-        try {
-            $userName = $this->getCurrentUser();
             $stmt = $this->db->prepare("SELECT user.uid FROM user WHERE user.name = :username");
             if ($stmt->execute(array(':username' => $userName))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['uid'];
@@ -314,23 +284,9 @@ class Database
     public function getEmail($userId)
     {
         try {
-            $stmt = $this->db->prepare("SELECT user.mail as '0' FROM user WHERE user.uid = :userID");
+            $stmt = $this->db->prepare("SELECT user.mail FROM user WHERE user.uid = :userID");
             if ($stmt->execute(array(':userID' => $userId))) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
-
-    public function getUsername($userId)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT user.name as '0' FROM user WHERE user.uid = :userID");
-            if ($stmt->execute(array(':userID' => $userId))) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['mail'];
             } else {
                 return false;
             }
@@ -374,7 +330,7 @@ class Database
                 WHERE {$this->UIIC_CID} = :chatId
                 AND {$this->UIIC_UID} = :userId");
 
-            $userId = $this->getUserID_v2();
+            $userId = $this->getUserID();
 
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
@@ -411,7 +367,7 @@ class Database
 
             $link = md5(rand(0,1000));
 
-            if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $this->getUserID_v2(), ':link' => $link))) {
+            if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $this->getUserID(), ':link' => $link))) {
                 return $this->db->lastInsertId();
             } else {
                 return false;
@@ -435,7 +391,7 @@ class Database
                     VALUES (:chatId, :userId, :deleted , :link)");
 
                 $link = md5(rand(0,1000));
-                $userId = $this->getUserID_v2();
+                $userId = $this->getUserID();
                 
                 if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId, ':deleted'=> 0, ':link' => $link))) {
                     return $this->db->lastInsertId();
@@ -471,7 +427,7 @@ class Database
 
                 $link1 = md5(rand(0,1000));
                 $link2 = md5(rand(0,1000));
-                $userId = $this->getUserID_v2();
+                $userId = $this->getUserID();
                 
                 if ($stmt->execute(array(':chatId' => $chatId, ':userId1' => $userId, ':link1' => $link1, ':link2' => $link2))) {
                     $stmt->closeCursor();
@@ -498,7 +454,7 @@ class Database
 		            SET {$this->UIIC_DELETED} = 1
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
-            $userId = $this->getUserID_v2();
+            $userId = $this->getUserID();
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 return $this->db->lastInsertId();
             } else {
@@ -520,7 +476,6 @@ class Database
 					WHERE {$this->UIIC_CID} = :chatId
 					AND {$this->UIIC_UID} = :userId");
             $userId = $this->getUserID();
-            $userId = $userId[0][0];
             if ($stmt->execute(array(':chatId' => $chatId, ':userId' => $userId))) {
                 $deleted = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $deleted = $deleted[0]['deleted'];
@@ -557,7 +512,7 @@ class Database
         }
     }
 
-    function userCount(){
+    public function userCount(){
         try{
             $stmt = $this->db->prepare("SELECT {$this->U_ID} FROM {$this->TABLE_USER}");
             if($stmt->execute()){
@@ -568,7 +523,7 @@ class Database
         }
     }
 
-    function msgCountPerTime($hours){
+    public function msgCountPerTime($hours){
         try{
             $stmt = $this->db->prepare("SELECT * FROM {$this->TABLE_MESSAGE} WHERE {$this->M_TIMEMODIFIED} >= DATE_SUB(NOW(), INTERVAL ? HOUR)");
             if($stmt->execute((array($hours)))){
@@ -581,7 +536,7 @@ class Database
         }
     }
 
-    function totalChatMessages(){
+    public function totalChatMessages(){
         try{
             $stmt = $this->db->prepare("SELECT * FROM {$this->TABLE_MESSAGE}");
             if($stmt->execute()){
@@ -594,7 +549,7 @@ class Database
         }
     }
 
-    function recentlyActive(){
+    public function recentlyActive(){
         try{
             $stmt = $this->db->prepare("SELECT * FROM {$this->TABLE_MESSAGE} WHERE {$this->M_TIMEMODIFIED} >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) GROUP BY {$this->M_UIICID}");
             if($stmt->execute()){
@@ -607,7 +562,7 @@ class Database
         }
     }
 
-    function onlineUsers(){
+    public function onlineUsers(){
         try{
             $stmt = $this->db->prepare("SELECT * FROM {$this->TABLE_USER} WHERE {$this->U_TIMEMODIFIED} >= DATE_SUB(NOW(), INTERVAL 10 SECOND)");
             if($stmt->execute()){
@@ -620,24 +575,22 @@ class Database
         }
     }
 
-    function isUserAdmin (){
+    public function isUserAdmin (){
         /*
          * SELECT USER.is_admin FROM `user` WHERE user.uid = 1
          */
         $userid = $this->getUserID();
-        $userid = $userid[0][0];
         try{
             $stmt = $this->db->prepare("SELECT {$this->U_ISADMIN} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_ID}= :userId");
             if($stmt->execute(array(':userId' => $userid))){
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $result[0][0];
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0][0];
             }
         }catch (PDOException $e){
             return "Error: ".$e->getMessage();
         }
     }
 
-    function ping(){
+    public function ping(){
         try {
             /*
              * UPDATE `user` SET USER.timemodified=CURRENT_TIMESTAMP   WHERE USER.uid = 1
@@ -646,7 +599,6 @@ class Database
 		            SET {$this->U_TIMEMODIFIED} = CURRENT_TIMESTAMP 
 					WHERE {$this->U_ID} = :userId");
             $userId = $this->getUserID();
-            $userId = $userId[0][0];
             if ($stmt->execute(array(':userId' => $userId))) {
                 return $this->db->lastInsertId();
             } else {
@@ -657,24 +609,7 @@ class Database
         }
     }
 
-    function getCurrentUser_v2(){
-        /*
-         * SELECT USER.name FROM `user` WHERE user.uid = 1
-         */
-        $userid = $this->getUserID();
-        $userid = $userid[0][0];
-        try{
-            $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_ID}= :userId");
-            if($stmt->execute(array(':userId' => $userid))){
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $result[0][0];
-            }
-        }catch (PDOException $e){
-            return "Error: ".$e->getMessage();
-        }
-    }
-
-    function createPictureFromUser($name,$image){
+    public function createPictureFromUser($name,$image){
         try {
             /*
              * INSERT INTO images (uid,imdata) VALUES (:uid,:imdata)
@@ -682,7 +617,6 @@ class Database
             $stmt = $this->db->prepare("INSERT INTO {$this->TABLE_IMAGES}
 		            ({$this->I_UID},{$this->I_IMGNAME},{$this->I_IMGDATA}) VALUES (:userId,:imgname,:imgdata)");
             $userId = $this->getUserID();
-            $userId = $userId[0][0];
             if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
                 return $this->db->lastInsertId();
             } else {
@@ -693,10 +627,9 @@ class Database
         }
     }
 
-    function showPictureFromCurrentUser(){
+    public function showPictureFromCurrentUser(){
         try{
             $userId = $this->getUserID();
-            $userId = $userId[0][0];
             $stmt = $this->db->prepare("SELECT {$this->I_IMGNAME},{$this->I_IMGDATA} FROM {$this->TABLE_IMAGES} WHERE {$this->I_UID}=:userId");
             if($stmt->execute(array(':userId' => $userId))){
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -706,7 +639,7 @@ class Database
         }
     }
 
-    function showPictureByUserId($userId){
+    public function showPictureByUserId($userId){
         try{
             $stmt = $this->db->prepare("SELECT {$this->I_IMGNAME},{$this->I_IMGDATA} FROM {$this->TABLE_IMAGES} WHERE {$this->I_UID}=:userId");
             if($stmt->execute(array(':userId' => $userId))){
@@ -717,7 +650,7 @@ class Database
         }
     }
 
-    function getUserIdByName($username){
+    public function getUserIdByName($username){
         try{
             $stmt = $this->db->prepare("SELECT {$this->U_ID} AS '0' FROM {$this->TABLE_USER} WHERE {$this->U_NAME}=:username");
             if($stmt->execute(array(':username' => $username))){
@@ -729,7 +662,7 @@ class Database
         }
     }
 
-    function getUserNameById($userId) {
+    public function getUserNameById($userId) {
         try{
             $stmt = $this->db->prepare("SELECT {$this->U_NAME} AS name
                     FROM {$this->TABLE_USER}
@@ -763,7 +696,7 @@ class Database
         }
     }
 
-    function getChatnameById($chatId) {
+    public function getChatnameById($chatId) {
         try{
             $stmt = $this->db->prepare("SELECT {$this->C_NAME} AS name
                     FROM {$this->TABLE_CHAT} WHERE
@@ -779,7 +712,7 @@ class Database
         }
     }
 
-    function updatePictureFromCurrentUser($name,$image){
+    public function updatePictureFromCurrentUser($name,$image){
         try {
             /*
              * UPDATE images SET imgdata=:imgdata,imgname=:imgname WEHRE uid=:userId
@@ -787,7 +720,6 @@ class Database
             $stmt = $this->db->prepare("UPDATE {$this->TABLE_IMAGES}
 		            SET {$this->I_IMGNAME}=:imgname,{$this->I_IMGDATA}=:imgdata WHERE {$this->I_UID}=:userId");
             $userId = $this->getUserID();
-            $userId = $userId[0][0];
             if ($stmt->execute(array(':userId' => $userId,':imgname' => $name,':imgdata' => $image))) {
                 return $this->db->lastInsertId();
             } else {
@@ -798,7 +730,7 @@ class Database
         }
     }
 
-    function haveUserPicture(){
+    public function haveUserPicture(){
         $picture = $this->showPictureFromCurrentUser();
         $count = count($picture);
         if($count>0){

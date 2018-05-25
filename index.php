@@ -80,8 +80,14 @@ if($Database->isLoggedIn()) {
         <link rel="stylesheet" type="text/css" href="./css/login-signup.css">
         <link rel="icon" href="./images/Speach-BubbleDialog-512.png">
     </head>
+    <noscript>
+        <div id="nojavascript">
+            Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
+            Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+            und laden Sie die Seite neu.
+        </div>
+    </noscript>
     <body>
-
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">

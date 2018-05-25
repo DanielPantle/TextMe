@@ -26,8 +26,16 @@ $onlineUsers = '<div class="form-group" id="statisticContent">Nutzer online: ' .
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./../css/statistic.css" rel="stylesheet">
     <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
+    <link rel="stylesheet" href="./../css/mainpage.css">
 </head>
 <body>
+    <noscript>
+        <div id="nojavascript">
+            Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
+            Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+            und laden Sie die Seite neu.
+        </div>
+    </noscript>
 
     <div class="modal-content" style="top:0;">
         <div class="modal-header">

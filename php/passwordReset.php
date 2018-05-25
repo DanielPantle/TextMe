@@ -47,9 +47,17 @@ function generatePassword($length = 8) {
 <title>TextMe - Passwort vergessen..</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <script src="../js/vendor/jquery-3.3.1.js"></script>
+<link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
 <script src="../js/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
 
 <!------ Include the above in your HEAD tag ---------->
+<noscript>
+    <div id="nojavascript">
+        Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
+        Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+        und laden Sie die Seite neu.
+    </div>
+</noscript>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="../css/password-reset.css">
 <div class="form-gap"></div>
