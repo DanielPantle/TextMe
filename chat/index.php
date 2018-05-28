@@ -85,6 +85,9 @@ if(isset($_SESSION['link'])) {
     <link rel="stylesheet" href="./../css/mainpage.css">
     <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!-- Emoji-Font -->
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 </head>
 <body>
 <!-- -------- -->
@@ -151,6 +154,7 @@ if(isset($_SESSION['link'])) {
                         }*/
                         //$members[$j] = $Database->getMembersOfChat($cid[$j]);
                         $history = conHistory($cid[$j],$Database,$count_2);
+
                         if($count_2>2){
                             echo "<div class='chatButton' onclick='chatButtonClick($cid[$j],\"$chatname[$j]\",\"$members_2[$j]\",\"$history\");'> 
                                 <div class='chatInfo'>
@@ -276,7 +280,10 @@ if(isset($_SESSION['link'])) {
         <div class="replyBar">
 
             <!-- Eingabefeld -->
-            <input id="inputChatMessage" type="text" onkeypress="return onEnter(event)" class="replyMessage" placeholder="Type your message..."/>
+            <!--
+            <input id="inputChatMessage" type="text" onkeypress="return onEnter(event)" class="replyMessage" placeholder="Type your message..."/>-->
+
+            <div id="inputChatMessage" contenteditable="true" hidefocus="true" onkeypress="return onEnter(event)" class="replyMessage"></div>
 
             <div class="emojiBar">
                 <!-- Emoji's /Stickers / GIF -->
@@ -286,12 +293,20 @@ if(isset($_SESSION['link'])) {
 
                 <!-- Emoji panel -->
                 <div class="emojiList">
-                    <button id="smileface" class="pick"></button>
-                    <button id="grinningface" class="pick"></button>
-                    <button id="tearjoyface" class="pick"></button>
-                    <button id="rofl" class="pick"></button>
-                    <button id="somface" class="pick"></button>
-                    <button id="swfface" class="pick"></button>
+                    <button id="smileface" class="pick"><i class="em-svg em-slightly_smiling_face"></i></button>
+                    <button id="tearjoyface" class="pick"><i class="em-svg em-joy"></i></button>
+                    <button id="laughingface" class="pick"><i class="em-svg em-smiley"></i></button>
+                    <button id="sadface" class="pick"><i class="em-svg em-slightly_frowning_face"></i></button>
+                    <button id="cryingface" class="pick"><i class="em-svg em-sob"></i></button>
+                    <button id="surpriseface" class="pick"><i class="em-svg em-open_mouth"></i></button>
+                    <button id="winkface" class="pick"><i class="em-svg em-smirk"></i></button>
+                    <button id="cheekyface" class="pick"><i class="em-svg em-stuck_out_tongue"></i></button>
+
+                    <!--<button id="rofl" class="pick"></button>-->
+                    <!--<button id="somface" class="pick"></button>-->
+                    <!--<button id="swfface" class="pick"></button>-->
+
+                    <!-- https://afeld.github.io/emoji-css/ -->
                 </div>
             </div>
 

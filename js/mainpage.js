@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     {/* make side menu show up */
         $(".trigger").click(function () {
@@ -124,9 +125,14 @@ $(document).ready(function() {
         chatloeschen();
     }
 
+    // Emoji-Click
+    $(".pick").click(function() {
+        emojiClick($(this).attr('id'));
+    });
 
     if(sessionStorage.chatCreated != null && sessionStorage.chatCreated != 0) {
         // TODO: Ausgabe ändern
+        console.log(sessionStorage.chatCreated);
         alert("Chat " + sessionStorage.chatCreated + " erfolgreich erstellt!");
         sessionStorage.chatCreated = 0;
     }
@@ -226,18 +232,67 @@ function onEnter(e) {
     }
 }
 
+function replaceEmojis(text) {
+    text = text.split(":)").join('<i class="em-svg em-slightly_smiling_face"></i>');
+    text = text.split(":\'D").join('<i class="em-svg em-joy"></i>');
+    text = text.split(":D").join('<i class="em-svg em-smiley"></i>');
+    text = text.split(":(").join('<i class="em-svg em-slightly_frowning_face"></i>');
+    text = text.split(":\'(").join('<i class="em-svg em-sob"></i>');
+    text = text.split(":o").join('<i class="em-svg em-open_mouth"></i>');
+    text = text.split(";)").join('<i class="em-svg em-smirk"></i>');
+    text = text.split(":P").join('<i class="em-svg em-stuck_out_tongue"></i>');
+    return text;
+}
+
+function replaceEmojisBack(id) {
+    var emoji = "";
+    switch(id) {
+        case "smileface":
+            emoji = ":)";
+            break;
+        case "tearjoyface":
+            emoji = ":\'D";
+            break;
+        case "laughingface":
+            emoji = ":D";
+            break;
+        case "sadface":
+            emoji = ":(";
+            break;
+        case "cryingface":
+            emoji = ":\'(";
+            break;
+        case "surpriseface":
+            emoji = ":o";
+            break;
+        case "winkface":
+            emoji = ";)";
+            break;
+        case "cheekyface":
+            emoji = ":P";
+            break;
+    }
+    return emoji;
+}
+
+
 function sendChatMsg(chatroomId) {
-    var chatText = $("#inputChatMessage").val();
+    var chatText = $("#inputChatMessage").html();
+
+    // Emojis escapen
     if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
         $("#inputChatMessage").val("");
         $("#inputChatMessage").focus();
     } else {
-        chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
-        chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
+        //chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
+        //chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
+
         var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
         callChatctlWithSuccess(jsonSend, function (response) {
             console.log(response);
+            chatText = replaceEmojis(chatText);
+
             // Nachricht ausgeben
             $("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
             scrollChatVerlauf();
@@ -261,6 +316,8 @@ function logout(){
 }
 
 function chatButtonClick(cid,chatname,members,history) {
+    history = replaceEmojis(history);
+
     $('#chatname').html(chatname);
     $('#mitglieder').html("Mitglieder: "+members);
     $('#chatVerlauf').html(history);
@@ -355,7 +412,7 @@ function createchatclick() {
             if(response > 0) {
                 //$.post("../php/chat_created.php", {"chatName": chatName});
                 sessionStorage.chatCreated = chatName;
-                window.location.href = window.location.href;
+                //window.location.href = window.location.href;
             }
         });
     }
@@ -376,3 +433,11 @@ window.setInterval(function () {
     var functionString = '{"i":"ping"}';
     callChatctl(functionString);
 },500);
+
+
+
+// Emojis-Click
+function emojiClick(em) {
+    var emoji = replaceEmojisBack(em);
+    $("#inputChatMessage").append(emoji);
+}

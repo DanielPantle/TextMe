@@ -835,6 +835,7 @@ div[class~="onTop"] > .count {
 	height: 70px;
 	padding: 0px 8px;
 	font-size: 16px;
+	line-height: 70px;
 }
 
 .replyBar .otherTools {
@@ -924,6 +925,7 @@ div[class~="onTop"] > .count {
 
 /* css FOR THE EMOJI IMAGES, JUST SOME */
 
+/*
 #smileface {
 	background-image: url(https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/96/grinning-face_1f600.png);
 }
@@ -947,7 +949,7 @@ div[class~="onTop"] > .count {
 #swfface {
 	background-image: url(https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/96/smiling-face-with-open-mouth-and-smiling-eyes_1f604.png);
 }
-
+*/
 
 /* SOLVING RESPONSIVE DESIGN ISSUES */
 
@@ -1190,3 +1192,15 @@ select.form-control:focus::-ms-value {
 	display: block;
 	width: 100%;
 }
+
+
+
+
+
+/* Emojis */
+
+.em, .em-svg {
+	margin: 0 5px;
+	height: 1.2em;
+}
+

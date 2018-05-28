@@ -251,6 +251,7 @@ class Database
                         if (!array_key_exists($message['date'], $res)) {
                             $res[$message['date']] = array();
                         }
+
                         array_push($res[$message['date']], $message);
                     }
                 }
@@ -298,6 +299,7 @@ class Database
     public function writeMessage($chatId, $message)
     {
         try {
+            $message = htmlentities($message, ENT_QUOTES);
             $userId = $this->getUserID();
             /*
             INSERT INTO message
