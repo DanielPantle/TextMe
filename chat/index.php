@@ -356,6 +356,13 @@ if(isset($_SESSION['link'])) {
                 <i class="material-icons">&#xE8D3;</i>
                 <span>Neuen Chat erstellen</span>
             </button>
+            <div class="nc-div" style="display: none">
+                <input id="nc-chatnameField" type="text" placeholder="chatname">
+                <div class="row">
+                    <button class="col" id="nc-abort" type="button">abort</button>
+                    <button class="col" id="nc-create" type="button">create</button>
+                </div>
+            </div>
             <button class="ng">
                 <i class="material-icons">&#xE0B6;</i>
                 <span>Random-Chat erstellen</span>

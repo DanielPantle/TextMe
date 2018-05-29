@@ -215,6 +215,50 @@ nav button {
 	color: #666;
 }
 
+
+#nc-chatnameField {
+	border: 1px solid #000;
+	width: 81%;
+	height: 45px;
+	/*background: #FFF;*/
+	text-align: left;
+	padding-left: 20px;
+	margin-left: 19px;
+	color: #666;
+	font-size: 16px;
+
+}
+
+#nc-abort {
+	width: 100%;
+	height: 45px;
+	padding-left: 0px;
+	margin-left: 10%;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+	text-align: center;
+}
+#nc-abort:hover {
+	background-color: #f85352;
+}
+#nc-create {
+	width: 100%;
+	height: 45px;
+	padding-left: 0px;
+	margin-right: 10%;
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+	text-align: center;
+}
+#nc-create:hover {
+	background-color: #78ed6f;
+}
+.nc-div {
+	background-color: #D3D3D3;
+}
+
 nav {
 	float: left;
 	width: 100%;
@@ -1262,7 +1306,26 @@ select.form-control:focus::-ms-value {
 }
 
 
+.row {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	margin-right: -15px;
+	margin-left: -15px;
+}
 
+
+
+.col {
+	-ms-flex-preferred-size: 0;
+	flex-basis: 0;
+	-webkit-box-flex: 1;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	max-width: 100%;
+}
 
 
 /* Emojis */

@@ -105,7 +105,18 @@ $(document).ready(function() {
         });
 
         $(".nc").click(function () {
-            createchatclick();
+            $(".nc-div").show();
+        });
+        $("#nc-abort").click(function () {
+            $("#nc-chatnameField").val("");
+            $(".nc-div").hide();
+        });
+        $("#nc-create").click(function () {
+            const chatName = $("#nc-chatnameField").val();
+            if(chatName != null && chatName != "") {
+                createchatclick(chatName);
+
+            }
         });
         
         $(".ng").click(function () {
@@ -401,21 +412,18 @@ function showlinkresult() {
     alert('$linkResult');
 }
 
-function createchatclick() {
-    // TODO: Eingabe des Chat-Namens ändern
-    var chatName = prompt("Gib den Chat-Namen ein:", "");
+function createchatclick(chatName) {
+    var chatName = chatName;
 
-    if(chatName != null && chatName != "") {
         var createChatString = '{"i":"createchat","chat_name":"'+chatName+'"}';
         callChatctlWithSuccess(createChatString, function (response) {
             console.log(response);
             if(response > 0) {
                 //$.post("../php/chat_created.php", {"chatName": chatName});
                 sessionStorage.chatCreated = chatName;
-                //window.location.href = window.location.href;
+                window.location.href = window.location.href;
             }
         });
-    }
 }
 
 function createrandomchatclick() {
