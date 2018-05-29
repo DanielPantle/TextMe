@@ -3,6 +3,14 @@
 include("db.php");
 $Database = new Database();
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'mail/src/Exception.php';
+require 'mail/src/PHPMailer.php';
+require 'mail/src/SMTP.php';
+
+
 $generatedPassword = generatePassword();
 
 if (isset($_POST) & !empty($_POST)) {
@@ -10,7 +18,7 @@ if (isset($_POST) & !empty($_POST)) {
     $userExists = $Database->userExists("", $mail);
     if ($userExists == 1) {
         if ($Database->changePasswordByEmail($mail, $generatedPassword)) {
-            echo "<div class='alert alert-info'>PW:[" . $generatedPassword . "]</div>";
+            //echo "<div class='alert alert-info'>PW:[" . $generatedPassword . "]</div>";
             sendPasswordByMail($mail, $generatedPassword);
         }
     } else {
@@ -20,15 +28,38 @@ if (isset($_POST) & !empty($_POST)) {
 
 function sendPasswordByMail($to, $password)
 {
-    $subject = "Your Recovered Password";
-
-    $message = "Please use this password to login [" . $password . "]";
-    $headers = "From : TextMe";
-    if (mail($to, $subject, $message, $headers)) {
-        echo "<div class='alert alert-info'>Your Password has been sent to your email</div>";
+    $mail = new PHPMailer(true);
+    //Tell PHPMailer to use SMTP
+    $mail->isSMTP();
+// 0 = off (for production use)
+// 1 = client messages
+// 2 = client and server messages
+    $mail->SMTPDebug = 0;
+//Set the hostname of the mail server
+    $mail->Host = 'smtp.gmail.com';
+    $mail->Port = 587;
+//Set the encryption system to use - ssl (deprecated) or tls
+    $mail->SMTPSecure = 'tls';
+//Whether to use SMTP authentication
+    $mail->SMTPAuth = true;
+//Username to use for SMTP authentication - use full email address for gmail
+    $mail->Username = "peterpandreamworld666@gmail.com";
+//Password to use for SMTP authentication
+    $mail->Password = "Pineapple#1";
+//Set who the message is to be sent from
+    $mail->setFrom('peterpandreamworld666@gmail.com', 'TextME');
+//Set who the message is to be sent to
+    $mail->addAddress($to, '');
+//Set the subject line
+    $mail->Subject = 'Your Recovered TextMe Password';
+    $mail->Body = 'Please use this password to login ['. $password .']';
+//send the message, check for errors
+    if (!$mail->send()) {
+        echo "<div class='alert alert-danger'>Failed to Recover your password, try again</div>";
     } else {
-        echo "<div class='alert alert-danger'>Failed to Recover your password, try again</div>x";
+        echo "<div class='alert alert-info'>Your Password has been sent to your email</div>";
     }
+
 }
 
 function generatePassword($length = 8)
