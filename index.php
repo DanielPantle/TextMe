@@ -79,7 +79,9 @@ if($Database->isLoggedIn()) {
         <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="./css/login-signup.css">
         <link rel="icon" href="./images/Speach-BubbleDialog-512.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
+    <body>
     <noscript>
         <div id="nojavascript">
             Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
@@ -87,7 +89,6 @@ if($Database->isLoggedIn()) {
             und laden Sie die Seite neu.
         </div>
     </noscript>
-    <body>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
