@@ -5,32 +5,34 @@ $Database = new Database();
 
 $generatedPassword = generatePassword();
 
-if(isset($_POST) & !empty($_POST)){
+if (isset($_POST) & !empty($_POST)) {
     $mail = $_POST['email'];
-    $userExists = $Database->userExists("",$mail);
-    if($userExists == 1){
-        if($Database->changePasswordByEmail($mail,$generatedPassword)) {
-           echo "<div class='alert alert-info'>PW:[".$generatedPassword."]</div>";
-           sendPasswordByMail($mail, $generatedPassword);
+    $userExists = $Database->userExists("", $mail);
+    if ($userExists == 1) {
+        if ($Database->changePasswordByEmail($mail, $generatedPassword)) {
+            echo "<div class='alert alert-info'>PW:[" . $generatedPassword . "]</div>";
+            sendPasswordByMail($mail, $generatedPassword);
         }
-    }else{
+    } else {
         echo "<div  class='alert alert-danger'>E-Mail does not exist in database</div>";
     }
 }
 
-function sendPasswordByMail($to, $password) {
+function sendPasswordByMail($to, $password)
+{
     $subject = "Your Recovered Password";
 
     $message = "Please use this password to login [" . $password . "]";
     $headers = "From : TextMe";
-    if(mail($to, $subject, $message, $headers)){
+    if (mail($to, $subject, $message, $headers)) {
         echo "<div class='alert alert-info'>Your Password has been sent to your email</div>";
-    }else{
+    } else {
         echo "<div class='alert alert-danger'>Failed to Recover your password, try again</div>x";
     }
 }
 
-function generatePassword($length = 8) {
+function generatePassword($length = 8)
+{
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!§$%&?';
     $count = mb_strlen($chars);
 
@@ -42,19 +44,24 @@ function generatePassword($length = 8) {
 }
 
 
-
 ?>
-<title>TextMe - Passwort vergessen..</title>
-<link rel="stylesheet" href="../css/bootstrap.css">
-<script src="../js/vendor/jquery-3.3.1.js"></script>
-<link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
-<script src="../js/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+<head>
+
+    <title>TextMe - Passwort vergessen..</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/vendor/jquery-3.3.1.js"></script>
+    <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
+    <script src="../js/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
 
 <!------ Include the above in your HEAD tag ---------->
 <noscript>
     <div id="nojavascript">
         Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
-        Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+        Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java
+            Script</a>
         und laden Sie die Seite neu.
     </div>
 </noscript>
@@ -77,11 +84,12 @@ function generatePassword($length = 8) {
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
-                                        <input id="email" name="email" placeholder="email address" class="form-control"  type="email">
+                                        <input id="email" name="email" placeholder="email address" class="form-control" type="email">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+                                    <input name="recover-submit" class="btn btn-lg btn-primary btn-block"
+                                           value="Reset Password" type="submit">
                                 </div>
                                 <div class="text-center">
                                     <a href="../../" tabindex="5" class="return-to-mainpage">Return to Mainpage</a>
@@ -97,3 +105,4 @@ function generatePassword($length = 8) {
         </div>
     </div>
 </div>
+</body>
