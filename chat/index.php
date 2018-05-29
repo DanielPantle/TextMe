@@ -94,6 +94,7 @@ if(isset($_SESSION['link'])) {
 <!-- -------- -->
 <!-- MAIN APP -->
 <!-- -------- -->
+<div id="messageContainer" class='alert alert-success' style="display: none"></div>
 
 <noscript>
     <div id="nojavascript">

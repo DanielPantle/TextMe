@@ -142,15 +142,17 @@ $(document).ready(function() {
     });
 
     if(sessionStorage.chatCreated != null && sessionStorage.chatCreated != 0) {
-        // TODO: Ausgabe ändern
         console.log(sessionStorage.chatCreated);
-        alert("Chat " + sessionStorage.chatCreated + " erfolgreich erstellt!");
+        var message = "Chat: " + sessionStorage.chatCreated + " erfolgreich erstellt!"
+        setSuccessMessage(message);
+        //alert("Chat " + sessionStorage.chatCreated + " erfolgreich erstellt!");
         sessionStorage.chatCreated = 0;
     }
 
     if(sessionStorage.randomChatCreatedWith != null && sessionStorage.randomChatCreatedWith != 0) {
-        // TODO: Ausgabe ändern
-        alert("Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!");
+        var message = "Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!";
+        setSuccessMessage(message);
+        //alert("Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!");
         sessionStorage.randomChatCreatedWith = 0;
     }
 
@@ -159,6 +161,24 @@ $(document).ready(function() {
         alert(linkResult);
     }
 });
+
+function setSuccessMessage(message) {
+    var messageContainer = $("#messageContainer");
+    messageContainer.removeClass();
+    messageContainer.addClass("alert alert-success");
+
+    messageContainer.text(message);
+    messageContainer.show();
+}
+
+function setErrorMessage(message) {
+    var messageContainer = $("#messageContainer");
+    messageContainer.removeClass();
+    messageContainer.addClass("alert alert-danger");
+
+    messageContainer.text(message);
+    messageContainer.show();
+}
 
 function validateChangeAccountData() {
 
