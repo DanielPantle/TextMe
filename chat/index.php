@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php
 include("./../php/db.php");
 $Database = new Database();
@@ -382,15 +383,15 @@ if(isset($_SESSION['link'])) {
     </div>
 </section>
 
-<!-- MOBILE OVERLAY -->
+<!-- MOBILE OVERLAY 
 <section class="switchMobile">
-    <!-- hier ist noch ein Fehler, wenn ich vorher moreMenu geöffnet habe bleibt es eingeblendet -->
+    <!-- hier ist noch ein Fehler, wenn ich vorher moreMenu geöffnet habe bleibt es eingeblendet
     <p class="title">Mobiles Gerät entdeckt</p>
 
     <p class="desc">Wechseln Sie zu der Mobilen Seite</p>
 
     <a href=""><button class="okay">OK</button></a>
-</section>
+</section> -->
 
 <!-- PROFILE OPTIONS OVERLAY -->
 <section class="config">

@@ -1024,12 +1024,80 @@ div[class~="onTop"] > .count {
 }
 
 @media screen and (max-width: 540px) {
-	.switchMobile {
+	/*.switchMobile {
 		display: block;
-	}
+	}*/
 
 	.leftPanel, .rightPanel, .menuWrap, .config, .overlay {
+		/*display: none;*/
+		width: 100%
+	}
+
+
+	.rightPanel{
+		height: 50%;
+		position:fixed;
+		bottom:0;
+		left:0;
+	}
+
+	.rightPanel .topBar{
+
+	}
+
+	.moreMenu{
+		top: calc(50vh - 120px);
+	}
+
+	.convHistory{
+		height: calc(70vh - 250px);
+
+	}
+
+	.msg{
+		padding: 10px;
+		padding-bottom: 25px;
+		margin: 5px 10px;
+
+	}
+
+	.msg .timestamp{
+		right: 10px;
+	}
+
+	.readStatus{
+		right:10px;
+	}
+	.replyBar{
+
+	}
+
+	.leftPanel{
+		height: 50%;
+	}
+
+	.chats{
+		height: calc(50vh - 50px);
+	}
+
+	.message{
 		display: none;
+	}
+
+	.chatButton{
+		height: 50px;
+	}
+
+	.imagenew{
+		max-height: 20px;
+		max-width: 20px;
+		height: 1%;
+		width:1%;
+		display:none;
+	}
+
+	header{
+		height: 20%;
 	}
 }
 
