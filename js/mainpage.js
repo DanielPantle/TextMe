@@ -312,7 +312,7 @@ function sendChatMsg(chatroomId) {
         callChatctlWithSuccess(jsonSend, function (response) {
             chatText = replaceEmojis(chatText);
             // Nachricht ausgeben
-            $("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
+            //$("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
             scrollChatVerlauf();
             document.getElementById("inputChatMessage").innerText ="";
             $("#inputChatMessage").focus();
