@@ -1,6 +1,5 @@
-
 $(document).ready(function() {
-    {/* make side menu show up */
+    {
         $(".trigger").click(function () {
             $(".overlay, .menuWrap").fadeIn(180);
             $(".menu").animate({opacity: "1", left: "0px"}, 180);
@@ -133,7 +132,16 @@ $(document).ready(function() {
         validateChangeAccountData();
 
         sessionStorage.aktuelleChatId = 0;
+        var functionString = '{"i":"getUserID"}';
+        callChatctlWithSuccess(functionString,function(response){
+            sessionStorage.aktuelleUserId = response;
+        });
+        var functionString = '{"i":"getCurrentUser"}';
+        callChatctlWithSuccess(functionString,function(response){
+            sessionStorage.aktuellerUser = response;
+        });
         chatloeschen();
+        chats();
     }
 
     // Emoji-Click
@@ -306,7 +314,6 @@ function replaceEmojisBack(id) {
     return emoji;
 }
 
-
 function sendChatMsg(chatroomId) {
     var chatText = $("#inputChatMessage").html();
 
@@ -346,14 +353,14 @@ function logout(){
     window.location.href='./../logout.php';
 }
 
-function chatButtonClick(cid,chatname,members,history) {
-    history = replaceEmojis(history);
-
-    $('#chatname').html(chatname);
-    $('#mitglieder').html("Mitglieder: "+members);
-    $('#chatVerlauf').html(history);
+function chatButtonClick(cid,members) {
     sessionStorage.aktuelleChatId = cid;
-    scrollChatVerlauf();
+    var functionString = '{"i":"getChatnameById","chat_id":'+cid+'}';
+    callChatctlWithSuccess(functionString, function (chatname) {
+        $('#chatname').html(chatname);
+    });
+    $('#mitglieder').html("Mitglieder: "+members);
+    chatHistory();
     chatloeschen();
 }
 
@@ -458,14 +465,160 @@ function createrandomchatclick() {
 }
 
 window.setInterval(function () {
+    //chatHistory();
     var functionString = '{"i":"ping"}';
     callChatctl(functionString);
 },500);
-
-
 
 // Emojis-Click
 function emojiClick(em) {
     var emoji = replaceEmojisBack(em);
     $("#inputChatMessage").append(emoji);
+}
+
+function chatHistory () {
+    var chat_id = sessionStorage.aktuelleChatId;
+    if(chat_id>0){
+        var functionString = '{"i":"getChatUsers","chat_id":'+chat_id+'}';
+        callChatctlWithSuccess(functionString, function (response) {
+           var count = response.length;
+            var functionString = '{"i":"getAllMessagesFromChat","chat_id":'+chat_id+'}';
+            callChatctlWithSuccess(functionString,function(response){
+                document.getElementById("chatVerlauf").innerHTML ="";
+                for (var date in response){
+                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+                    for(var i=0;i<response[date].length;i++){
+                        var obj = response[date][i];
+                        var nachricht_1 = obj['message'];
+                        const nachricht = replaceEmojis(nachricht_1);
+                        const zeit = obj['time'];
+                        const name = obj['name'];
+                        var username = sessionStorage.aktuellerUser;
+                        if(nachricht==" wurde dem Chat hinzugefügt"){
+                            document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                        }else if(nachricht==" hat den Chat verlassen"){
+                            document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                        }else {
+                            if(username==name){
+                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageSent\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                            }
+                            else if(count>2){
+                                var functionString = '{"i":"getUserIdByName","username":"'+name+'"}';
+                                callChatctlWithSuccess(functionString,function(userid_members_picture){
+                                    var functionString = '{"i":"showPictureByUserId","user_id":"'+userid_members_picture+'"}';
+                                    callChatctlWithSuccess(functionString,function(picture){
+                                        var count_picture = picture.length;
+                                        if(count_picture>0){
+                                            var bild = picture[0]['imgdata'];
+                                            document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(data:image;base64,"+bild+") no-repeat center;background-size:cover\"></div>";
+                                        }else {
+                                            document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\"></div>";
+                                        }
+                                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceivedGroup\">"+name+": "+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                                    });
+                                });
+                            }else {
+                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceived\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                            }
+                        }
+                    }
+                }
+                scrollChatVerlauf();
+            });
+        });
+    }else console.log("kein aktueller chat raum");
+}
+
+function chats() {
+    document.getElementById("chats").innerHTML ="";
+    var functionString = '{"i":"getAllChatsFromCurrentUser"}';
+    callChatctlWithSuccess(functionString, function (response) {
+        const count = response.length;
+        if(count>0){
+            for(var j = 0; j<count;j++){
+                const obj = response[j];
+                const cid = obj['cid'];
+                functionString='{"i":"isChatDeletedForUser","chat_id":"'+cid+'"}';
+                callChatctlWithSuccess(functionString,function (deleted) {
+                    if (deleted<1){
+                        var chatname = obj['chatname'];
+                        functionString='{"i":"getChatUsers","chat_id":"'+cid+'"}';
+                        var members_2 ="";
+                        callChatctlWithSuccess(functionString,function(members){
+                            var count_members = members.length;
+                            var members_2="";
+                            var members_10;
+                            var members_20;
+                            if(count_members>1){
+                                members_10 = members[0]['name'];
+                                members_20 = members[1]['name'];
+                            }else {
+                                members_10 = members[0]['name'];
+                                members_20 = "NV";
+                            }
+                            for (var i=0;i<count_members;i++){
+                                if(members_2==""){
+                                    members_2 = members[i]['name'];
+                                }else members_2 = members_2+" , "+members[i]['name'];
+                            }
+                            if(count_members>2){
+                                document.getElementById("chats").innerHTML += "<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\");'>\n" +
+                                    "                    <div class='chatInfo'>\n" +
+                                    "                        <div class='image'>\n" +
+                                    "                        </div>\n" +
+                                    "                        <p class='name'>\n" +
+                                    "                        "+chatname+"\n" +
+                                    "                        </p>\n" +
+                                    "                        <p class='message'>\n" +
+                                    "                        Mitglieder: "+members_2+"\n" +
+                                    "                    </p>\n" +
+                                    "                    </div>\n" +
+                                    "                    </div>";
+                            }else {
+                                var members_picture="";
+                                if(members_20=="NV"){
+                                    var members_0="--> kein Chat Partner vorhanden <--";
+                                }else {
+                                    if(members_10==sessionStorage.aktuellerUser){
+                                        members_0 = "An: "+members_20;
+                                        members_picture = members_20;
+                                    }else {
+                                        members_0 = "An: "+members_10;
+                                        members_picture = members_10;
+                                    }
+                                }
+                                var image ="";
+                                if(members_picture ==""){}else{
+                                    functionString='{"i":"getUserIdByName","username":"'+members_picture+'"}';
+                                    callChatctlWithSuccess(functionString,function (userid_members_picutre) {
+                                        functionString='{"i":"showPictureByUserId","user_id":"'+userid_members_picutre+'"}';
+                                        callChatctlWithSuccess(functionString,function (picture) {
+                                            var count_picture = picture.length;
+                                            if(count_picture>0){
+                                                let bild = picture[0]['imgdata'];
+                                                image =  '<div class= "imagenew" style="background: #FFF url(data:image;base64,'+ bild+') no-repeat center;background-size:cover"></div>';
+                                            }else {
+                                                image = '<div class= "imagenew" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+                                            }
+                                            document.getElementById("chats").innerHTML +="<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
+                                                ""+image+
+                                                "<div class='chatInfo'>" +
+                                                "<p class='name'>" +
+                                                ""+chatname+
+                                                "</p>" +
+                                                "<p class='message'>" +
+                                                ""+members_0+
+                                                "</p>" +
+                                                "</div>" +
+                                                "</div>";
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
 }

@@ -43,7 +43,6 @@ try {
         case "ping":
             $return_array = $Database->ping();
             break;
-
         case "getinvitationlink":
             $return_array = $Database->getInvitationLink($p['chat_id']);
             break;
@@ -53,7 +52,24 @@ try {
         case "createrandomchat":
             $return_array = $Database->createRandomChat();
             break;
-
+        case "getChatUsers":
+            $return_array = $Database->getMembersOfChat($p['chat_id']);
+            break;
+        case "getUserID":
+            $return_array = $Database->getUserID();
+            break;
+        case "getUserIdByName":
+            $return_array = $Database->getUserIdByName($p['username']);
+            break;
+        case "showPictureByUserId":
+            $return_array = $Database->showPictureByUserId($p['user_id']);
+            break;
+        case "isChatDeletedForUser":
+            $return_array = $Database->isChatDeletedForUser($p['chat_id']);
+            break;
+        case "getChatnameById":
+            $return_array = $Database->getChatnameById($p['chat_id']);
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 
