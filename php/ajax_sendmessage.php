@@ -70,6 +70,9 @@ try {
         case "getChatnameById":
             $return_array = $Database->getChatnameById($p['chat_id']);
             break;
+        case "getLastMessageIdFromChat":
+            $return_array = $Database->getLastMessageIdFromChat($p['chat_id']);
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 

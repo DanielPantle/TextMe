@@ -140,6 +140,7 @@ $(document).ready(function() {
         callChatctlWithSuccess(functionString,function(response){
             sessionStorage.aktuellerUser = response;
         });
+        sessionStorage.lastMessage = 0;
         chatloeschen();
         chats();
     }
@@ -148,21 +149,6 @@ $(document).ready(function() {
     $(".pick").click(function() {
         emojiClick($(this).attr('id'));
     });
-
-    if(sessionStorage.chatCreated != null && sessionStorage.chatCreated != 0) {
-        console.log(sessionStorage.chatCreated);
-        var message = "Chat: " + sessionStorage.chatCreated + " erfolgreich erstellt!"
-        setSuccessMessage(message);
-        //alert("Chat " + sessionStorage.chatCreated + " erfolgreich erstellt!");
-        sessionStorage.chatCreated = 0;
-    }
-
-    if(sessionStorage.randomChatCreatedWith != null && sessionStorage.randomChatCreatedWith != 0) {
-        var message = "Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!";
-        setSuccessMessage(message);
-        //alert("Random-Chat mit " + sessionStorage.randomChatCreatedWith + " erfolgreich erstellt!");
-        sessionStorage.randomChatCreatedWith = 0;
-    }
 
     if(typeof linkResult !== 'undefined' && linkResult != null) {
         // TODO: Ausgabe ändern
@@ -260,11 +246,8 @@ function validatePassword(str) {
 
 function onEnter(e) {
     if (e.keyCode == 13) {
-        var tb = document.getElementById("inputChatMessage");
-        //console.log("Es wurde ENTER gedruckt -  \"" + tb.value + "\"");
         var cid = parseInt(sessionStorage.aktuelleChatId);
         if(cid!=0){
-            console.log("Es wurde-  \"" + tb.value + "\" an "+cid+" verschickt");
             sendChatMsg(cid);
         }else console.log ("keine cid");
         return false;
@@ -320,23 +303,21 @@ function sendChatMsg(chatroomId) {
     // Emojis escapen
     if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
-        $("#inputChatMessage").val("");
+        document.getElementById("inputChatMessage").innerText ="";
         $("#inputChatMessage").focus();
     } else {
         //chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
         //chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
-
-        var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';//{"i":"send-message","chat_id":"14","msg":"Erste Nachricht die Automatisch erstellt wurde!"}
+        var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';
         callChatctlWithSuccess(jsonSend, function (response) {
-            console.log(response);
             chatText = replaceEmojis(chatText);
-
             // Nachricht ausgeben
             $("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
             scrollChatVerlauf();
+            document.getElementById("inputChatMessage").innerText ="";
+            $("#inputChatMessage").focus();
         });
-        $("#inputChatMessage").val(""); // löscht den Text aus dem Textfeld
-        $("#inputChatMessage").focus();
+
     }
 
     //sendReadUntil(sessionStorage.aktuelleChatId);
@@ -417,7 +398,11 @@ function chatloeschenclick() {
         callChatctl(functionString);
         var jsonSend = '{"i":"sendmessage","chat_id":'+chat_id+',"msg":" hat den Chat verlassen"}';
         callChatctl(jsonSend);
-        window.location="";
+        sessionStorage.aktuelleChatId=0;
+        chats();
+        chatHistory();
+        $('#mitglieder').html("");
+        $('#chatname').html("");
     }else console.log("kein aktueller chat raum");
 }
 
@@ -446,9 +431,10 @@ function createchatclick(chatName) {
         callChatctlWithSuccess(createChatString, function (response) {
             console.log(response);
             if(response > 0) {
-                //$.post("../php/chat_created.php", {"chatName": chatName});
-                sessionStorage.chatCreated = chatName;
-                window.location.href = window.location.href;
+                chats();
+                $(".overlay, .menuWrap").fadeOut(180);
+                var message = "Chat: " + chatName + " erfolgreich erstellt!"
+                setSuccessMessage(message)
             }
         });
 }
@@ -458,14 +444,16 @@ function createrandomchatclick() {
     callChatctlWithSuccess(createRandomChatString, function (response) {
         console.log(response);
         if(response != false) {
-            sessionStorage.randomChatCreatedWith = response;
-            window.location.href = window.location.href;
+            chats();
+            $(".overlay, .menuWrap").fadeOut(180);;
+            var message = "Random-Chat mit " + response + " erfolgreich erstellt!";
+            setSuccessMessage(message);
         }
     });
 }
 
 window.setInterval(function () {
-    //chatHistory();
+    checkForNewMessagesInCurrentChat();
     var functionString = '{"i":"ping"}';
     callChatctl(functionString);
 },500);
@@ -477,14 +465,14 @@ function emojiClick(em) {
 }
 
 function chatHistory () {
-    var chat_id = sessionStorage.aktuelleChatId;
+    const chat_id = sessionStorage.aktuelleChatId;
+    document.getElementById("chatVerlauf").innerHTML ="";
     if(chat_id>0){
-        var functionString = '{"i":"getChatUsers","chat_id":'+chat_id+'}';
+        var functionString = '{"i":"getChatUsers","chat_id":"'+chat_id+'"}';
         callChatctlWithSuccess(functionString, function (response) {
            var count = response.length;
-            var functionString = '{"i":"getAllMessagesFromChat","chat_id":'+chat_id+'}';
+            var functionString = '{"i":"getAllMessagesFromChat","chat_id":"'+chat_id+'"}';
             callChatctlWithSuccess(functionString,function(response){
-                document.getElementById("chatVerlauf").innerHTML ="";
                 for (var date in response){
                     document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
                     for(var i=0;i<response[date].length;i++){
@@ -493,6 +481,9 @@ function chatHistory () {
                         const nachricht = replaceEmojis(nachricht_1);
                         const zeit = obj['time'];
                         const name = obj['name'];
+                        const mid = obj['mid'];
+                        sessionStorage.lastMessage = mid;
+                        //console.log("i: "+i+" mid: "+mid);
                         var username = sessionStorage.aktuellerUser;
                         if(nachricht==" wurde dem Chat hinzugefügt"){
                             document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
@@ -530,10 +521,11 @@ function chatHistory () {
 }
 
 function chats() {
-    document.getElementById("chats").innerHTML ="";
     var functionString = '{"i":"getAllChatsFromCurrentUser"}';
     callChatctlWithSuccess(functionString, function (response) {
+        document.getElementById("chats").innerHTML ="";
         const count = response.length;
+        console.log(response);
         if(count>0){
             for(var j = 0; j<count;j++){
                 const obj = response[j];
@@ -588,7 +580,18 @@ function chats() {
                                     }
                                 }
                                 var image ="";
-                                if(members_picture ==""){}else{
+                                if(members_picture ==""){
+                                    document.getElementById("chats").innerHTML +="<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
+                                        "<div class='chatInfo'>" +
+                                        "<p class='name'>" +
+                                        ""+chatname+
+                                        "</p>" +
+                                        "<p class='message'>" +
+                                        ""+members_0+
+                                        "</p>" +
+                                        "</div>" +
+                                        "</div>";
+                                }else{
                                     functionString='{"i":"getUserIdByName","username":"'+members_picture+'"}';
                                     callChatctlWithSuccess(functionString,function (userid_members_picutre) {
                                         functionString='{"i":"showPictureByUserId","user_id":"'+userid_members_picutre+'"}';
@@ -621,4 +624,18 @@ function chats() {
             }
         }
     });
+}
+
+function checkForNewMessagesInCurrentChat() {
+    const chat_id = sessionStorage.aktuelleChatId;
+    if (chat_id>0){
+        if(sessionStorage.lastMessage>0){
+            var functionString = '{"i":"getLastMessageIdFromChat","chat_id":"'+chat_id+'"}';
+            callChatctlWithSuccess(functionString, function (response) {
+                if(response == sessionStorage.lastMessage){}else {
+                    chatHistory();
+                }
+            });
+        }
+    }
 }

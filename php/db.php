@@ -215,7 +215,7 @@ class Database
         try {
             /*
             SELECT m.message, u.name, m.timeadded,
-            DATEDIFF(NOW(), m.timeadded) AS date
+            DATEDIFF(NOW(), m.timadded) AS date
             FROM message AS m
             JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
             JOIN user AS u on (uiic.uid = u.uid)
@@ -223,7 +223,7 @@ class Database
             WHERE uiic.cid = 2
             ORDER BY m.timeadded
             */
-            $stmt = $this->db->prepare("SELECT {$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%H:%i') AS time, {$this->U_ID}, {$this->U_NAME}
+            $stmt = $this->db->prepare("SELECT {$this->M_ID},{$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%H:%i') AS time, {$this->U_ID}, {$this->U_NAME}
                     FROM {$this->TABLE_MESSAGE}
                     JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
                     JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
@@ -764,5 +764,33 @@ class Database
         } catch (PDOException $e) {
             return "Error: " . $e->getMessage();
         }
+    }
+
+    public function getLastMessageIdFromChat($chatId){
+        /*
+         *  SELECT m.mid
+            FROM message AS m
+            JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
+            WHERE uiic.cid = 3
+            ORDER BY m.timeadded DESC
+            LIMIT 1
+         */
+        try {
+            $stmt = $this->db->prepare("SELECT {$this->M_ID}
+                                                FROM {$this->TABLE_MESSAGE}
+                                                JOIN {$this->TABLE_USER_IS_IN_CHAT} on ({$this->M_UIICID}={$this->UIIC_ID})
+                                                WHERE {$this->UIIC_CID} = :chatid
+                                                ORDER BY {$this->M_TIMEADDED} DESC 
+                                                LIMIT 1");
+
+            if ($stmt->execute(array(':chatid' => $chatId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['mid'];
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+
     }
 }
