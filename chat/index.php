@@ -139,10 +139,7 @@ if(isset($_SESSION['link'])) {
         <div class="replyBar">
 
             <!-- Eingabefeld -->
-            <!--
-            <input id="inputChatMessage" type="text" onkeypress="return onEnter(event)" class="replyMessage" placeholder="Type your message..."/>-->
-
-            <div id="inputChatMessage" contenteditable="true" hidefocus="true" onkeypress="return onEnter(event)" class="replyMessage"></div>
+            <div id="inputChatMessage" contenteditable="true" onkeypress="return onEnter(event)" class="replyMessage"></div>
 
             <div class="emojiBar">
                 <!-- Emoji's /Stickers / GIF -->
@@ -250,7 +247,7 @@ if(isset($_SESSION['link'])) {
 
 <!-- MOBILE OVERLAY 
 <section class="switchMobile">
-    <!-- hier ist noch ein Fehler, wenn ich vorher moreMenu geöffnet habe bleibt es eingeblendet
+    hier ist noch ein Fehler, wenn ich vorher moreMenu geöffnet habe bleibt es eingeblendet
     <p class="title">Mobiles Gerät entdeckt</p>
 
     <p class="desc">Wechseln Sie zu der Mobilen Seite</p>
