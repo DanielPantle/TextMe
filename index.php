@@ -89,7 +89,12 @@ if($Database->isLoggedIn()) {
             und laden Sie die Seite neu.
         </div>
     </noscript>
+
+
     <div class="container">
+        <div class="col-md-6 col-md-offset-3" style="text-align: center">
+            <img src="images/logo.png" width="30%" height="30%">
+        </div>
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-login">
@@ -191,8 +196,11 @@ if($Database->isLoggedIn()) {
                 }
             });
 
-            if(linkResult != null) {
-            	alert(linkResult);
+            if (typeof linkResult !== 'undefined') {
+                if(linkResult != null) {
+                    $("body").prepend("<div class=\"alert alert-danger\" role=\"alert\">"+linkResult+"</div>")
+            	    //alert(linkResult);
+                }
             }
         });
     </script>
