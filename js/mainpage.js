@@ -259,11 +259,12 @@ function onEnter(e) {
 }
 
 function replaceEmojis(text) {
+    console.log(text);
     text = text.split(":)").join('<i class="em-svg em-slightly_smiling_face"></i>');
-    text = text.split(":\'D").join('<i class="em-svg em-joy"></i>');
+    text = text.split(":&#039;D").join('<i class="em-svg em-joy"></i>');
     text = text.split(":D").join('<i class="em-svg em-smiley"></i>');
     text = text.split(":(").join('<i class="em-svg em-slightly_frowning_face"></i>');
-    text = text.split(":\'(").join('<i class="em-svg em-sob"></i>');
+    text = text.split(":&#039;(").join('<i class="em-svg em-sob"></i>');
     text = text.split(":o").join('<i class="em-svg em-open_mouth"></i>');
     text = text.split(";)").join('<i class="em-svg em-smirk"></i>');
     text = text.split(":P").join('<i class="em-svg em-stuck_out_tongue"></i>');
