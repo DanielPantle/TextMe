@@ -43,7 +43,6 @@ function validateLogin() {
             loginPasswordField.addClass("invalid");
             jQuery("#password-error").show();
         }
-        console.log("username: " + username + ", pw: " + password);
     });
 
     loginUsernameField.keypress(function () {

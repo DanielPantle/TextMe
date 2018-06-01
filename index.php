@@ -12,7 +12,7 @@ if(isset($_POST['login-submit'])) {
 	// Login-Form wurde abgesendet
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	
+
 	// Einloggen
 	if($Database->login($username, $password)) {
 		echo "<div class='alert alert-success'>Login erfolgreich!</div>";
@@ -30,8 +30,8 @@ if(isset($_POST['register-submit'])) {
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 	$confirm_password = $_POST['confirm-password'];
-	
-	
+
+
 	// Passwörter überprüfen
 	if($password != $confirm_password) {
 		echo "<div class='alert alert-danger'>Registrierung fehlgeschlagen! Passwörter stimmen nicht überein!</div>";
@@ -107,7 +107,7 @@ if($Database->isLoggedIn()) {
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <form id="login-form" action="/chat/index.php" method="post" role="form" style="display: block;">
+                                <form id="login-form" action="index.php" method="post" role="form" style="display: block;">
                                     <div class="form-group">
                                         <input type="text" name="username" id="login-username" tabindex="1" class="form-control" placeholder="Username" value="">
                                     </div>
