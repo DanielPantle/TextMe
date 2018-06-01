@@ -62,13 +62,6 @@ $(document).ready(function() {
             }, 500);
         });
 
-        /**
-         * click listener on chats to add class 'active' respectively remove it from other chats
-         **/
-        $(".chatButton").click(function () {
-            jQuery(".active").removeClass("active");
-            jQuery(this).addClass("active");
-        });
 
         $(".edit").click(function () {
             jQuery(".configSect2").show();
@@ -299,9 +292,10 @@ function replaceEmojisBack(id) {
 
 function sendChatMsg(chatroomId) {
     var chatText = $("#inputChatMessage").html();
+    var chatTextVal = $("#inputChatMessage").text();
 
     // Emojis escapen
-    if (chatText.length === 0 || !chatText.trim()) { // wenn der String leer ist, oder nur Blanks enthält
+    if (chatText.length === 0 || !chatTextVal.trim()) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
         document.getElementById("inputChatMessage").innerText ="";
         $("#inputChatMessage").focus();
@@ -366,7 +360,7 @@ function callChatctl(functionString) {
 
 function callChatctlWithSuccess(functionString, successFunction) {
     $.ajax({
-        async: true,
+        async: false,
         contentType: "application/json",
         url: '../php/ajax_sendmessage.php',
         type : "POST",
@@ -624,6 +618,7 @@ function chats() {
             }
         }
     });
+    addActiveChatClickSwitcher();
 }
 
 function checkForNewMessagesInCurrentChat() {
@@ -638,4 +633,13 @@ function checkForNewMessagesInCurrentChat() {
             });
         }
     }
+}
+/**
+ * click listener on chats to add class 'active' respectively remove it from other chats
+ **/
+function addActiveChatClickSwitcher() {
+    $(".chatButton").click(function () {
+        jQuery(".active").removeClass("active");
+        jQuery(this).addClass("active");
+    });
 }
