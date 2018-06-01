@@ -486,12 +486,20 @@ function addNewMessages (response){
     callChatctlWithSuccess(functionString, function (user) {
         var count = user.length;
         for (var date in response){
-            $(".chatDatum").each(function (index,value) {
-                var date = $(this).text();
-                if (date !="Heute"){
+            if(document.getElementsByClassName("chatDatum").length==0){
+                document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+            }else {
+                var date_heute = false;
+                $(".chatDatum").each(function () {
+                    var date2 = $(this).text();
+                    if(date2 == "Heute")date_heute=true;
+                });
+                if(date_heute==false){
+                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+                }else if (date!="Heute") {
                     document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
                 }
-            });
+            }
             for(var i=0;i<response[date].length;i++){
                 var obj = response[date][i];
                 var nachricht_1 = obj['message'];
@@ -503,7 +511,6 @@ function addNewMessages (response){
                 //console.log("i: "+i+" mid: "+mid);
                 //console.log("message:"+nachricht);
                 var username = sessionStorage.aktuellerUser;
-                console.log("Message: "+nachricht);
                 if(nachricht==" wurde dem Chat hinzugefuegt"){
                     document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
                 }else if(nachricht==" hat den Chat verlassen"){
@@ -542,7 +549,6 @@ function chats() {
     callChatctlWithSuccess(functionString, function (response) {
         document.getElementById("chats").innerHTML ="";
         const count = response.length;
-        console.log(response);
         if(count>0){
             for(var j = 0; j<count;j++){
                 const obj = response[j];
