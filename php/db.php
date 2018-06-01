@@ -214,7 +214,7 @@ class Database
     {
         try {
             /*
-            SELECT m.message, u.name, m.timeadded,
+            SELECT m.mid m.message, u.name, m.timeadded,
             DATEDIFF(NOW(), m.timadded) AS date
             FROM message AS m
             JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
@@ -792,5 +792,58 @@ class Database
             return "Error: " . $e->getMessage();
         }
 
+    }
+
+    public function getNewMessages($chatId,$messageId){
+        try{
+            /*            SELECT m.mid, m.message, u.name, m.timeadded,
+            DATEDIFF(NOW(), m.timeadded) AS date
+            FROM message AS m
+            JOIN user_is_in_chat AS uiic on (m.uiicid = uiic.uiicid)
+            JOIN user AS u on (uiic.uid = u.uid)
+            JOIN chat AS c on (uiic.cid = c.cid)
+            WHERE uiic.cid = 3 AND m.mid > 50
+            ORDER BY m.timeadded
+            */
+            $stmt = $this->db->prepare("SELECT {$this->M_ID},{$this->M_UIICID}, {$this->UIIC_UID}, {$this->M_MESSAGE}, {$this->M_TIMEADDED}, DATEDIFF(NOW(), {$this->M_TIMEADDED}) AS datediff, DATE_FORMAT({$this->M_TIMEADDED}, '%d.%m.%Y') AS date, DATE_FORMAT({$this->M_TIMEADDED}, '%H:%i') AS time, {$this->U_ID}, {$this->U_NAME}
+                    FROM {$this->TABLE_MESSAGE}
+                    JOIN {$this->TABLE_USER_IS_IN_CHAT} ON ({$this->M_UIICID} = {$this->UIIC_ID})
+                    JOIN {$this->TABLE_USER} ON ({$this->UIIC_UID} = {$this->U_ID})
+                    WHERE {$this->UIIC_CID} = :chatid AND {$this->M_ID} > :messageId
+                    ORDER BY {$this->M_TIMEADDED} ASC, {$this->M_ID} ASC");
+            if ($stmt->execute(array(':chatid' => $chatId,':messageId' => $messageId))) {
+                $res = array();
+
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $message) {
+                    if ($message['datediff'] == 0) {
+                        // Nachricht heute
+                        if (!array_key_exists('Heute', $res)) {
+                            $res['Heute'] = array();
+                        }
+                        array_push($res['Heute'], $message);
+                    } else if ($message['datediff'] == 1) {
+                        // Nachricht gestern
+                        if (!array_key_exists('Gestern', $res)) {
+                            $res['Gestern'] = array();
+                        }
+                        array_push($res['Gestern'], $message);
+                    } else {
+                        // sonstige Nachrichten
+                        if (!array_key_exists($message['date'], $res)) {
+                            $res[$message['date']] = array();
+                        }
+
+                        array_push($res[$message['date']], $message);
+                    }
+                }
+                return $res;
+
+            } else {
+                return false;
+            }
+
+        }catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
     }
 }

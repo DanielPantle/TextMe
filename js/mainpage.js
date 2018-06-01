@@ -473,56 +473,67 @@ function chatHistory () {
     const chat_id = sessionStorage.aktuelleChatId;
     document.getElementById("chatVerlauf").innerHTML ="";
     if(chat_id>0){
-        var functionString = '{"i":"getChatUsers","chat_id":"'+chat_id+'"}';
-        callChatctlWithSuccess(functionString, function (response) {
-           var count = response.length;
-            var functionString = '{"i":"getAllMessagesFromChat","chat_id":"'+chat_id+'"}';
-            callChatctlWithSuccess(functionString,function(response){
-                for (var date in response){
-                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
-                    for(var i=0;i<response[date].length;i++){
-                        var obj = response[date][i];
-                        var nachricht_1 = obj['message'];
-                        const nachricht = replaceEmojis(nachricht_1);
-                        const zeit = obj['time'];
-                        const name = obj['name'];
-                        const mid = obj['mid'];
-                        sessionStorage.lastMessage = mid;
-                        //console.log("i: "+i+" mid: "+mid);
-                        var username = sessionStorage.aktuellerUser;
-                        if(nachricht==" wurde dem Chat hinzugefügt"){
-                            document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
-                        }else if(nachricht==" hat den Chat verlassen"){
-                            document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
-                        }else {
-                            if(username==name){
-                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageSent\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
-                            }
-                            else if(count>2){
-                                var functionString = '{"i":"getUserIdByName","username":"'+name+'"}';
-                                callChatctlWithSuccess(functionString,function(userid_members_picture){
-                                    var functionString = '{"i":"showPictureByUserId","user_id":"'+userid_members_picture+'"}';
-                                    callChatctlWithSuccess(functionString,function(picture){
-                                        var count_picture = picture.length;
-                                        if(count_picture>0){
-                                            var bild = picture[0]['imgdata'];
-                                            document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(data:image;base64,"+bild+") no-repeat center;background-size:cover\"></div>";
-                                        }else {
-                                            document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\"></div>";
-                                        }
-                                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceivedGroup\">"+name+": "+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
-                                    });
-                                });
-                            }else {
-                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceived\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
-                            }
-                        }
-                    }
-                }
-                scrollChatVerlauf();
-            });
+        var functionString = '{"i":"getAllMessagesFromChat","chat_id":"'+chat_id+'"}';
+        callChatctlWithSuccess(functionString,function(response){
+            addNewMessages(response);
         });
     }else console.log("kein aktueller chat raum");
+}
+
+function addNewMessages (response){
+    const chat_id = sessionStorage.aktuelleChatId;
+    var functionString = '{"i":"getChatUsers","chat_id":"'+chat_id+'"}';
+    callChatctlWithSuccess(functionString, function (user) {
+        var count = user.length;
+        for (var date in response){
+            $(".chatDatum").each(function (index,value) {
+                var date = $(this).text();
+                if (date !="Heute"){
+                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+                }
+            });
+            for(var i=0;i<response[date].length;i++){
+                var obj = response[date][i];
+                var nachricht_1 = obj['message'];
+                const nachricht = replaceEmojis(nachricht_1);
+                const zeit = obj['time'];
+                const name = obj['name'];
+                const mid = obj['mid'];
+                sessionStorage.lastMessage = mid;
+                //console.log("i: "+i+" mid: "+mid);
+                //console.log("message:"+nachricht);
+                var username = sessionStorage.aktuellerUser;
+                if(nachricht==" wurde dem Chat hinzugefügt"){
+                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                }else if(nachricht==" hat den Chat verlassen"){
+                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                }else {
+                    if(username==name){
+                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageSent\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                    }
+                    else if(count>2){
+                        var functionString = '{"i":"getUserIdByName","username":"'+name+'"}';
+                        callChatctlWithSuccess(functionString,function(userid_members_picture){
+                            var functionString = '{"i":"showPictureByUserId","user_id":"'+userid_members_picture+'"}';
+                            callChatctlWithSuccess(functionString,function(picture){
+                                var count_picture = picture.length;
+                                if(count_picture>0){
+                                    var bild = picture[0]['imgdata'];
+                                    document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(data:image;base64,"+bild+") no-repeat center;background-size:cover\"></div>";
+                                }else {
+                                    document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\"></div>";
+                                }
+                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceivedGroup\">"+name+": "+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                            });
+                        });
+                    }else {
+                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceived\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                    }
+                }
+            }
+        }
+        scrollChatVerlauf();
+    });
 }
 
 function chats() {
@@ -639,7 +650,10 @@ function checkForNewMessagesInCurrentChat() {
             var functionString = '{"i":"getLastMessageIdFromChat","chat_id":"'+chat_id+'"}';
             callChatctlWithSuccess(functionString, function (response) {
                 if(response == sessionStorage.lastMessage){}else {
-                    chatHistory();
+                    var functionString = '{"i":"getNewMessages","chat_id":"'+chat_id+'","message_id":"'+sessionStorage.lastMessage+'"}';
+                    callChatctlWithSuccess(functionString, function (response) {
+                        addNewMessages(response);
+                    });
                 }
             });
         }

@@ -73,6 +73,9 @@ try {
         case "getLastMessageIdFromChat":
             $return_array = $Database->getLastMessageIdFromChat($p['chat_id']);
             break;
+        case "getNewMessages":
+            $return_array = $Database->getNewMessages($p['chat_id'],$p['message_id']);
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 
