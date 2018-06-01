@@ -503,7 +503,8 @@ function addNewMessages (response){
                 //console.log("i: "+i+" mid: "+mid);
                 //console.log("message:"+nachricht);
                 var username = sessionStorage.aktuellerUser;
-                if(nachricht==" wurde dem Chat hinzugefügt"){
+                console.log("Message: "+nachricht);
+                if(nachricht==" wurde dem Chat hinzugefuegt"){
                     document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
                 }else if(nachricht==" hat den Chat verlassen"){
                     document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";

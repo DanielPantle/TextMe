@@ -65,7 +65,7 @@ if(isset($_SESSION['link'])) {
         if($res && $res > 0) {
             echo "<script>var linkResult = 'Du wurdest erfolgreich dem Chat $chatName hinzugefügt. (Eingeladen von $invitor)';</script>";
             $username_link = $Database->getCurrentUser();
-            $message_link =" wurde dem Chat hinzugefügt";
+            $message_link =" wurde dem Chat hinzugefuegt";
             $Database->writeMessage($cid,$message_link);
         }
         else {
