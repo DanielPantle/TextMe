@@ -32,6 +32,17 @@ $(document).ready(function() {
             $(".moreMenu").slideToggle("fast");
         });
 
+        $(document).mouseup(function(e)
+        {
+            var container = $(".moreMenu");
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!container.is(e.target) && container.has(e.target).length === 0)
+            {
+                container.hide();
+            }
+        });
+
         /* clicking the search button from the conversation focus the search bar outside it, as on desktop */
         $(".search").click(function () {
             $(".searchChats").focus();
