@@ -38,12 +38,12 @@ if(isset($_POST['editSubmitButton'])) {
 
     if($Database->login($username, $currentPassword)) {
         if($newPassword != "" && $Database->changePasswordByEmail($email,$newPassword)) {
-            echo "<div class='alert alert-success'>Password changed Successfully!</div>";
+            echo "<div class='alert alert-success'>Password changed successfully!</div>";
         } else {
             echo "failure!";
         }
     } else {
-        echo "False current Password!";
+        echo "<div class='alert alert-danger'>False current password! Please try again...</div>";
     }
 
 }
