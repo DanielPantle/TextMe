@@ -411,6 +411,9 @@ function chatloeschenclick() {
         chatHistory();
         $('#mitglieder').html("");
         $('#chatname').html("");
+        $("#nc-chatnameField").val("");
+        $(".nc-div").hide();
+        setSuccessMessage("Chat successfully deleted!");
     }else console.log("kein aktueller chat raum");
 }
 
