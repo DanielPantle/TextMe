@@ -15,11 +15,14 @@ echo "<br><pre>";
 #var_dump($Database->createRandomChat());
 
 
+/*
 $chatId = 1;
 $userId = 5;
 $message = "akfjödfkjs dfjsakfjsdfajs fs";
 #var_dump($Database->writeMessage($chatId, $userId, $message));
+*/
 
+var_dump($Database->getAllChatsFromCurrentUser());
 
 /*
 foreach ($Database->getAllMessagesFromChat(41) as $key => $value) {

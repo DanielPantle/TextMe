@@ -174,20 +174,48 @@ class Database
 
     public function getAllChatsFromCurrentUser()
     {
+        /*
+            SELECT chat.cid AS cid,
+            chat.cid AS _cid,
+            chat.name AS chatname,
+            GROUP_CONCAT(distinct user.name) AS members,
+            (SELECT message.timeadded
+             FROM message
+             JOIN user_is_in_chat AS _uiic ON message.uiicid = _uiic.uiicid
+             JOIN chat AS _c ON _uiic.cid = _c.cid
+             WHERE _c.cid = _cid
+             ORDER BY message.timeadded DESC
+             LIMIT 1)
+             AS ord
+            FROM chat, user, user_is_in_chat
+            WHERE user_is_in_chat.cid = chat.cid
+            AND user_is_in_chat.uid = user.uid
+            GROUP BY chat.cid
+            HAVING members LIKE '%daniel%'
+            ORDER BY ord
+        */
         try {
             $currentUser = $this->getCurrentUser();
-            $stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_NAME} AS chatname, GROUP_CONCAT(distinct {$this->U_NAME}) AS members
+            $stmt = $this->db->prepare("SELECT {$this->C_ID} AS cid, {$this->C_ID} AS _cid, {$this->C_NAME} AS chatname, GROUP_CONCAT(distinct {$this->U_NAME}) AS members,
+                    (SELECT MAX({$this->M_TIMEADDED}) FROM message
+                        JOIN {$this->TABLE_USER_IS_IN_CHAT} AS _uiic ON {$this->M_UIICID} = _uiic.uiicid
+                        JOIN {$this->TABLE_CHAT} AS _c ON _uiic.cid = _c.cid
+                        WHERE _c.cid = _cid
+                        ORDER BY {$this->M_TIMEADDED} DESC
+                        LIMIT 1) AS ord
                     FROM {$this->TABLE_CHAT}, {$this->TABLE_USER_IS_IN_CHAT}, {$this->TABLE_USER}
                     WHERE {$this->UIIC_CID} = {$this->C_ID}
                     AND {$this->UIIC_UID} = {$this->U_ID}
                     GROUP BY {$this->C_ID}
-                    HAVING members LIKE '%$currentUser%'");
+                    HAVING members LIKE '%$currentUser%'
+                    ORDER BY ord DESC");
 
             if ($stmt->execute()) {
                 //return $stmt;
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
                 //return $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
             } else {
+                return $stmt;
                 return false;
             }
         } catch (PDOException $e) {
