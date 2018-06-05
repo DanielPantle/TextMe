@@ -852,6 +852,7 @@ div[class~="onTop"] > .count {
 	height: 70px;
 	float: left;
 	background: #fff;
+	display: none;
 }
 
 .replyBar .attach {
@@ -1328,6 +1329,12 @@ select.form-control:focus::-ms-value {
 	flex-grow: 1;
 	max-width: 100%;
 }
+
+
+
+
+
+
 
 
 /* Emojis */

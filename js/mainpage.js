@@ -673,6 +673,7 @@ function checkForNewMessagesInCurrentChat() {
  **/
 function addActiveChatClickSwitcher() {
     $(".chatButton").click(function () {
+        $(".replyBar").css("display", "block");
         jQuery(".active").removeClass("active");
         jQuery(this).addClass("active");
     });
