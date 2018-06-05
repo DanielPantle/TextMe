@@ -304,17 +304,16 @@ function replaceEmojisBack(id) {
 }
 
 function sendChatMsg(chatroomId) {
-    var chatText = $("#inputChatMessage").html();
-    var chatTextVal = $("#inputChatMessage").text();
-
-    // Emojis escapen
-    if (chatText.length === 0 || !chatTextVal.trim()) { // wenn der String leer ist, oder nur Blanks enthält
+    var chatText = $("#inputChatMessage").text();
+    chatText = chatText.trim();
+    if (chatText.length === 0) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
         document.getElementById("inputChatMessage").innerText ="";
         $("#inputChatMessage").focus();
     } else {
         //chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
-        //chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
+        chatText = chatText.trim();
+        chatText = chatText.replace(/\"/g,"\\\""); // jedes Anführungszeichen escapen
         var jsonSend = '{"i":"sendmessage","chat_id":'+chatroomId+',"msg":"'+chatText+'"}';
         callChatctlWithSuccess(jsonSend, function (response) {
             chatText = replaceEmojis(chatText);
