@@ -319,7 +319,7 @@ function sendChatMsg(chatroomId) {
             chatText = replaceEmojis(chatText);
             // Nachricht ausgeben
             //$("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
-            var functionString = '{"i":"setFlagUnreadMessageForEveryOne","chat_id":"'+sessionStorage.aktuelleChatId+'","user_id":"'+sessionStorage.aktuellerUser+'","setbit":"1"}';
+            var functionString = '{"i":"setFlagUnreadMessageForEveryOne","chat_id":"'+sessionStorage.aktuelleChatId+'","user_id":"'+sessionStorage.aktuelleUserId+'","setbit":"1"}';
             callChatctl(functionString);
             scrollChatVerlauf();
             document.getElementById("inputChatMessage").innerText ="";
