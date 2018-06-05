@@ -1350,10 +1350,10 @@ select.form-control:focus::-ms-value {
 }
 
 .newMessage {
-	background: url(./../images/jalogo.png) no-repeat center;
+	background: url(./../images/jalogo2.png) no-repeat center;
 	background-size:cover;
 	right: 15px;
-	bottom: 25px;
+	/*bottom: 25px;*/
 	position: absolute;
 	width: auto;
 	height: auto;

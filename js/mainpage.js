@@ -600,13 +600,14 @@ function chats() {
                                     "                        <p class='message'>\n" +
                                     "                        Mitglieder: "+members_2+"\n" +
                                     "                    </p>\n" +
+                                    //"                    </div>\n" +
+                                    "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\">!</p></div>"+
                                     "                    </div>\n" +
-                                    "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\"'>!</p></div>"+
                                     "                    </div>";
                             }else {
                                 var members_picture="";
                                 if(members_20=="NV"){
-                                    var members_0="--> kein Chat Partner vorhanden <--";
+                                    var members_0=">kein Chat Partner vorhanden<";
                                 }else {
                                     if(members_10==sessionStorage.aktuellerUser){
                                         members_0 = "An: "+members_20;
@@ -626,8 +627,9 @@ function chats() {
                                         "<p class='message'>" +
                                         ""+members_0+
                                         "</p>" +
-                                        "</div>" +
+                                        //"</div>" +
                                         "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\">!</p></div>"+
+                                        "</div>" +
                                         "</div>";
                                 }else{
                                     functionString='{"i":"getUserIdByName","username":"'+members_picture+'"}';
@@ -650,8 +652,9 @@ function chats() {
                                                 "<p class='message'>" +
                                                 ""+members_0+
                                                 "</p>" +
-                                                "</div>" +
+                                                //"</div>" +
                                                 "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none' ><p class=\"newMessage\">!</p></div>"+
+                                                "</div>" +
                                                 "</div>";
                                         });
                                     });

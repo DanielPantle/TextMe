@@ -93,7 +93,7 @@ if($Database->isLoggedIn()) {
 
     <div class="container">
         <div class="col-md-6 col-md-offset-3" style="text-align: center">
-            <img src="images/logo.png" width="30%" height="30%">
+            <img src="images/logo2.png" width="30%" height="30%">
         </div>
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
