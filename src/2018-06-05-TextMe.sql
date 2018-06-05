@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 05. Jun 2018 um 17:16
+-- Erstellungszeit: 05. Jun 2018 um 20:20
 -- Server-Version: 5.7.22-0ubuntu0.17.10.1
 -- PHP-Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -52,7 +52,7 @@ INSERT INTO `chat` (`cid`, `name`, `timeadded`, `timemodified`) VALUES
 CREATE TABLE `images` (
   `id` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
+  `cid` int(11) NOT NULL DEFAULT '0',
   `imgdata` longblob NOT NULL,
   `imgname` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -121,11 +121,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uid`, `name`, `mail`, `password`, `timeadded`, `timemodified`, `is_admin`) VALUES
-(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-05 17:16:42', 1),
+(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-05 19:22:04', 1),
 (2, 'Dodo', 'dodo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:42:44', 0),
 (3, 'Daniel', 'daniel@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:38:01', 0),
 (4, 'Flo', 'flo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:31:36', 0),
-(5, 'Jule', 'jule@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-01 16:04:07', 0),
+(5, 'Jule', 'jule@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-05 19:05:43', 0),
 (6, 'tim', 'tim@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:40:06', '2018-05-21 12:40:37', 0);
 
 -- --------------------------------------------------------
@@ -156,7 +156,7 @@ INSERT INTO `user_is_in_chat` (`uiicid`, `cid`, `uid`, `timeadded`, `timemodifie
 (4, 4, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:58', 0, '9c82c7143c102b71c593d98d96093fde', 1),
 (5, 1, 4, '2018-05-03 12:22:21', '2018-05-24 02:04:02', 0, '39461a19e9eddfb385ea76b26521ea48', 1),
 (6, 2, 3, '2018-05-03 12:22:21', '2018-05-24 02:04:08', 0, 'd490d7b4576290fa60eb31b5fc917ad1', 1),
-(7, 3, 1, '2018-05-03 12:22:21', '2018-05-24 02:04:12', 0, '6f3ef77ac0e3619e98159e9b6febf557', 1),
+(7, 3, 1, '2018-05-03 12:22:21', '2018-06-05 19:08:56', 0, '6f3ef77ac0e3619e98159e9b6febf557', 0),
 (8, 4, 6, '2018-05-03 12:22:21', '2018-05-24 02:04:17', 0, 'b5b41fac0361d157d9673ecb926af5ae', 1),
 (9, 4, 2, '2018-05-03 12:22:21', '2018-05-24 02:04:19', 0, '860320be12a1c050cd7731794e231bd3', 1);
 
