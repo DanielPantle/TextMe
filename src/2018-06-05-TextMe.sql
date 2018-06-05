@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 01. Jun 2018 um 17:14
+-- Erstellungszeit: 05. Jun 2018 um 17:16
 -- Server-Version: 5.7.22-0ubuntu0.17.10.1
 -- PHP-Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -121,7 +121,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uid`, `name`, `mail`, `password`, `timeadded`, `timemodified`, `is_admin`) VALUES
-(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-01 16:03:35', 1),
+(1, 'Christian', 'Christian.Schoofs@t-online.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-06-05 17:16:42', 1),
 (2, 'Dodo', 'dodo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-21 12:42:44', 0),
 (3, 'Daniel', 'daniel@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:38:01', 0),
 (4, 'Flo', 'flo@mail.de', '$2y$10$pKoFXWyXkKvKSsEjZnljXeHSSm9qZ4vSYNQmonlvBwA4lkrRY0c52', '2018-05-03 11:25:19', '2018-05-24 17:31:36', 0),
@@ -141,23 +141,24 @@ CREATE TABLE `user_is_in_chat` (
   `timeadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `timemodified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted` tinyint(1) DEFAULT '0',
-  `link` varchar(32) NOT NULL
+  `link` varchar(32) NOT NULL,
+  `unreadMessage` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `user_is_in_chat`
 --
 
-INSERT INTO `user_is_in_chat` (`uiicid`, `cid`, `uid`, `timeadded`, `timemodified`, `deleted`, `link`) VALUES
-(1, 1, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:41', 0, '02e74f10e0327ad868d138f2b4fdd6f0'),
-(2, 2, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:50', 0, 'cfee398643cbc3dc5eefc89334cacdc1'),
-(3, 3, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:54', 0, 'ff4d5fbbafdf976cfdc032e3bde78de5'),
-(4, 4, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:58', 0, '9c82c7143c102b71c593d98d96093fde'),
-(5, 1, 4, '2018-05-03 12:22:21', '2018-05-24 02:04:02', 0, '39461a19e9eddfb385ea76b26521ea48'),
-(6, 2, 3, '2018-05-03 12:22:21', '2018-05-24 02:04:08', 0, 'd490d7b4576290fa60eb31b5fc917ad1'),
-(7, 3, 1, '2018-05-03 12:22:21', '2018-05-24 02:04:12', 0, '6f3ef77ac0e3619e98159e9b6febf557'),
-(8, 4, 6, '2018-05-03 12:22:21', '2018-05-24 02:04:17', 0, 'b5b41fac0361d157d9673ecb926af5ae'),
-(9, 4, 2, '2018-05-03 12:22:21', '2018-05-24 02:04:19', 0, '860320be12a1c050cd7731794e231bd3');
+INSERT INTO `user_is_in_chat` (`uiicid`, `cid`, `uid`, `timeadded`, `timemodified`, `deleted`, `link`, `unreadMessage`) VALUES
+(1, 1, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:41', 0, '02e74f10e0327ad868d138f2b4fdd6f0', 1),
+(2, 2, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:50', 0, 'cfee398643cbc3dc5eefc89334cacdc1', 1),
+(3, 3, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:54', 0, 'ff4d5fbbafdf976cfdc032e3bde78de5', 1),
+(4, 4, 5, '2018-05-03 12:20:29', '2018-05-24 02:03:58', 0, '9c82c7143c102b71c593d98d96093fde', 1),
+(5, 1, 4, '2018-05-03 12:22:21', '2018-05-24 02:04:02', 0, '39461a19e9eddfb385ea76b26521ea48', 1),
+(6, 2, 3, '2018-05-03 12:22:21', '2018-05-24 02:04:08', 0, 'd490d7b4576290fa60eb31b5fc917ad1', 1),
+(7, 3, 1, '2018-05-03 12:22:21', '2018-05-24 02:04:12', 0, '6f3ef77ac0e3619e98159e9b6febf557', 1),
+(8, 4, 6, '2018-05-03 12:22:21', '2018-05-24 02:04:17', 0, 'b5b41fac0361d157d9673ecb926af5ae', 1),
+(9, 4, 2, '2018-05-03 12:22:21', '2018-05-24 02:04:19', 0, '860320be12a1c050cd7731794e231bd3', 1);
 
 --
 -- Indizes der exportierten Tabellen
