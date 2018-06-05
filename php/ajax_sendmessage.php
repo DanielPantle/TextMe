@@ -85,6 +85,9 @@ try {
         case "proofForNewMessages":
             $return_array = $Database->proofForNewMessages();
             break;
+        case "isUserAdmin":
+            $return_array = $Database->isUserAdmin();
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 

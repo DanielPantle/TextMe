@@ -223,14 +223,12 @@ if(isset($_SESSION['link'])) {
                 <span>Random-Chat erstellen</span>
             </button>
 
-            <?php
-                if($Database->isUserAdmin()){
-                    echo "<button class=\"cn\">
-                                <i class=\"fa fa-bar-chart-o\" style=\"font-size:20px;color:#999\"></i>
-                                <span>Statistik</span>
-                            </button>";
-                }
-            ?>
+            <!-- Button / icon Statistik - ausgeblendet -->
+            <button class="cn" style="display: none">
+                <i class="fa fa-bar-chart-o" style="font-size:20px;color:#999"></i>
+                <!-- TODO: Text auf Deutsch / Englisch ändern -->
+                <span>Statistik</span>
+            </button>
 
             <button class="lo">
                 <i class="material-icons">&#xE879;</i>

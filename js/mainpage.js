@@ -147,16 +147,23 @@ $(document).ready(function() {
         sessionStorage.lastMessage = 0;
         chatloeschen();
         chats();
-    }
 
-    // Emoji-Click
-    $(".pick").click(function() {
-        emojiClick($(this).attr('id'));
-    });
+        var functionString = '{"i":"isUserAdmin"}';
+        callChatctlWithSuccess(functionString,function(response){
+            if(response){
+                $(".cn").show();
+            }
+        });
 
-    if(typeof linkResult !== 'undefined' && linkResult != null) {
-        // TODO: Ausgabe ändern
-        alert(linkResult);
+        // Emoji-Click
+        $(".pick").click(function() {
+            emojiClick($(this).attr('id'));
+        });
+
+        if(typeof linkResult !== 'undefined' && linkResult != null) {
+            // TODO: Ausgabe ändern
+            alert(linkResult);
+        }
     }
 });
 
