@@ -7,7 +7,7 @@ $Database = new Database();
 
 // prüfen, ob User eingeloggt ist
 if(!$Database->isLoggedIn()) {
-    // zur Login-Seite weiterleiten
+    // zur Login-Seite weiterleiten - falls nicht eingeloggt
     header('Location: ./../');
 }
 
