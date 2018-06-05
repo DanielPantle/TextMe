@@ -167,6 +167,8 @@ function setSuccessMessage(message) {
 
     messageContainer.text(message);
     messageContainer.show();
+    
+    messageContainer.delay(5000).fadeOut();
 }
 
 function setErrorMessage(message) {
