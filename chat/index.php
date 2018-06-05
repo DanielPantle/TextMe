@@ -411,20 +411,6 @@ if(isset($_SESSION['link'])) {
     <button class="option about" id="send_invitation">Einladung versenden</button>
 </div>
 
-<?php
-$username = $Database->getCurrentUser();
-$userid = $Database->getUserID();
-$email = $Database->getEmail($userid);
-
-echo "<script>
-    document.getElementById('nutzernamen').innerHTML = '$username';
-    document.getElementById('nutzernamen2').innerHTML = '$username';
-    document.getElementById('email').innerHTML='$email';
-    document.getElementById('email2').innerHTML='$email';
-</script>";
-
-?>
-
 <!-- JS einbinden -->
 <script src='./../js/vendor/jquery.min.js'></script>
 <script  src="./../js/mainpage.js"></script>

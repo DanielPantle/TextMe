@@ -144,10 +144,15 @@ $(document).ready(function() {
         callChatctlWithSuccess(functionString,function(response){
             sessionStorage.aktuellerUser = response;
         });
+        var functionString = '{"i":"getEmail","user_id":'+sessionStorage.aktuelleUserId+'}';
+        callChatctlWithSuccess(functionString,function(response){
+            sessionStorage.aktuelleeEmail = response;
+        });
         sessionStorage.lastMessage = 0;
         chatloeschen();
         chats();
         showProfilPicture();
+        showProfilInfos();
 
         var functionString = '{"i":"isUserAdmin"}';
         callChatctlWithSuccess(functionString,function(response){
@@ -741,4 +746,11 @@ function showProfilPicture() {
             document.getElementById("imageplace2").innerHTML = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
         }
     });
+}
+
+function showProfilInfos() {
+    document.getElementById('nutzernamen').innerHTML = sessionStorage.aktuellerUser;
+    document.getElementById('nutzernamen2').innerHTML = sessionStorage.aktuellerUser;
+    document.getElementById('email').innerHTML = sessionStorage.aktuelleeEmail;
+    document.getElementById('email2').innerHTML = sessionStorage.aktuelleeEmail;
 }

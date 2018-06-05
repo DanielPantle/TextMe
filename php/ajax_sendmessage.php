@@ -91,6 +91,9 @@ try {
         case "showPictureFromCurrentUser":
             $return_array = $Database->showPictureFromCurrentUser();
             break;
+        case "getEmail":
+            $return_array = $Database->getEmail($p['user_id']);
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 
