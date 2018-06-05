@@ -76,6 +76,15 @@ try {
         case "getNewMessages":
             $return_array = $Database->getNewMessages($p['chat_id'],$p['message_id']);
             break;
+        case "setFlagUnreadMessage":
+            $return_array = $Database->setFlagUnreadMessage($p['chat_id'],$p['user_id']);
+            break;
+        case "setFlagUnreadMessageForEveryOne":
+            $return_array = $Database->setFlagUnreadMessageForEveryOne($p['chat_id'],$p['user_id'],$p['setbit']);
+            break;
+        case "proofForNewMessages":
+            $return_array = $Database->proofForNewMessages();
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 

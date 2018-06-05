@@ -33,6 +33,7 @@ class Database
     private $UIIC_TIMEADDED = "user_is_in_chat.timeadded";
     private $UIIC_TIMEMODIFIED = "user_is_in_chat.timemodified";
     private $UIIC_DELETED = "user_is_in_chat.deleted";
+    private $UIIC_UNREADMESSAGE = "user_is_in_chat.unreadMessage";
 
     private $TABLE_MESSAGE = "message";
     private $M_ID = "message.mid";
@@ -872,6 +873,67 @@ class Database
 
         }catch (PDOException $e) {
             return "Error: " . $e->getMessage();
+        }
+    }
+
+    public function setFlagUnreadMessage($chatId,$userId) {
+        try{
+            /*
+             * UPDATE `user_is_in_chat` SET `unreadMessage`= WHERE cid= AND uid =
+             */
+            $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER_IS_IN_CHAT}
+                    SET {$this->UIIC_UNREADMESSAGE} = 0
+                    WHERE {$this->UIIC_CID} = :chatId AND {$this->UIIC_UID} = :userId");
+
+            if($stmt->execute(array(':chatId' => $chatId,'userId'=>$userId))) {
+                return $this->db->lastInsertId();
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    public function setFlagUnreadMessageForEveryOne ($chatId,$userId,$setbit) {
+        /*
+             * UPDATE `user_is_in_chat` SET `unreadMessage`=1 WHERE cid=3 AND NOT uid = 3
+             */
+        try{
+            $stmt = $this->db->prepare("UPDATE {$this->TABLE_USER_IS_IN_CHAT}
+                    SET {$this->UIIC_UNREADMESSAGE} = :setbit
+                    WHERE {$this->UIIC_CID} = :chatId AND NOT {$this->UIIC_UID} = :userId");
+
+            if($stmt->execute(array(':chatId' => $chatId,'userId'=>$userId,'setbit'=>$setbit))) {
+                return $this->db->lastInsertId();
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
+            return "Error: ".$e->getMessage();
+        }
+    }
+
+    public function proofForNewMessages () {
+        /*
+         * SELECT user_is_in_chat.cid FROM `user_is_in_chat` WHERE user_is_in_chat.uid = 5 AND user_is_in_chat.unreadMessage = 1
+         */
+        try{
+            $userId = $this->getUserID();
+            $stmt = $this->db->prepare("SELECT {$this->UIIC_CID}
+                    FROM {$this->TABLE_USER_IS_IN_CHAT}
+                    WHERE {$this->UIIC_UNREADMESSAGE} = 1 AND {$this->UIIC_UID} = :userId");
+
+            if($stmt->execute(array('userId'=>$userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                return false;
+            }
+        } catch (PDOException $e){
+            return "Error: ".$e->getMessage();
         }
     }
 }

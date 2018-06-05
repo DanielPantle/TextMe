@@ -1344,3 +1344,13 @@ select.form-control:focus::-ms-value {
 	height: 1.2em;
 }
 
+.newMessage {
+	background: url(./../images/jalogo.png) no-repeat center;
+	background-size:cover;
+	right: 15px;
+	bottom: 25px;
+	position: absolute;
+	width: auto;
+	height: auto;
+	padding: 10px;
+}

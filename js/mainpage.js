@@ -320,6 +320,8 @@ function sendChatMsg(chatroomId) {
             chatText = replaceEmojis(chatText);
             // Nachricht ausgeben
             //$("#chatVerlauf").append("<div class='msg messageSent'>" + chatText + "<span class='timestamp'>" + response + "</span></div>");
+            var functionString = '{"i":"setFlagUnreadMessageForEveryOne","chat_id":"'+sessionStorage.aktuelleChatId+'","user_id":"'+sessionStorage.aktuellerUser+'","setbit":"1"}';
+            callChatctl(functionString);
             scrollChatVerlauf();
             document.getElementById("inputChatMessage").innerText ="";
             $("#inputChatMessage").focus();
@@ -463,6 +465,7 @@ window.setInterval(function () {
     checkForNewMessagesInCurrentChat();
     var functionString = '{"i":"ping"}';
     callChatctl(functionString);
+    lookForUnreadMessages();
 },500);
 
 // Emojis-Click
@@ -542,7 +545,16 @@ function addNewMessages (response){
                 }
             }
         }
+        var functionString = '{"i":"setFlagUnreadMessage","chat_id":"'+sessionStorage.aktuelleChatId+'","user_id":"'+sessionStorage.aktuelleUserId+'"}';
+        callChatctl(functionString);
         scrollChatVerlauf();
+        $(".status").each(function () {
+            //console.log("cid2: "+$(this).data("cid"));
+            var cid2 = $(this).data("cid");
+            if(chat_id==cid2){
+                $(this).hide();
+            }
+        });
     });
 }
 
@@ -590,6 +602,7 @@ function chats() {
                                     "                        Mitglieder: "+members_2+"\n" +
                                     "                    </p>\n" +
                                     "                    </div>\n" +
+                                    "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\"'>!</p></div>"+
                                     "                    </div>";
                             }else {
                                 var members_picture="";
@@ -615,6 +628,7 @@ function chats() {
                                         ""+members_0+
                                         "</p>" +
                                         "</div>" +
+                                        "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\">!</p></div>"+
                                         "</div>";
                                 }else{
                                     functionString='{"i":"getUserIdByName","username":"'+members_picture+'"}';
@@ -638,6 +652,7 @@ function chats() {
                                                 ""+members_0+
                                                 "</p>" +
                                                 "</div>" +
+                                                "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none' ><p class=\"newMessage\">!</p></div>"+
                                                 "</div>";
                                         });
                                     });
@@ -676,5 +691,22 @@ function addActiveChatClickSwitcher() {
         $(".replyBar").css("display", "block");
         jQuery(".active").removeClass("active");
         jQuery(this).addClass("active");
+    });
+}
+
+function lookForUnreadMessages () {
+    var functionString = '{"i":"proofForNewMessages"}';
+    callChatctlWithSuccess(functionString,function(response){
+        if(response.length > 0){
+            for(var i=0;i<response.length;i++){
+                var cid = response[i]['cid'];
+                $(".status").each(function () {
+                    var cid2 = $(this).data("cid");
+                    if(cid==cid2){
+                        $(this).show();
+                    }
+                });
+            }
+        }
     });
 }
