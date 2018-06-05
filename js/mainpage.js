@@ -147,6 +147,7 @@ $(document).ready(function() {
         sessionStorage.lastMessage = 0;
         chatloeschen();
         chats();
+        showProfilPicture();
 
         var functionString = '{"i":"isUserAdmin"}';
         callChatctlWithSuccess(functionString,function(response){
@@ -720,6 +721,24 @@ function lookForUnreadMessages () {
                     }
                 });
             }
+        }
+    });
+}
+
+function showProfilPicture() {
+    var functionString = '{"i":"showPictureFromCurrentUser"}';
+    callChatctlWithSuccess(functionString,function(response){
+        //wenn count großer ist als 0 ist ein bild in der Datenbank vorhanden
+        if(response.length>0){
+            var bild = response[0]['imgdata'];
+            //wenn User ein bild in der Datenbank hat nimmer dies
+            //und nutzt es als Hintergrund bild, wenn da ein fehler ist wird das bild Weiß
+            document.getElementById("imageplace").innerHTML = '<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>';
+            document.getElementById("imageplace2").innerHTML = '<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>';
+        }else {
+            //wenn der user das Bild nicht in der Datenbank hat nimmt er ein default bild
+            document.getElementById("imageplace").innerHTML = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+            document.getElementById("imageplace2").innerHTML = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
         }
     });
 }

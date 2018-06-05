@@ -184,17 +184,10 @@ if(isset($_SESSION['link'])) {
     <div class="menu">
         <!-- menu oben -->
         <div class="me userBg">
-            <div class="image"></div>
-                <?php
-                    $picture = $Database->showPictureFromCurrentUser();
-                    $count = count($picture);
-                    if($count>0){
-                        $bild= $picture[0]['imgdata'];
-                        echo '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
-                    }else {
-                        echo '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
-                    }
-                ?>
+            <!-- Platz für User Profilbild -->
+            <div id="imageplace"></div>
+
+            <!-- User Info (Name / Email Adresse) -->
             <div class="myinfo">
                 <p class="name" id="nutzernamen">Random Name</p>
                 <p id="email"> eMail Adresse?</p>
@@ -258,18 +251,7 @@ if(isset($_SESSION['link'])) {
     <section class="configSect">
         <div class="profile">
             <p class="confTitle">Einstellungen</p>
-
-            <?php
-            $picture = $Database->showPictureFromCurrentUser();
-            $count = count($picture);
-            if($count>0){
-                $bild= $picture[0]['imgdata'];
-                echo '<div class= "image" style="background: #FFF url(data:image;base64,'.$bild.') no-repeat center;background-size:cover"></div>';
-            }else {
-                echo '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
-            }
-            ?>
-
+            <div id="imageplace2"></div>
             <div class="side">
                 <p class="name" id="nutzernamen2">Random Name</p>
                 <p id="email2">email Adresse?</p>

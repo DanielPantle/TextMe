@@ -88,6 +88,9 @@ try {
         case "isUserAdmin":
             $return_array = $Database->isUserAdmin();
             break;
+        case "showPictureFromCurrentUser":
+            $return_array = $Database->showPictureFromCurrentUser();
+            break;
         default:
             throw new Exception('Instruktion nicht gefunden.');
 
