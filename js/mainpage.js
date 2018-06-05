@@ -133,7 +133,12 @@ $(document).ready(function() {
             });
         });
 
-        validateChangeAccountData();
+        var functionString = '{"i":"isUserAdmin"}';
+        callChatctlWithSuccess(functionString,function(response){
+            if(response){
+                $(".cn").show();
+            }
+        });
 
         sessionStorage.aktuelleChatId = 0;
         var functionString = '{"i":"getUserID"}';
@@ -149,17 +154,12 @@ $(document).ready(function() {
             sessionStorage.aktuelleeEmail = response;
         });
         sessionStorage.lastMessage = 0;
+
         chatloeschen();
         chats();
         showProfilPicture();
         showProfilInfos();
-
-        var functionString = '{"i":"isUserAdmin"}';
-        callChatctlWithSuccess(functionString,function(response){
-            if(response){
-                $(".cn").show();
-            }
-        });
+        validateChangeAccountData();
 
         // Emoji-Click
         $(".pick").click(function() {
