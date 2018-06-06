@@ -1,175 +1,174 @@
 $(document).ready(function() {
+    
+    $(".trigger").click(function () {
+        $(".overlay, .menuWrap").fadeIn(180);
+        $(".menu").animate({opacity: "1", left: "0px"}, 180);
+    });
+
+    /* make config menu show up */
+    $(".settings").click(function () {
+        $(".config").animate({opacity: "1", right: "0px"}, 180);
+        /* hide others */
+        $(".menuWrap").fadeOut(180);
+        $(".menu").animate({opacity: "0", left: "-320px"}, 180);
+
+    });
+
+    // Show/Hide the other notification options
+    $(".deskNotif").click(function () {
+        $(".showSName, .showPreview, .playSounds").toggle();
+    });
+
+    /* close all overlay elements */
+    $(".overlay").click(function () {
+        $(".configSect2").hide();
+        $(".overlay, .menuWrap").fadeOut(180);
+        $(".menu").animate({opacity: "0", left: "-320px"}, 180);
+        $(".config").animate({opacity: "0", right: "-200vw"}, 180);
+    });
+
+    /* small conversation menu */
+    $("#chatOption").click(function () {
+        $(".moreMenu").slideToggle("fast");
+    });
+
+    $(document).mouseup(function(e)
     {
-        $(".trigger").click(function () {
-            $(".overlay, .menuWrap").fadeIn(180);
-            $(".menu").animate({opacity: "1", left: "0px"}, 180);
-        });
+        var container = $(".moreMenu");
 
-        /* make config menu show up */
-        $(".settings").click(function () {
-            $(".config").animate({opacity: "1", right: "0px"}, 180);
-            /* hide others */
-            $(".menuWrap").fadeOut(180);
-            $(".menu").animate({opacity: "0", left: "-320px"}, 180);
-
-        });
-
-        // Show/Hide the other notification options
-        $(".deskNotif").click(function () {
-            $(".showSName, .showPreview, .playSounds").toggle();
-        });
-
-        /* close all overlay elements */
-        $(".overlay").click(function () {
-            $(".configSect2").hide();
-            $(".overlay, .menuWrap").fadeOut(180);
-            $(".menu").animate({opacity: "0", left: "-320px"}, 180);
-            $(".config").animate({opacity: "0", right: "-200vw"}, 180);
-        });
-
-        /* small conversation menu */
-        $("#chatOption").click(function () {
-            $(".moreMenu").slideToggle("fast");
-        });
-
-        $(document).mouseup(function(e)
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0)
         {
-            var container = $(".moreMenu");
-
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!container.is(e.target) && container.has(e.target).length === 0)
-            {
-                container.hide();
-            }
-        });
-
-        /* clicking the search button from the conversation focus the search bar outside it, as on desktop */
-        $(".search").click(function () {
-            $(".searchChats").focus();
-        });
-
-        /**
-         * input listener for search field
-         * shows/hides chats depending on search input
-         * 500ms delay after input changes to prevent multiple fire events
-         **/
-        var timeout = null;
-        $(".searchChats").on("input", function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(function () {
-
-                var chatList = $(".chats .chatButton");
-                var filterString = $(".searchChats").val().toLowerCase().trim();
-                if (chatList.length !== 0) {
-                    chatList.each(function (index, chat) {
-                        var chatName = $(chat).find(".name").text().toLowerCase().trim();
-                        if (chatName.indexOf(filterString) >= 0) {
-                            $(chat).show();
-                        } else {
-                            $(chat).hide();
-                        }
-                    });
-                }
-            }, 500);
-        });
-
-
-        $(".edit").click(function () {
-            jQuery(".configSect2").show();
-        });
-
-        /* Show or Hide Emoji Panel */
-        $(".emoji").click(function () {
-            $(".emojiBar").fadeToggle(120);
-        });
-
-        /* if the user click the conversation or the type panel will also hide the emoji panel */
-        $(".convHistory, .replyMessage").click(function () {
-            $(".emojiBar").fadeOut(120);
-
-        });
-
-        $(".lo").click(function () {
-            logout();
-        });
-
-        $("#delete_chat").click(function () {
-            $(".moreMenu").slideToggle("fast");
-            chatloeschenclick();
-        });
-
-        $("#send_invitation").click(function () {
-            $(".moreMenu").slideToggle("fast");
-            sendinvitationclick();
-        });
-
-        $(".cn").click(function () {
-            window.location.href='./statistic.php';
-        });
-
-        $(".nc").click(function () {
-            $(".nc-div").show();
-        });
-        $("#nc-abort").click(function () {
-            $("#nc-chatnameField").val("");
-            $(".nc-div").hide();
-        });
-        $("#nc-create").click(function () {
-            const chatName = $("#nc-chatnameField").val();
-            if(chatName != null && chatName != "") {
-                createchatclick(chatName);
-
-            }
-        });
-        
-        $(".ng").click(function () {
-            // Random-Chat erstellen
-            createrandomchatclick();
-        });
-
-        jQuery(".alert").each(function (index) {
-            jQuery(this).click(function () {
-                jQuery(this).hide();
-            });
-        });
-
-        var functionString = '{"i":"isUserAdmin"}';
-        callChatctlWithSuccess(functionString,function(response){
-            if(response){
-                $(".cn").show();
-            }
-        });
-
-        sessionStorage.aktuelleChatId = 0;
-        var functionString = '{"i":"getUserID"}';
-        callChatctlWithSuccess(functionString,function(response){
-            sessionStorage.aktuelleUserId = response;
-        });
-        var functionString = '{"i":"getCurrentUser"}';
-        callChatctlWithSuccess(functionString,function(response){
-            sessionStorage.aktuellerUser = response;
-        });
-        var functionString = '{"i":"getEmail","user_id":'+sessionStorage.aktuelleUserId+'}';
-        callChatctlWithSuccess(functionString,function(response){
-            sessionStorage.aktuelleeEmail = response;
-        });
-        sessionStorage.lastMessage = 0;
-
-        chatloeschen();
-        chats();
-        showProfilPicture();
-        showProfilInfos();
-        validateChangeAccountData();
-
-        // Emoji-Click
-        $(".pick").click(function() {
-            emojiClick($(this).attr('id'));
-        });
-
-        if(typeof linkResult !== 'undefined' && linkResult != null) {
-            // TODO: Ausgabe ändern
-            alert(linkResult);
+            container.hide();
         }
+    });
+
+    /* clicking the search button from the conversation focus the search bar outside it, as on desktop */
+    $(".search").click(function () {
+        $(".searchChats").focus();
+    });
+
+    /**
+     * input listener for search field
+     * shows/hides chats depending on search input
+     * 500ms delay after input changes to prevent multiple fire events
+     **/
+    var timeout = null;
+    $(".searchChats").on("input", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+
+            var chatList = $(".chats .chatButton");
+            var filterString = $(".searchChats").val().toLowerCase().trim();
+            if (chatList.length !== 0) {
+                chatList.each(function (index, chat) {
+                    var chatName = $(chat).find(".name").text().toLowerCase().trim();
+                    if (chatName.indexOf(filterString) >= 0) {
+                        $(chat).show();
+                    } else {
+                        $(chat).hide();
+                    }
+                });
+            }
+        }, 500);
+    });
+
+
+    $(".edit").click(function () {
+        $(".configSect2").show();
+    });
+
+    /* Show or Hide Emoji Panel */
+    $(".emoji").click(function () {
+        $(".emojiBar").fadeToggle(120);
+    });
+
+    /* if the user click the conversation or the type panel will also hide the emoji panel */
+    $(".convHistory, .replyMessage").click(function () {
+        $(".emojiBar").fadeOut(120);
+
+    });
+
+    $(".lo").click(function () {
+        logout();
+    });
+
+    $("#delete_chat").click(function () {
+        $(".moreMenu").slideToggle("fast");
+        chatloeschenclick();
+    });
+
+    $("#send_invitation").click(function () {
+        $(".moreMenu").slideToggle("fast");
+        sendinvitationclick();
+    });
+
+    $(".cn").click(function () {
+        window.location.href="./statistic.php";
+    });
+
+    $(".nc").click(function () {
+        $(".nc-div").show();
+    });
+    $("#nc-abort").click(function () {
+        $("#nc-chatnameField").val("");
+        $(".nc-div").hide();
+    });
+    $("#nc-create").click(function () {
+        const chatName = $("#nc-chatnameField").val();
+        if(chatName != null && chatName != "") {
+            createchatclick(chatName);
+
+        }
+    });
+    
+    $(".ng").click(function () {
+        // Random-Chat erstellen
+        createrandomchatclick();
+    });
+
+    $(".alert").each(function (index) {
+        $(this).click(function () {
+            $(this).hide();
+        });
+    });
+
+    var functionString = '{"i":"isUserAdmin"}';
+    callChatctlWithSuccess(functionString,function(response){
+        if(response){
+            $(".cn").show();
+        }
+    });
+
+    sessionStorage.aktuelleChatId = 0;
+    functionString = '{"i":"getUserID"}';
+    callChatctlWithSuccess(functionString,function(response){
+        sessionStorage.aktuelleUserId = response;
+    });
+    functionString = '{"i":"getCurrentUser"}';
+    callChatctlWithSuccess(functionString,function(response){
+        sessionStorage.aktuellerUser = response;
+    });
+    functionString = '{"i":"getEmail","user_id":'+sessionStorage.aktuelleUserId+'}';
+    callChatctlWithSuccess(functionString,function(response){
+        sessionStorage.aktuelleeEmail = response;
+    });
+    sessionStorage.lastMessage = 0;
+
+    chatloeschen();
+    chats();
+    showProfilPicture();
+    showProfilInfos();
+    validateChangeAccountData();
+
+    // Emoji-Click
+    $(".pick").click(function() {
+        emojiClick($(this).attr('id'));
+    });
+
+    if(typeof linkResult !== "undefined" && linkResult != null) {
+        /* TODO: Ausgabe ändern */
+        alert(linkResult);
     }
 });
 
@@ -180,7 +179,7 @@ function setSuccessMessage(message) {
 
     messageContainer.text(message);
     messageContainer.show();
-    
+
     messageContainer.delay(5000).fadeOut();
 }
 
@@ -209,40 +208,40 @@ function validateChangeAccountData() {
         if (currentPassword === ""){
             e.preventDefault();
             currentPasswordField.addClass("invalid");
-            jQuery("#current-password-error").show();
+            $("#current-password-error").show();
         }
 
         if (passwordMessage !== "") {
             e.preventDefault();
             console.log(passwordMessage);
             passwordField.addClass("invalid");
-            jQuery("#password-error").html(passwordMessage);
-            jQuery("#password-error").show();
+            $("#password-error").html(passwordMessage);
+            $("#password-error").show();
         }
         if (passwordConfirm !== password) {
             e.preventDefault();
             console.log("password confirm error");
             passwordConfirmField.addClass("invalid");
-            jQuery("#password-confirm-error").show();
+            $("#password-confirm-error").show();
         }
     });
 
     currentPasswordField.keypress(function () {
         if(currentPasswordField.hasClass("invalid")) {
             currentPasswordField.removeClass("invalid");
-            jQuery("#current-password-error").hide();
+            $("#current-password-error").hide();
         }
     });
     passwordField.keypress(function () {
         if(passwordField.hasClass("invalid")) {
             passwordField.removeClass("invalid");
-            jQuery("#password-error").hide();
+            $("#password-error").hide();
         }
     });
     passwordConfirmField.keypress(function () {
         if(passwordConfirmField.hasClass("invalid")) {
             passwordConfirmField.removeClass("invalid");
-            jQuery("#password-confirm-error").hide();
+            $("#password-confirm-error").hide();
         }
     });
 }
@@ -268,20 +267,22 @@ function onEnter(e) {
         var cid = parseInt(sessionStorage.aktuelleChatId);
         if(cid!=0){
             sendChatMsg(cid);
-        }else console.log ("keine cid");
+        }else {
+            console.log ("keine cid");
+        }
         return false;
     }
 }
 
 function replaceEmojis(text) {
-    text = text.split(":)").join('<i class="em-svg em-slightly_smiling_face"></i>');
-    text = text.split(":&#039;D").join('<i class="em-svg em-joy"></i>');
-    text = text.split(":D").join('<i class="em-svg em-smiley"></i>');
-    text = text.split(":(").join('<i class="em-svg em-slightly_frowning_face"></i>');
-    text = text.split(":&#039;(").join('<i class="em-svg em-sob"></i>');
-    text = text.split(":o").join('<i class="em-svg em-open_mouth"></i>');
-    text = text.split(";)").join('<i class="em-svg em-smirk"></i>');
-    text = text.split(":P").join('<i class="em-svg em-stuck_out_tongue"></i>');
+    text = text.split(":)").join("<i class='em-svg em-slightly_smiling_face'></i>");
+    text = text.split(":&#039;D").join("<i class='em-svg em-joy'></i>");
+    text = text.split(":D").join("<i class='em-svg em-smiley'></i>");
+    text = text.split(":(").join("<i class='em-svg em-slightly_frowning_face'></i>");
+    text = text.split(":&#039;(").join("<i class='em-svg em-sob'></i>");
+    text = text.split(":o").join("<i class='em-svg em-open_mouth'></i>");
+    text = text.split(";)").join("<i class='em-svg em-smirk'></i>");
+    text = text.split(":P").join("<i class='em-svg em-stuck_out_tongue'></i>");
     return text;
 }
 
@@ -321,7 +322,7 @@ function sendChatMsg(chatroomId) {
     chatText = chatText.trim();
     if (chatText.length === 0) { // wenn der String leer ist, oder nur Blanks enthält
         console.log("Nachrichten Text leer oder enthält nur Blanks");
-        document.getElementById("inputChatMessage").innerText ="";
+        $("#inputChatMessage").html("");
         $("#inputChatMessage").focus();
     } else {
         //chatText = chatText.replace(/\\/g,"\\\\"); // jeden Backslash escapen, /string/g ersetzt jede Erscheinung von string, sonst nur erste
@@ -335,7 +336,7 @@ function sendChatMsg(chatroomId) {
             var functionString = '{"i":"setFlagUnreadMessageForEveryOne","chat_id":"'+sessionStorage.aktuelleChatId+'","user_id":"'+sessionStorage.aktuelleUserId+'","setbit":"1"}';
             callChatctl(functionString);
             scrollChatVerlauf();
-            document.getElementById("inputChatMessage").innerText ="";
+            $("#inputChatMessage").html("");
             $("#inputChatMessage").focus();
         });
 
@@ -345,8 +346,7 @@ function sendChatMsg(chatroomId) {
 }
 
 function scrollChatVerlauf() {
-    var chathistory = document.getElementById('chatVerlauf');
-    chathistory.scrollTop = chathistory.scrollHeight;
+    $("#chatVerlauf").scrollTop($("#chatVerlauf").prop("scrollHeight"));
 }
 
 function logout(){
@@ -370,10 +370,10 @@ function callChatctl(functionString) {
     $.ajax({
         async: true,
         contentType: "application/json",
-        url: '../php/ajax_sendmessage.php',
+        url: "../php/ajax_sendmessage.php",
         type : "POST",
         data: functionString,
-        dataType: 'json',   //data format
+        dataType: "json",   //data format
         success: function (response) {
             console.log(response);
         },
@@ -404,11 +404,10 @@ function callChatctlWithSuccess(functionString, successFunction) {
 
 function chatloeschen() {
     var chatid = sessionStorage.aktuelleChatId;
-    var chatOption = document.getElementById("chatOption")
     if(chatid>0){
-        chatOption.style.visibility="visible";
+        $("#chatOption").css("visibility", "visible");
     }else {
-        chatOption.style.visibility="hidden";
+        $("#chatOption").css("visibility", "hidden");
     }
 }
 
@@ -422,8 +421,8 @@ function chatloeschenclick() {
         sessionStorage.aktuelleChatId=0;
         chats();
         chatHistory();
-        $('#mitglieder').html("");
-        $('#chatname').html("");
+        $("#mitglieder").html("");
+        $("#chatname").html("");
         $("#nc-chatnameField").val("");
         $(".nc-div").hide();
         setSuccessMessage("Chat successfully deleted!");
@@ -436,7 +435,7 @@ function sendinvitationclick() {
         var getLinkString = '{"i":"getinvitationlink","chat_id":'+chat_id+'}';
         callChatctlWithSuccess(getLinkString, function (response) {
             console.log(response);
-            // TODO: Ausgabe ändern
+            /* TODO: Ausgabe ändern */
             var location = window.location.hostname+"/link/"+response['link'];
             prompt("Mit diesem Link kannst du Andere in diesen Chat einladen:", "\n\n"+ location);
         });
@@ -444,7 +443,7 @@ function sendinvitationclick() {
 }
 
 function showlinkresult() {
-    // TODO: Ausgabe ändern
+    /* TODO: Ausgabe ändern */
     alert('$linkResult');
 }
 
@@ -491,7 +490,7 @@ function emojiClick(em) {
 
 function chatHistory () {
     const chat_id = sessionStorage.aktuelleChatId;
-    document.getElementById("chatVerlauf").innerHTML ="";
+    $("#chatVerlauf").html("");
     if(chat_id>0){
         var functionString = '{"i":"getAllMessagesFromChat","chat_id":"'+chat_id+'"}';
         callChatctlWithSuccess(functionString,function(response){
@@ -506,8 +505,8 @@ function addNewMessages (response){
     callChatctlWithSuccess(functionString, function (user) {
         var count = user.length;
         for (var date in response){
-            if(document.getElementsByClassName("chatDatum").length==0){
-                document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+            if($(".chatDatum").length==0){
+                $("#chatVerlauf").append("<div class=\"chatDatum\">"+date+"</div>");
             }else {
                 var date_heute = false;
                 $(".chatDatum").each(function () {
@@ -515,9 +514,9 @@ function addNewMessages (response){
                     if(date2 == "Heute")date_heute=true;
                 });
                 if(date_heute==false){
-                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+                    $("#chatVerlauf").append("<div class=\"chatDatum\">"+date+"</div>");
                 }else if (date!="Heute") {
-                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatDatum\">"+date+"</div>";
+                    $("#chatVerlauf").append("<div class=\"chatDatum\">"+date+"</div>");
                 }
             }
             for(var i=0;i<response[date].length;i++){
@@ -532,12 +531,12 @@ function addNewMessages (response){
                 //console.log("message:"+nachricht);
                 var username = sessionStorage.aktuellerUser;
                 if(nachricht==" wurde dem Chat hinzugefuegt"){
-                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                    $("#chatVerlauf").append("<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>");
                 }else if(nachricht==" hat den Chat verlassen"){
-                    document.getElementById("chatVerlauf").innerHTML +="<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>";
+                    $("#chatVerlauf").append("<div class=\"chatVerlassen\"><b>"+name+"</b>"+nachricht+"</div>");
                 }else {
                     if(username==name){
-                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageSent\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                        $("#chatVerlauf").append("<div class=\"msg messageSent\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>");
                     }
                     else if(count>2){
                         var functionString = '{"i":"getUserIdByName","username":"'+name+'"}';
@@ -547,15 +546,15 @@ function addNewMessages (response){
                                 var count_picture = picture.length;
                                 if(count_picture>0){
                                     var bild = picture[0]['imgdata'];
-                                    document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(data:image;base64,"+bild+") no-repeat center;background-size:cover\"></div>";
+                                    $("#chatVerlauf").append("<div class= \"msgimage\" style=\"background: #FFF url(data:image;base64,"+bild+") no-repeat center;background-size:cover\"></div>");
                                 }else {
-                                    document.getElementById("chatVerlauf").innerHTML +="<div class= \"msgimage\" style=\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\"></div>";
+                                    $("#chatVerlauf").append("<div class= \"msgimage\" style=\"background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover\"></div>");
                                 }
-                                document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceivedGroup\">"+name+": "+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                                $("#chatVerlauf").append("<div class=\"msg messageReceivedGroup\">"+name+": "+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>");
                             });
                         });
                     }else {
-                        document.getElementById("chatVerlauf").innerHTML +="<div class=\"msg messageReceived\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>";
+                        $("#chatVerlauf").append("<div class=\"msg messageReceived\">"+nachricht+"<span class=\"timestamp\">"+zeit+"</span></div>");
                     }
                 }
             }
@@ -576,7 +575,7 @@ function addNewMessages (response){
 function chats() {
     var functionString = '{"i":"getAllChatsFromCurrentUser"}';
     callChatctlWithSuccess(functionString, function (response) {
-        document.getElementById("chats").innerHTML ="";
+        $("#chats").html("");
         const count = response.length;
         if(count>0){
             for(var j = 0; j<count;j++){
@@ -606,7 +605,7 @@ function chats() {
                                 }else members_2 = members_2+" , "+members[i]['name'];
                             }
                             if(count_members>2){
-                                document.getElementById("chats").innerHTML += "<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\");'>\n" +
+                                $("#chats").append("<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\");'>\n" +
                                     "                    <div class='chatInfo'>\n" +
                                     "                        <div class='image'>\n" +
                                     "                        </div>\n" +
@@ -619,7 +618,7 @@ function chats() {
                                     //"                    </div>\n" +
                                     "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\">!</p></div>"+
                                     "                    </div>\n" +
-                                    "                    </div>";
+                                    "                    </div>");
                             }else {
                                 var members_picture="";
                                 if(members_20=="NV"){
@@ -635,7 +634,7 @@ function chats() {
                                 }
                                 var image ="";
                                 if(members_picture ==""){
-                                    document.getElementById("chats").innerHTML +="<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
+                                    $("#chats").append("<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
                                         "<div class='chatInfo'>" +
                                         "<p class='name'>" +
                                         ""+chatname+
@@ -646,7 +645,7 @@ function chats() {
                                         //"</div>" +
                                         "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none'><p class=\"newMessage\">!</p></div>"+
                                         "</div>" +
-                                        "</div>";
+                                        "</div>");
                                 }else{
                                     functionString='{"i":"getUserIdByName","username":"'+members_picture+'"}';
                                     callChatctlWithSuccess(functionString,function (userid_members_picutre) {
@@ -659,7 +658,7 @@ function chats() {
                                             }else {
                                                 image = '<div class= "imagenew" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
                                             }
-                                            document.getElementById("chats").innerHTML +="<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
+                                            $("#chats").append("<div class='chatButton' onclick='chatButtonClick("+cid+",\""+members_2+"\",);'>" +
                                                 ""+image+
                                                 "<div class='chatInfo'>" +
                                                 "<p class='name'>" +
@@ -671,7 +670,7 @@ function chats() {
                                                 //"</div>" +
                                                 "<div class=\"status onTop\" data-cid=\""+cid+"\" style='display: none' ><p class=\"newMessage\">!</p></div>"+
                                                 "</div>" +
-                                                "</div>";
+                                                "</div>");
                                         });
                                     });
                                 }
@@ -708,8 +707,8 @@ function addActiveChatClickSwitcher() {
     $(".chatButton").click(function () {
         $("#inputChatMessage").css("display", "block");
         $(".otherTools").css("display", "block");
-        jQuery(".active").removeClass("active");
-        jQuery(this).addClass("active");
+        $(".active").removeClass("active");
+        $(this).addClass("active");
     });
 }
 
@@ -738,19 +737,19 @@ function showProfilPicture() {
             var bild = response[0]['imgdata'];
             //wenn User ein bild in der Datenbank hat nimmer dies
             //und nutzt es als Hintergrund bild, wenn da ein fehler ist wird das bild Weiß
-            document.getElementById("imageplace").innerHTML = '<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>';
-            document.getElementById("imageplace2").innerHTML = '<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>';
+            $("#imageplace").html('<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>');
+            $("#imageplace2").html('<div class= "image" style="background: #FFF url(data:image;base64,'+bild+') no-repeat center;background-size:cover"></div>');
         }else {
             //wenn der user das Bild nicht in der Datenbank hat nimmt er ein default bild
-            document.getElementById("imageplace").innerHTML = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
-            document.getElementById("imageplace2").innerHTML = '<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>';
+            $("#imageplace").html('<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>');
+            $("#imageplace2").html('<div class= "image" style="background: #FFF url(./../images/Profilbild_default.jpg) no-repeat center;background-size:cover"></div>');
         }
     });
 }
 
 function showProfilInfos() {
-    document.getElementById('nutzernamen').innerHTML = sessionStorage.aktuellerUser;
-    document.getElementById('nutzernamen2').innerHTML = sessionStorage.aktuellerUser;
-    document.getElementById('email').innerHTML = sessionStorage.aktuelleeEmail;
-    document.getElementById('email2').innerHTML = sessionStorage.aktuelleeEmail;
+    $('#nutzernamen').html(sessionStorage.aktuellerUser);
+    $('#nutzernamen2').html(sessionStorage.aktuellerUser);
+    $('#email').html(sessionStorage.aktuelleeEmail);
+    $('#email2').html(sessionStorage.aktuelleeEmail);
 }

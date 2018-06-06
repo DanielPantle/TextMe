@@ -35,27 +35,27 @@ function validateLogin() {
             e.preventDefault();
             console.log("username error");
             loginUsernameField.addClass("invalid");
-            jQuery("#username-error").show();
+            $("#username-error").show();
         }
         if(password.length < 6){
             e.preventDefault();
             console.log("password error");
             loginPasswordField.addClass("invalid");
-            jQuery("#password-error").show();
+            $("#password-error").show();
         }
     });
 
     loginUsernameField.keypress(function () {
         if(loginUsernameField.hasClass("invalid")) {
             loginUsernameField.removeClass("invalid");
-            jQuery("#username-error").hide();
+            $("#username-error").hide();
         }
     });
 
     loginPasswordField.keypress(function () {
         if(loginPasswordField.hasClass("invalid")) {
             loginPasswordField.removeClass("invalid");
-            jQuery("#password-error").hide();
+            $("#password-error").hide();
         }
     });
 }
@@ -80,13 +80,13 @@ function validateRegistration() {
             e.preventDefault();
             console.log("username error");
             registerUsernameField.addClass("invalid");
-            jQuery("#register-username-error").show();
+            $("#register-username-error").show();
         }
         if(!isValidEmailAddress(email)) {
             e.preventDefault();
             console.log("email error");
             registerEmailField.addClass("invalid");
-            jQuery("#register-email-error").show();
+            $("#register-email-error").show();
         }
 
         const passwordMessage = validatePassword(password);
@@ -94,39 +94,39 @@ function validateRegistration() {
             e.preventDefault();
             console.log(passwordMessage);
             registerPasswordField.addClass("invalid");
-            jQuery("#register-password-error").html(passwordMessage);
-            jQuery("#register-password-error").show();
+            $("#register-password-error").html(passwordMessage);
+            $("#register-password-error").show();
         }
         if(passwordConfirm !== password){
             e.preventDefault();
             console.log("password confirm error");
             registerPasswordConfirmField.addClass("invalid");
-            jQuery("#register-password-confirm-error").show();
+            $("#register-password-confirm-error").show();
         }
     });
 
     registerUsernameField.keypress(function () {
         if(registerUsernameField.hasClass("invalid")) {
             registerUsernameField.removeClass("invalid");
-            jQuery("#register-username-error").hide();
+            $("#register-username-error").hide();
         }
     });
     registerEmailField.keypress(function () {
         if(registerEmailField.hasClass("invalid")) {
             registerEmailField.removeClass("invalid");
-            jQuery("#register-email-error").hide();
+            $("#register-email-error").hide();
         }
     });
     registerPasswordField.keypress(function () {
         if(registerPasswordField.hasClass("invalid")) {
             registerPasswordField.removeClass("invalid");
-            jQuery("#register-password-error").hide();
+            $("#register-password-error").hide();
         }
     });
     registerPasswordConfirmField.keypress(function () {
         if(registerPasswordConfirmField.hasClass("invalid")) {
             registerPasswordConfirmField.removeClass("invalid");
-            jQuery("#register-password-confirm-error").hide();
+            $("#register-password-confirm-error").hide();
         }
     });
 
@@ -151,6 +151,4 @@ function validateRegistration() {
             }
             return(returnMessage);
     }
-
-
 }
