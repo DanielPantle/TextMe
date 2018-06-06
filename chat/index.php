@@ -2,7 +2,7 @@
 //db.php einfügen
 include("./../php/db.php");
 
-//neue Klasse Database erstellen
+//neue Klasse Database einbinden
 $Database = new Database();
 
 // prüfen, ob User eingeloggt ist
@@ -204,12 +204,6 @@ if(isset($_SESSION['link'])) {
                             <button id="surpriseface" class="pick"><i class="em-svg em-open_mouth"></i></button>
                             <button id="winkface" class="pick"><i class="em-svg em-smirk"></i></button>
                             <button id="cheekyface" class="pick"><i class="em-svg em-stuck_out_tongue"></i></button>
-
-                            <!--<button id="rofl" class="pick"></button>-->
-                            <!--<button id="somface" class="pick"></button>-->
-                            <!--<button id="swfface" class="pick"></button>-->
-
-                            <!-- https://afeld.github.io/emoji-css/ -->
                         </div>
                     </div>
 

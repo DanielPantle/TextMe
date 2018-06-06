@@ -1,5 +1,5 @@
 <?php
-//db.php einfügen
+//db.php einbinden
 include("./../php/db.php");
 
 //neue Klasse Database erstellen
