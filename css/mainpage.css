@@ -11,6 +11,7 @@ body {
 	font-size: 16px;
 	width: 100vw;
 	height: 100vh;
+
 }
 
 a {
@@ -663,12 +664,15 @@ div[class~="onTop"] > .count {
 	width: 100%;
 	height: 70px;
 	background: #FFF;
+	overflow: hidden;
 }
 
 .leftSide {
 	display: inline-block;
 	clear: none;
 	float: left;
+
+
 }
 
 .leftSide .chatName {
@@ -678,6 +682,7 @@ div[class~="onTop"] > .count {
 	color: #444;
 	font-weight: 600;
 	cursor: default;
+	overflow: hidden;
 }
 
 .leftSide .chatStatus {
@@ -688,6 +693,7 @@ div[class~="onTop"] > .count {
 	color: #419fd9;
 	font-weight: 300;
 	cursor: default;
+	overflow: hidden;
 }
 
 .rightSide {
@@ -695,6 +701,7 @@ div[class~="onTop"] > .count {
 	clear: none;
 	float: right;
 	margin-right: 20px;
+
 }
 
 .tbButton, .otherTools .toolButtons {
@@ -1087,22 +1094,26 @@ div[class~="onTop"] > .count {
 
 
 	.rightPanel{
-		height: 50%;
+		height: 70vh;
 		position:fixed;
 		bottom:0;
 		left:0;
 	}
 
 	.rightPanel .topBar{
+		height: 10vh;
+	}
+
+	.leftSide{
 
 	}
 
 	.moreMenu{
-		top: calc(50vh - 120px);
+		top: calc(30vh - 120px);
 	}
 
 	.convHistory{
-		height: calc(70vh - 250px);
+		height: 50vh;
 
 	}
 
@@ -1121,7 +1132,7 @@ div[class~="onTop"] > .count {
 		right:10px;
 	}
 	.replyBar{
-
+		height: 10vh;
 	}
 
 	.leftPanel{
@@ -1129,7 +1140,7 @@ div[class~="onTop"] > .count {
 	}
 
 	.chats{
-		height: calc(50vh - 50px);
+		height: 20vh;
 	}
 
 	.message{
@@ -1149,7 +1160,7 @@ div[class~="onTop"] > .count {
 	}
 
 	header{
-		height: 20%;
+		height: 10vh;
 	}
 }
 
