@@ -119,7 +119,7 @@ if(isset($_SESSION['link'])) {
 
         <!--Meta Informationen der Website-->
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
         <!--Stylesheets einbinden-->
         <link rel="stylesheet" href="./../css/Icons.css">
