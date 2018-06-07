@@ -1359,3 +1359,7 @@ select.form-control:focus::-ms-value {
 	height: auto;
 	padding: 10px;
 }
+
+.cn {
+	display: none;
+}

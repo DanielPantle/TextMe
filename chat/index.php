@@ -265,7 +265,7 @@ if(isset($_SESSION['link'])) {
                     </button>
 
                     <!-- Button / icon Statistik - ausgeblendet -->
-                    <button class="cn" style="display: none">
+                    <button class="cn">
                         <i class="fa fa-bar-chart-o" style="font-size:20px;color:#999"></i>
                         <!-- TODO: Text auf Deutsch / Englisch ändern -->
                         <span>Statistik</span>

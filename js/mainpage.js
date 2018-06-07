@@ -136,7 +136,7 @@ $(document).ready(function() {
 
     var functionString = '{"i":"isUserAdmin"}';
     callChatctlWithSuccess(functionString,function(response){
-        if(response){
+        if(response>0){
             $(".cn").show();
         }
     });

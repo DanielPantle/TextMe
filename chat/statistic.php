@@ -45,48 +45,48 @@ $onlineUsers = '<div class="form-group" id="statisticContent">Nutzer online: ' .
         <!--Icon "einrichten"-->
         <link rel="icon" href="./../images/Speach-BubbleDialog-512.png">
     </head>
-<body>
-    <!-- noscript Funktion -
-    Fängt User ab die JavaScript deaktivert haben
-    weißt auf eine Anleitung hin um JavaScript wieder zu aktivieren
-    -->
-    <noscript>
-        <!-- TODO: Text auf Deutsch / Englisch ändern-->
-        <div id="nojavascript">
-            Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
-            Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
-            und laden Sie die Seite neu.
-        </div>
-    </noscript>
+    <body>
+        <!-- noscript Funktion -
+        Fängt User ab die JavaScript deaktivert haben
+        weißt auf eine Anleitung hin um JavaScript wieder zu aktivieren
+        -->
+        <noscript>
+            <!-- TODO: Text auf Deutsch / Englisch ändern-->
+            <div id="nojavascript">
+                Diese Anwendung benötitgt JavaScript zum ordungsgemäßen Betrieb.
+                Bitte <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer"> aktivieren Sie Java Script</a>
+                und laden Sie die Seite neu.
+            </div>
+        </noscript>
 
-    <div class="modal-content" style="top:0;">
-        <!-- Überschrift -->
-        <div class="modal-header">
-            <h2>Statistik</h2>
+        <div class="modal-content" style="top:0;">
+            <!-- Überschrift -->
+            <div class="modal-header">
+                <h2>Statistik</h2>
+            </div>
+
+            <!-- "Body" - Informationen -->
+            <div class="modal-body">
+                <?php
+                    //alle vorher Definierten Variabeln werden aufgerufen
+                    echo $oneHour;
+                    echo $twentyfourHour;
+                    echo $registeredUsers;
+                    echo $totalMessages;
+                    echo $recentlyActive;
+                    echo $onlineUsers;
+                ?>
+            </div>
+            <!-- TODO: Text auf Deutsch / Englisch ändern -->
+            <!-- Fuß der Seite -->
+            <!-- Link zum ausloggen / Link zurpck zum Chat -->
+            <div class="modal-footer">
+                <h4><a id="toChat" href="./index.php">zum Chat</a> // <span style = "display: inline;"><a id="toLogout" href="./../logout.php">Logout</a></span></h4>
+            </div>
         </div>
 
-        <!-- "Body" - Informationen -->
-        <div class="modal-body">
-            <?php
-                //alle vorher Definierten Variabeln werden aufgerufen
-                echo $oneHour;
-                echo $twentyfourHour;
-                echo $registeredUsers;
-                echo $totalMessages;
-                echo $recentlyActive;
-                echo $onlineUsers;
-            ?>
-        </div>
-        <!-- TODO: Text auf Deutsch / Englisch ändern -->
-        <!-- Fuß der Seite -->
-        <!-- Link zum ausloggen / Link zurpck zum Chat -->
-        <div class="modal-footer">
-            <h4><a id="toChat" href="./index.php">zum Chat</a> // <span style = "display: inline;"><a id="toLogout" href="./../logout.php">Logout</a></span></h4>
-        </div>
-    </div>
-
-    <!-- Java Script Dateien einbinden -->
-    <script src='./../js/vendor/jquery.min.js'></script>
-    <script  src='./../js/statistic.js'></script>
-</body>
+        <!-- Java Script Dateien einbinden -->
+        <script src='./../js/vendor/jquery.min.js'></script>
+        <script  src='./../js/statistic.js'></script>
+    </body>
 </html>
