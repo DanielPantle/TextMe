@@ -1,12 +1,23 @@
 
+/**
+ * wird ausgeführt, nachdem die Seite geladen ist
+ */
 $(document).ready(function() {
     
+    /**
+     * Click-Event des Menü-Buttons in der linken oberen Ecke
+     * blendet das Seiten-Menü ein
+     */
     $(".trigger").click(function () {
         $(".overlay, .menuWrap").fadeIn(180);
         $(".menu").animate({opacity: "1", left: "0px"}, 180);
     });
 
-    /* make config menu show up */
+    /**
+     * Click-Event des Einstellungs-Buttons im Seiten-Menü
+     * blendet das Einstellungs-Menü ein
+     * blendet das Seiten-Menü aus
+     */
     $(".settings").click(function () {
         $(".config").animate({opacity: "1", right: "0px"}, 180);
         /* hide others */
@@ -15,12 +26,17 @@ $(document).ready(function() {
 
     });
 
+    /* TODO: Kann gelöscht werden?
     // Show/Hide the other notification options
     $(".deskNotif").click(function () {
         $(".showSName, .showPreview, .playSounds").toggle();
     });
+    */
 
-    /* close all overlay elements */
+    /**
+     * Click-Event des Overlays neben dem Seiten-Menü
+     * blendet das Seiten-Menü und das Einstellungs-Menü aus
+     */
     $(".overlay").click(function () {
 
         var passwordCurrentField = $("#passwordCurrentField");
@@ -46,11 +62,19 @@ $(document).ready(function() {
         $(".config").animate({opacity: "0", right: "-200vw"}, 180);
     });
 
-    /* small conversation menu */
+    /**
+     * Click-Event des Chat-Menü-Buttons
+     * blendet das Chat-Menü ein
+     */
     $("#chatOption").click(function () {
         $(".moreMenu").slideToggle("fast");
     });
 
+
+    /**
+     * Click-Event des gesamten Dokuments
+     * wenn das Chat-Menü geöffnet ist, wird dieses geschlossen
+     */
     $(document).mouseup(function(e)
     {
         var container = $(".moreMenu");
@@ -62,16 +86,18 @@ $(document).ready(function() {
         }
     });
 
-    /* clicking the search button from the conversation focus the search bar outside it, as on desktop */
+    /* TODO: kann gelöscht werden?
+    /* clicking the search button from the conversation focus the search bar outside it, as on desktop
     $(".search").click(function () {
         $(".searchChats").focus();
     });
+    */
 
     /**
-     * input listener for search field
-     * shows/hides chats depending on search input
-     * 500ms delay after input changes to prevent multiple fire events
-     **/
+     * Input-Event für das Suchfeld
+     * Blendet Chats ein/aus, je nach Eingabe im Suchfeld
+     * 500ms Wartezeit, um mehrfaches Event zu vermeiden
+     */
     var timeout = null;
     $(".searchChats").on("input", function () {
         clearTimeout(timeout);
@@ -93,65 +119,120 @@ $(document).ready(function() {
     });
 
 
+    /**
+     * Click-Event des Passwort-bearbeiten-Buttons
+     * blendet das Passwort-bearbeiten-Feld ein
+     */
     $(".edit").click(function () {
         $(".configSect2").show();
     });
 
+    /**
+     * Click-Event auf den Emoji-Button
+     * blendet das Emoji-Feld ein
+     */
     /* Show or Hide Emoji Panel */
     $(".emoji").click(function () {
         $(".emojiBar").fadeToggle(120);
     });
 
-    /* if the user click the conversation or the type panel will also hide the emoji panel */
+    /**
+     * Click-Event auf die Chat-Anzeige und das Eingabefeld
+     * blendet das Emoji-Feld aus
+     */
     $(".convHistory, .replyMessage").click(function () {
         $(".emojiBar").fadeOut(120);
-
     });
 
+    /**
+     * Click-Event auf den Logout-Button
+     * ruft die logout-Funktion auf
+     */
     $(".lo").click(function () {
         logout();
     });
 
+
+    /**
+     * Click-Event auf den Chat-Löschen-Button
+     * blendet das Chat-Menü aus
+     * ruft die Chat-Löschen-Funktion auf
+     */
     $("#delete_chat").click(function () {
         $(".moreMenu").slideToggle("fast");
         chatloeschenclick();
     });
 
+    /**
+     * Click-Event auf den Einladung-Versenden-Button
+     * blendet das Chat-Menü aus
+     * ruft die Einladung-Versenden-Funktion auf
+     */
     $("#send_invitation").click(function () {
         $(".moreMenu").slideToggle("fast");
         sendinvitationclick();
     });
 
+    /**
+     * Click-Event auf den Statistik-Button
+     * leitet auf die Statistik-Seite weiter
+     */
     $(".cn").click(function () {
         window.location.href="./statistic.php";
     });
 
+    /**
+     * Click-Event auf den Neuer-Chat-Button
+     * blendet das Menü ein, um einen neuen Chat zu erstellen
+     */
     $(".nc").click(function () {
         $(".nc-div").show();
     });
+
+
+    /**
+     * Click-Event auf den Abbrechen-Button (bei der Erstellung eines neuen Chats)
+     * löscht das Eingabe-Feld des Chat-Namens
+     * blendet das Menü aus, um einen neuen Chat zu erstellen
+     */
     $("#nc-abort").click(function () {
         $("#nc-chatnameField").val("");
         $(".nc-div").hide();
     });
+
+    /**
+     * Click-Event auf den Erstellen-Button (bei der Erstellung eines neuen Chats)
+     * überprüft den eingegebenen Chat-Namen
+     * ruft die Chat-Erstellen-Funktion auf (Parameter: eingegebener Chat-Name)
+     */
     $("#nc-create").click(function () {
         const chatName = $("#nc-chatnameField").val();
         if(chatName != null && chatName != "") {
             createchatclick(chatName);
-
         }
     });
     
+    /**
+     * Click-Event auf den Random-Chat-Erstellen-Button
+     * ruft die Random-Chat-Erstellen-Funktion auf
+     */
     $(".ng").click(function () {
         // Random-Chat erstellen
         createrandomchatclick();
     });
 
-    $(".alert").each(function (index) {
-        $(this).click(function () {
-            $(this).hide();
-        });
+    /**
+     * Click-Event auf ein Alert
+     * blendet das Alert aus
+     */
+    $(".alert").click(function(index) {
+        $(this).hide();
     });
 
+    /**
+     * Server-Abfrage, ob angemeldeter User Admin ist
+     * wenn ja: Statistik-Button wird angezeigt
+     */
     var functionString = '{"i":"isUserAdmin"}';
     callChatctlWithSuccess(functionString,function(response){
         if(response>0){
@@ -159,38 +240,55 @@ $(document).ready(function() {
         }
     });
 
+    // Speichert die ID des Users in einer Session-Variable
     sessionStorage.aktuelleChatId = 0;
     functionString = '{"i":"getUserID"}';
     callChatctlWithSuccess(functionString,function(response){
         sessionStorage.aktuelleUserId = response;
     });
+
+    // Speichert den Namen des Users in einer Session-Variable
     functionString = '{"i":"getCurrentUser"}';
     callChatctlWithSuccess(functionString,function(response){
         sessionStorage.aktuellerUser = response;
     });
+
+    // Speichert die E-Mail-Adresse des Users in einer Session-Variable
     functionString = '{"i":"getEmail","user_id":'+sessionStorage.aktuelleUserId+'}';
     callChatctlWithSuccess(functionString,function(response){
         sessionStorage.aktuelleeEmail = response;
     });
+
+    // Setzt den Wert der Session-Variable auf 0
     sessionStorage.lastMessage = 0;
 
+    // Ruft Funktionen auf, um die Chats anzuzeigen
     chatloeschen();
     chats();
     showProfilPicture();
     showProfilInfos();
     validateChangeAccountData();
 
-    // Emoji-Click
+
+    /**
+     * Click-Event auf ein Emoji im Emoji-Feld
+     * ruft die Funktion Emoji-Click auf (Parameter: id des geklickten Emojis)
+     */
     $(".pick").click(function() {
         emojiClick($(this).attr('id'));
     });
 
+    // Gibt aus, ob ein Link geklickt wurde
     if(typeof linkResult !== "undefined" && linkResult != null) {
         /* TODO: Ausgabe ändern */
         alert(linkResult);
     }
 });
 
+/**
+ * Zeigt eine erfolgreiche Ausgabe mit einer übergebenen Nachricht
+ * @param message
+ */
 function setSuccessMessage(message) {
     var messageContainer = $("#messageContainer");
     messageContainer.removeClass();
@@ -202,6 +300,10 @@ function setSuccessMessage(message) {
     messageContainer.delay(5000).fadeOut();
 }
 
+/**
+ * Zeigt eine fehlgeschlagene Ausgabe mit einer übergebenen Nachricht
+ * @param message
+ */
 function setErrorMessage(message) {
     var messageContainer = $("#messageContainer");
     messageContainer.removeClass();
@@ -211,6 +313,10 @@ function setErrorMessage(message) {
     messageContainer.show();
 }
 
+
+/**
+ * Validiert die Eingabe beim Speichern bei der Passwort-Änderung
+ */
 function validateChangeAccountData() {
 
     const currentPasswordField = $("#passwordCurrentField");
@@ -265,6 +371,10 @@ function validateChangeAccountData() {
     });
 }
 
+/**
+ * Validiert das übergebene Passwort
+ * @param str
+ */
 function validatePassword(str) {
     let returnMessage = "";
     if (str.length < 6) {
@@ -281,6 +391,10 @@ function validatePassword(str) {
     return(returnMessage);
 }
 
+/**
+ * Eingabe-Event für die Enter-Taste
+ * wird die Enter-Taste gedrückt und ein Chat ist ausgewählt, wird die Nachricht gesendet
+ */
 function onEnter(e) {
     if (e.keyCode == 13) {
         var cid = parseInt(sessionStorage.aktuelleChatId);
@@ -293,6 +407,10 @@ function onEnter(e) {
     }
 }
 
+/**
+ * ersetzt die Emojis aus einer Nachricht mit einem Symbol
+ * @param text
+ */
 function replaceEmojis(text) {
     text = text.split(":)").join("<i class='em-svg em-slightly_smiling_face'></i>");
     text = text.split(":&#039;D").join("<i class='em-svg em-joy'></i>");
@@ -305,6 +423,10 @@ function replaceEmojis(text) {
     return text;
 }
 
+/**
+ * gibt das Emoji zurück, das angeklickt wurde
+ * @param id
+ */
 function replaceEmojisBack(id) {
     var emoji = "";
     switch(id) {
@@ -336,6 +458,10 @@ function replaceEmojisBack(id) {
     return emoji;
 }
 
+/**
+ * Sendet eine Chat-Nachricht an den Server
+ * @param chatroomId
+ */
 function sendChatMsg(chatroomId) {
     var chatText = $("#inputChatMessage").text();
     chatText = chatText.trim();
@@ -358,22 +484,32 @@ function sendChatMsg(chatroomId) {
             $("#inputChatMessage").html("");
             $("#inputChatMessage").focus();
         });
-
     }
-
-    //sendReadUntil(sessionStorage.aktuelleChatId);
 }
 
+/**
+ * scrollt den Chat-Verlauf nach ganz unten
+ */
 function scrollChatVerlauf() {
     $("#chatVerlauf").scrollTop($("#chatVerlauf").prop("scrollHeight"));
 }
 
+/**
+ * sendet eine Logout-Nachricht an den Server und leitet an die Logout-Seite weiter
+ */
 function logout(){
     var jsonSend = '{"i":"logout"}';
     callChatctl(jsonSend);
     window.location.href='./../logout.php';
 }
 
+/**
+ * wird aufgerufen bei Klick auf einen Chat
+ * fragt den Chat-Namen vom Server ab und gibt ihn aus
+ * ruft die Funktion chatHistory auf, die die Nachrichten vom Server ab
+ * @param cid
+ * @param members
+ */
 function chatButtonClick(cid,members) {
     sessionStorage.aktuelleChatId = cid;
     var functionString = '{"i":"getChatnameById","chat_id":'+cid+'}';
@@ -385,6 +521,11 @@ function chatButtonClick(cid,members) {
     chatloeschen();
 }
 
+/**
+ * sendet die übergebene Nachricht an den Server
+ * gibt das Ergebnis in der Konsole aus
+ * @param functionString
+ */
 function callChatctl(functionString) {
     $.ajax({
         async: true,
@@ -404,6 +545,12 @@ function callChatctl(functionString) {
     });
 }
 
+/**
+ * sendet die übergebene Nachricht an den Server
+ * ruft die übergebene Funktion auf, wenn der Aufruf erfolgreich war
+ * @param functionString
+ * @param successFunction
+ */
 function callChatctlWithSuccess(functionString, successFunction) {
     $.ajax({
         async: false,
@@ -421,6 +568,9 @@ function callChatctlWithSuccess(functionString, successFunction) {
     });
 }
 
+/**
+ * löscht einen Chat aus der Ausgabe
+ */
 function chatloeschen() {
     var chatid = sessionStorage.aktuelleChatId;
     if(chatid>0){
@@ -430,6 +580,9 @@ function chatloeschen() {
     }
 }
 
+/**
+ * sendet eine Chat-Löschen-Nachricht an den Server
+ */
 function chatloeschenclick() {
     var chat_id = sessionStorage.aktuelleChatId;
     if(chat_id>0){
@@ -448,6 +601,9 @@ function chatloeschenclick() {
     }else console.log("kein aktueller chat raum");
 }
 
+/**
+ * fragt den Einladungs-Link vom Server ab und gibt ihn aus
+ */
 function sendinvitationclick() {
     var chat_id = sessionStorage.aktuelleChatId;
     if(chat_id > 0) {
@@ -461,11 +617,10 @@ function sendinvitationclick() {
     }
 }
 
-function showlinkresult() {
-    /* TODO: Ausgabe ändern */
-    alert('$linkResult');
-}
-
+/**
+ * sendet eine Chat-Erstellen-Nachricht an den Server
+ * bei erfolgreicher Erstellung wird der Chat hinzugefügt
+ */
 function createchatclick(chatName) {
     var chatName = chatName;
 
@@ -481,6 +636,10 @@ function createchatclick(chatName) {
         });
 }
 
+/**
+ * sendet eine Random-Chat-Erstellen-Nachricht an den Server
+ * bei erfolgreicher Erstellung wird der Random-Chat hinzugefügt
+ */
 function createrandomchatclick() {
     var createRandomChatString = '{"i":"createrandomchat"}';
     callChatctlWithSuccess(createRandomChatString, function (response) {
@@ -494,6 +653,11 @@ function createrandomchatclick() {
     });
 }
 
+/**
+ * Timer, der alle 500ms feuert
+ * fragt ab, ob neue Nachrichten in dem aktuellen Chat gesendet wurden
+ * fragt ab, ob neue Nachrichten in einem anderen Chat gesendet wurden
+ */
 window.setInterval(function () {
     checkForNewMessagesInCurrentChat();
     var functionString = '{"i":"ping"}';
@@ -501,12 +665,18 @@ window.setInterval(function () {
     lookForUnreadMessages();
 },500);
 
-// Emojis-Click
+/**
+ * fragt das geklickte Emoji ab und hängt es im Eingabe-Feld an die eingegebene Nachricht an
+ * @param em
+ */
 function emojiClick(em) {
     var emoji = replaceEmojisBack(em);
     $("#inputChatMessage").append(emoji);
 }
 
+/**
+ * fragt alle Nachrichten aus dem aktuellen Chat vom Server ab
+ */
 function chatHistory () {
     const chat_id = sessionStorage.aktuelleChatId;
     $("#chatVerlauf").html("");
@@ -518,6 +688,10 @@ function chatHistory () {
     }else console.log("kein aktueller chat raum");
 }
 
+/**
+ * gibt  die vom Server geladenen Nachrichten aus
+ * @param response
+ */
 function addNewMessages (response){
     const chat_id = sessionStorage.aktuelleChatId;
     var functionString = '{"i":"getChatUsers","chat_id":"'+chat_id+'"}';
@@ -591,6 +765,9 @@ function addNewMessages (response){
     });
 }
 
+/**
+ * Liest alle Chats vom Server und gibt diese aus
+ */
 function chats() {
     var functionString = '{"i":"getAllChatsFromCurrentUser"}';
     callChatctlWithSuccess(functionString, function (response) {
@@ -703,6 +880,9 @@ function chats() {
     addActiveChatClickSwitcher();
 }
 
+/**
+ * prüft, ob im aktuellen Chat neue Nachrichten gesendet wurden
+ */
 function checkForNewMessagesInCurrentChat() {
     const chat_id = sessionStorage.aktuelleChatId;
     if (chat_id>0){
@@ -720,8 +900,9 @@ function checkForNewMessagesInCurrentChat() {
     }
 }
 /**
- * click listener on chats to add class 'active' respectively remove it from other chats
- **/
+ * Click-Event auf einen Button
+ * der aktuelle Chat wird als aktiv markiert
+ */
 function addActiveChatClickSwitcher() {
     $(".chatButton").click(function () {
         $("#inputChatMessage").css("display", "block");
@@ -731,6 +912,9 @@ function addActiveChatClickSwitcher() {
     });
 }
 
+/**
+ * prüft, ob in einem nicht-aktiven Chat neue Nachrichten gesendet wurden
+ */
 function lookForUnreadMessages () {
     var functionString = '{"i":"proofForNewMessages"}';
     callChatctlWithSuccess(functionString,function(response){
@@ -748,6 +932,9 @@ function lookForUnreadMessages () {
     });
 }
 
+/**
+ * zeigt das Profilbild an
+ */
 function showProfilPicture() {
     var functionString = '{"i":"showPictureFromCurrentUser"}';
     callChatctlWithSuccess(functionString,function(response){
@@ -766,6 +953,9 @@ function showProfilPicture() {
     });
 }
 
+/**
+ * gibt die Profil-Infos aus
+ */
 function showProfilInfos() {
     $('#nutzernamen').html(sessionStorage.aktuellerUser);
     $('#nutzernamen2').html(sessionStorage.aktuellerUser);
