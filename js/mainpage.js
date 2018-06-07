@@ -22,6 +22,24 @@ $(document).ready(function() {
 
     /* close all overlay elements */
     $(".overlay").click(function () {
+
+        var passwordCurrentField = $("#passwordCurrentField");
+        var passwordChangeField = $("#passwordChangeField");
+        var passwordConfirmChangeField = $("#passwordConfirmChangeField");
+
+        $(".nc-div").hide();
+        passwordCurrentField.val("");
+        passwordChangeField.val("");
+        passwordConfirmChangeField.val("");
+
+        passwordCurrentField.removeClass("invalid");
+        passwordChangeField.removeClass("invalid");
+        passwordConfirmChangeField.removeClass("invalid");
+
+        $("#current-password-error").hide();
+        $("#password-error").hide();
+        $("#password-confirm-error").hide();
+
         $(".configSect2").hide();
         $(".overlay, .menuWrap").fadeOut(180);
         $(".menu").animate({opacity: "0", left: "-320px"}, 180);
