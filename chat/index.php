@@ -368,6 +368,7 @@ if(isset($_SESSION['link'])) {
 
         <!-- Java Script Dateien einbinden -->
         <script src='./../js/vendor/jquery.min.js'></script>
+        <script  src="./../js/anchorme.min.js"></script>
         <script  src="./../js/mainpage.js"></script>
     </body>
 </html>

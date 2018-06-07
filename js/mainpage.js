@@ -26,13 +26,6 @@ $(document).ready(function() {
 
     });
 
-    /* TODO: Kann gelöscht werden?
-    // Show/Hide the other notification options
-    $(".deskNotif").click(function () {
-        $(".showSName, .showPreview, .playSounds").toggle();
-    });
-    */
-
     /**
      * Click-Event des Overlays neben dem Seiten-Menü
      * blendet das Seiten-Menü und das Einstellungs-Menü aus
@@ -85,13 +78,6 @@ $(document).ready(function() {
             container.hide();
         }
     });
-
-    /* TODO: kann gelöscht werden?
-    /* clicking the search button from the conversation focus the search bar outside it, as on desktop
-    $(".search").click(function () {
-        $(".searchChats").focus();
-    });
-    */
 
     /**
      * Input-Event für das Suchfeld
@@ -750,7 +736,13 @@ function addNewMessages (response){
             for(var i=0;i<response[date].length;i++){
                 var obj = response[date][i];
                 var nachricht_1 = obj['message'];
-                const nachricht = replaceEmojis(nachricht_1);
+                const nachricht = anchorme(replaceEmojis(nachricht_1), {
+                    attributes:[
+                        function(urlObj){
+                            if(urlObj.protocol !== "mailto:") return {name:"target",value:"blank"};
+                        }
+                    ]
+                });
                 const zeit = obj['time'];
                 const name = obj['name'];
                 const mid = obj['mid'];
