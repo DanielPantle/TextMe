@@ -271,6 +271,25 @@ $(document).ready(function() {
 
 
     /**
+     * Array mit allen Emojis
+     * Emojis werden dem Emoji-Feld hinzugefügt
+     */
+    emojis = [
+        ["em-slightly_smiling_face", "smileface", ":)"],
+        ["em-joy", "tearjoyface", ":&#039;D"],
+        ["em-slightly_frowning_face", "sadface", ":("],
+        ["em-sob", "cryingface", ":&#039;("],
+        ["em-open_mouth", "surpriseface", ":o"],
+        ["em-smirk", "winkface", ";)"],
+        ["em-stuck_out_tongue", "cheekyface", ":P"],
+        ["em-middle_finger", "flo", ":flo:"],
+        ["em-bacon", "bacon", ":bacon:"]
+    ];
+    for (var i = 0; i < emojis.length; i++) {
+        $(".emojiList").append('<button id="' + emojis[i][1] + '" class="pick"><i class="em-svg ' + emojis[i][0] + '"></i></button>');
+    }
+
+    /**
      * Click-Event auf ein Emoji im Emoji-Feld
      * ruft die Funktion Emoji-Click auf (Parameter: id des geklickten Emojis)
      */
@@ -412,6 +431,10 @@ function onEnter(e) {
  * @param text
  */
 function replaceEmojis(text) {
+    for (var i = 0; i < emojis.length; i++) {
+        text = text.split(emojis[i][2]).join("<i class='em-svg " + emojis[i][0] + "'></i>");
+    }
+    /*
     text = text.split(":)").join("<i class='em-svg em-slightly_smiling_face'></i>");
     text = text.split(":&#039;D").join("<i class='em-svg em-joy'></i>");
     text = text.split(":D").join("<i class='em-svg em-smiley'></i>");
@@ -421,6 +444,7 @@ function replaceEmojis(text) {
     text = text.split(";)").join("<i class='em-svg em-smirk'></i>");
     text = text.split(":P").join("<i class='em-svg em-stuck_out_tongue'></i>");
     text = text.split(":flo:").join("<i class='em-svg em-middle_finger'></i>");
+    */
 
     return text;
 }
@@ -430,6 +454,12 @@ function replaceEmojis(text) {
  * @param id
  */
 function replaceEmojisBack(id) {
+    for (var i = 0; i < emojis.length; i++) {
+        if(id == emojis[i][1]) {
+            return emojis[i][2];
+        }
+    }
+    /*
     var emoji = "";
     switch(id) {
         case "smileface":
@@ -460,7 +490,7 @@ function replaceEmojisBack(id) {
             emoji = ":flo:";
             break;
     }
-    return emoji;
+    return emoji;*/
 }
 
 /**

@@ -196,15 +196,6 @@ if(isset($_SESSION['link'])) {
 
                         <!-- Emoji panel -->
                         <div class="emojiList">
-                            <button id="smileface" class="pick"><i class="em-svg em-slightly_smiling_face"></i></button>
-                            <button id="tearjoyface" class="pick"><i class="em-svg em-joy"></i></button>
-                            <button id="laughingface" class="pick"><i class="em-svg em-smiley"></i></button>
-                            <button id="sadface" class="pick"><i class="em-svg em-slightly_frowning_face"></i></button>
-                            <button id="cryingface" class="pick"><i class="em-svg em-sob"></i></button>
-                            <button id="surpriseface" class="pick"><i class="em-svg em-open_mouth"></i></button>
-                            <button id="winkface" class="pick"><i class="em-svg em-smirk"></i></button>
-                            <button id="cheekyface" class="pick"><i class="em-svg em-stuck_out_tongue"></i></button>
-                            <button id="flo" class="pick"><i class="em-svg em-middle_finger"></i></button>
                         </div>
                     </div>
 
