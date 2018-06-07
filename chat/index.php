@@ -342,17 +342,17 @@ if(isset($_SESSION['link'])) {
                         <!-- Imput Feld für aktuelles Password -->
                         <input class="form-control" type="password" name="currentPassword" placeholder="Current Password" id="passwordCurrentField">
                         <!-- Error ausgabe falls kein password eingegeben wurde -->
-                        <div class="alert alert-danger" role="alert" style=" display:none;" id="current-password-error">Current Password must not be empty!</div>
+                        <div class="alertPassword alert-danger" role="alert" style=" display:none;" id="current-password-error">Current Password must not be empty!</div>
                         <br>
                         <!-- Imput Feld für neues Password -->
                         <input class="form-control" type="password" name="newPassword" placeholder="New Password" id="passwordChangeField">
                         <!-- Error ausgabe falls zuwenig Zeichen eingegeben wurde -->
-                        <div class="alert alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
+                        <div class="alertPassword alert-danger" role="alert" style=" display:none;" id="password-error">minimum six characters!</div>
                         <br>
                         <!-- Imput Feld zur Überprüfung des neuen Passwords -->
                         <input class="form-control" type="password" placeholder="Confirm Password" id="passwordConfirmChangeField">
                         <!-- Error ausgabe falls die beiden Passwörter nicht überein stimmen -->
-                        <div class="alert alert-danger" role="alert" style=" display:none;" id="password-confirm-error">passwords doesn't match!</div>
+                        <div class="alertPassword alert-danger" role="alert" style=" display:none;" id="password-confirm-error">passwords doesn't match!</div>
                         <br> <br>
                         <!-- Submit Button zur Speicherung des neuen Passwords -->
                         <input class="editSubmitButton" name="editSubmitButton" type="submit"  value="Speichern">

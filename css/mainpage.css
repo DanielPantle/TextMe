@@ -1229,6 +1229,12 @@ input.invalid {
 	z-index: 50;
 }
 
+.alertPassword {
+	padding: 0.75rem 1.25rem;
+	border: 1px solid transparent;
+	border-radius: 0.25rem;
+}
+
 .alert-danger {
     color: #721c24;
     background-color: #f8d7da;
