@@ -420,6 +420,8 @@ function replaceEmojis(text) {
     text = text.split(":o").join("<i class='em-svg em-open_mouth'></i>");
     text = text.split(";)").join("<i class='em-svg em-smirk'></i>");
     text = text.split(":P").join("<i class='em-svg em-stuck_out_tongue'></i>");
+    text = text.split(":flo:").join("<i class='em-svg em-middle_finger'></i>");
+
     return text;
 }
 
@@ -453,6 +455,9 @@ function replaceEmojisBack(id) {
             break;
         case "cheekyface":
             emoji = ":P";
+            break;
+        case "flo":
+            emoji = ":flo:";
             break;
     }
     return emoji;

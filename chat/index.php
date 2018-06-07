@@ -204,6 +204,7 @@ if(isset($_SESSION['link'])) {
                             <button id="surpriseface" class="pick"><i class="em-svg em-open_mouth"></i></button>
                             <button id="winkface" class="pick"><i class="em-svg em-smirk"></i></button>
                             <button id="cheekyface" class="pick"><i class="em-svg em-stuck_out_tongue"></i></button>
+                            <button id="flo" class="pick"><i class="em-svg em-middle_finger"></i></button>
                         </div>
                     </div>
 
